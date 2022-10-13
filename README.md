@@ -11,7 +11,7 @@ Even if this code is very small, it's a good guideline to always write it in Typ
 
 Starknet mainnet and testnet are (very) slow. To speed up the execution, we use Starknet-devnet, that create a local Starknet network.
 
-## 🛠️ Installation :hammer and wretch:  :pick:
+## 🛠️ Installation  :pick:
 
 Use `cd starknet.js-workshop-typescript` to go to the root of the project.
 
