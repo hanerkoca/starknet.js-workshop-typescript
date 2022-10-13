@@ -1,2 +1,17 @@
-.DS_STORE
 node_modules
+.vscode
+README.md.backup
+
+#Typescript
+out
+
+#Hardhat files
+cache
+artifacts
+
+#Python artifacts
+__pycache__
+.pytest_cache
+
+#Starknet plugin
+starknet-artifacts
