@@ -1,9 +1,10 @@
 node_modules
-.vscode
+#.vscode
 README.md.backup
 
 #Typescript
 out
+tsconfig.tsbuildinfo
 
 #Hardhat files
 cache
