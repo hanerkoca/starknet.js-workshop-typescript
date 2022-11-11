@@ -26,18 +26,20 @@ Run `npm install` in this directory.
 
 The file .env defines the network to use. It's currently configured for the local devnet. As explained in the file, you can change easily to Testnet or Mainnet.
 
+This repo is configured to be able to perform debugging of your typescript code. Just CTRL+SHIFT+D, then click on the green arrow.
+
 This script has been written with cairo v0.10.0, starknet-devnet v0.3.3, starknet.js v4.8.0. Due to fast iterations of Starknet and Cairo, this script will probably be quickly out-of-date.
 
 
 
 The Account contract used in this workshop is made by [OpenZeppelin](https://github.com/OpenZeppelin/cairo-contracts), contract version 0.4.0.
 
-##  🚀 Start the demo: 
+##  🚀 Start the demo 🚀  🎆 ↘️  💩
 
 Open a console, and launch the devnet `starknet-devnet --seed 0`
 
 Open a second console, and launch the script :  
-`npx ts-node starknet_jsNewAccount.ts`  
+`npx ts-node src/starknet_jsNewAccount.ts`  
 
 When you see that you have to fund your new wallet, it's easy in devnet : use this command in a third console, where you have to replace 0x1234 with the account address provided in the second console :  
 ```
@@ -47,7 +49,7 @@ or `source ./mintWallet.sh`
 Then press enter in the second console ; the script will proceed until end.
 
 
-More easy : use `npx ts-node starknet_jsExistingAccount.ts`, using preexisting account #0 created automatically during Devnet launch.
+More easy : use `npx ts-node src/starknet_jsExistingAccount.ts`, using preexisting account #0 created automatically during Devnet launch.
 
 You can easily use these scripts as a basis for your needs.
 
