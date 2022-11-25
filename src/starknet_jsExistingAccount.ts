@@ -19,6 +19,10 @@ import {
 // launch 'starknet-devnet --seed 0' before using this script
 async function main() {
     //initialize Provider with DEVNET, reading .env file
+    if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
+        console.log("This script work only on local devnet.");
+        process.exit(1);
+    }
     const provider = process.env.STARKNET_PROVIDER_BASE_URL === undefined ?
         defaultProvider :
         new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });

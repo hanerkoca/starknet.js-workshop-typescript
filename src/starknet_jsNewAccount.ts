@@ -1,6 +1,7 @@
 import { ec as EC } from "elliptic";
 import fs from "fs";
 import readline from "readline";
+import axios from "axios";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -74,8 +75,16 @@ async function main() {
     // https://faucet.goerli.starknet.io/
     // For Devnet : use /mint  (see README.md)
     ////////////////////////////////////////////////////////////////////////////////
+    switch (process.env.STARKNET_PROVIDER_BASE_URL) {
+        case "http://127.0.0.1:5050": // local testnet
+            // Feed account with 50 ETH (let be generous!)
+            const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": accountResponse.contract_address, "amount": 50_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
+            console.log('Answer mint =', answer);
+            break;
+        default:
+            const ans = await askQuestion("Did you add funds to your Account? Hit enter if yes");
+    }
 
-    const ans = await askQuestion("Did you add funds to your Account? Hit enter if yes");
 
     ////////////////
     //// PART 2 ////
@@ -88,22 +97,6 @@ async function main() {
         accountAddress,
         starkKeyPair
     );
-
-
-    // console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
-    // console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
-
-
-    // let privateKey2 = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
-    // const starkKeyPair2 = ec.getKeyPair(privateKey2);
-    // const accountAddress2: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
-    // const account = new Account(
-    //     provider,
-    //     accountAddress2,
-    //     starkKeyPair2
-    // );
-
-
 
     console.log("Reading ERC20 Contract...");
     const compiledErc20 = json.parse(

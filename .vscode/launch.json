@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Critical Project",
+            "name": "typescript",
             "program": "${workspaceFolder}/src/starknet_jsNewAccount.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,

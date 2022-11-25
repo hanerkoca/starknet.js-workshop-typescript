@@ -16,3 +16,4 @@ __pycache__
 
 #Starknet plugin
 starknet-artifacts
+tsconfig.tsbuildinfo
