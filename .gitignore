@@ -1,4 +1,5 @@
 node_modules
+package-lock.json
 #.vscode
 README.md.backup
 
@@ -16,4 +17,5 @@ __pycache__
 
 #Starknet plugin
 starknet-artifacts
+
 tsconfig.tsbuildinfo

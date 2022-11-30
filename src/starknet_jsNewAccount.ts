@@ -27,7 +27,7 @@ async function main() {
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL)
     console.log("Reading OpenZeppelin Account Contract...");
     const compiledOZAccount = json.parse(
-        fs.readFileSync("./OZAccount.json").toString("ascii")
+        fs.readFileSync("./compiledContracts/OZAccount.json").toString("ascii")
     );
 
     // Since there are no Externally Owned Accounts (EOA) in StarkNet,
