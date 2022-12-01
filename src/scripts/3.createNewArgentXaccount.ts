@@ -1,4 +1,5 @@
-// create a new OZ account in devnet
+// marche pas (encore).
+// create a new ArgentX account in devnet
 import { Account, Contract, defaultProvider, ec, json, stark, Provider, number, hash } from "starknet";
 import { ec as EC } from "elliptic";
 import fs from "fs";
@@ -60,7 +61,7 @@ async function main() {
     // deploy account
     const OZaccount = new Account(provider, OZcontractAddress, starkKeyPair);
     const { transaction_hash, contract_address } = await OZaccount.deployAccount({ classHash: OZaccountClashHass, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub });
-    console.log('New OpenZeppelin account deployed.\n   final address =', contract_address);
+    console.log('OpenZeppelin account final address =', contract_address);
 
 
 

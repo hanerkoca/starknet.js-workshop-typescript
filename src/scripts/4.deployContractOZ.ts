@@ -37,6 +37,7 @@ async function main() {
 
     // Deploy Test instance in devnet
     const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
+    const testConstructorClassHash = "0x5bc924cef85dae2e453f515f520de4a4e98962d3a3ccadbe7891ef34bb04348";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
     const deployResponse = await account0.deployContract({ classHash: testClassHash });
 

@@ -58,7 +58,7 @@ Or use Hardhat for Starknet (install [here](https://github.com/Shard-Labs/starkn
 
 
 ## 📜 scripts :
-In the folder 'scripts', you can find pedagogical codes :
+In the folder 'scripts', you can find many pedagogical codes :
 
 ### Accounts :
 - Create accounts

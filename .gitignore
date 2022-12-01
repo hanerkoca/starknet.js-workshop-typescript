@@ -1,11 +1,11 @@
 node_modules
-package-lock.json
+./package-lock.json
 #.vscode
 README.md.backup
 
 #Typescript
 out
-tsconfig.tsbuildinfo
+./tsconfig.tsbuildinfo
 
 #Hardhat files
 cache

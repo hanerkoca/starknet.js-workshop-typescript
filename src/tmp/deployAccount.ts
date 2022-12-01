@@ -9,11 +9,11 @@ async function main() {
 
     // Argent Class Hash on Testnet
     // https://testnet.starkscan.co/address-book
-    const accountClassHash =
-        "0x033434ad846cdd5f23eb73ff09fe6fddd568284a0fb7d1be20ee482f044dabe2";
+    //const accountClassHash ="0x033434ad846cdd5f23eb73ff09fe6fddd568284a0fb7d1be20ee482f044dabe2";
+    const accountClassHash = "0x5cd533592dd40ee07a087e120dd30a7bd24efd54471a65755cc1d553094c7d7";
 
-    const argentProxyClassHash =
-        "0x25ec026985a3bf9d0cc1fe17326b245dfdc3ff89b8fde106542a3ea56c5a918";
+    //const argentProxyClassHash ="0x25ec026985a3bf9d0cc1fe17326b245dfdc3ff89b8fde106542a3ea56c5a918";
+    const argentProxyClassHash = "0x4a5cae61fa8312b0a3d0c44658b403d3e4197be80027fd5020ffcdf0c803331";
 
     const constructorCallData = stark.compileCalldata({
         implementation: accountClassHash,
@@ -64,7 +64,7 @@ async function main() {
     // use testnet-1 provider
     const testnetOneProvider = new Provider({
         sequencer: {
-            baseUrl: "http://127.0.0.1:5050",
+            baseUrl: "https://alpha4.starknet.io",
             feederGatewayUrl: "feeder_gateway",
             gatewayUrl: "gateway",
         },
