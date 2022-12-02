@@ -62,19 +62,20 @@ In the folder 'scripts', you can find many pedagogical codes :
 
 ### Accounts :
 - Create accounts
-    - Create OZ account
-    - Create ArgentX account
+    - Create OZ account [1.openPredeployedAccount](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
+    - Create ArgentX account [1.openPredeployedAccount](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
     - Create your abstracted account
 - Connect account
     - Connect predeployed account (only on devnet) [1.openPredeployedAccount](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
-    - Connect created account
+    - Connect created account 
 ### Contracts :
 - Declare contract
 - Deploy contract
     - Deploy with OZ deployer (UDC)
     - Deploy with a custom deployer
-- Declare & deploy contract with OZ deployer (UDC)
+- Declare & deploy contract with OZ deployer (UDC) [5](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
 ### Interactions
+- Connect a contract [7](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
 - Call
     - contract.nameFunction
     - contract.call

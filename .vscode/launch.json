@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "typescript",
-            "program": "${workspaceFolder}/src/scripts/3.deployArgentXcontracts.ts",
+            "program": "${workspaceFolder}/src/scripts/5.declareDeployContractOZ.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,

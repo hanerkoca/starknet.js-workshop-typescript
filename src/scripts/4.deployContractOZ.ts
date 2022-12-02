@@ -1,4 +1,4 @@
-// deploy an instance of an already declared contract.
+// Deploy an instance of an already declared contract.
 // use of OZ deployer
 
 import { Provider, Account, Contract, defaultProvider, ec, json, stark, number, hash } from "starknet";
@@ -13,8 +13,7 @@ dotenv.config();
 
 //          👇👇👇
 // 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
-//          Launch also the script for deployement of myUniversalDeployer.
-//          Launch also the script for deployement of Test.
+//          Launch also the script for declaration of Test contract : .
 //          👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
@@ -37,7 +36,7 @@ async function main() {
 
     // Deploy Test instance in devnet
     const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
-    const testConstructorClassHash = "0x5bc924cef85dae2e453f515f520de4a4e98962d3a3ccadbe7891ef34bb04348";
+    //const testConstructorClassHash = "0x5bc924cef85dae2e453f515f520de4a4e98962d3a3ccadbe7891ef34bb04348";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
     const deployResponse = await account0.deployContract({ classHash: testClassHash });
 

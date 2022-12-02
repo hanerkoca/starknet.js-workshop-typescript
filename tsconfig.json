@@ -10,10 +10,6 @@
     "esModuleInterop": true,
     "sourceMap": true,
   },
-  "include": [
-    "/**/*.ts",
-    "src/scripts/.createNewArgentXaccount copy.ts",
-  ],
   "exclude": [
     "node_modules"
   ]

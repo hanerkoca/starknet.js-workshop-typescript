@@ -34,11 +34,11 @@ async function main() {
     // new Open Zeppelin account v0.5.1 :
 
     // Generate public and private key pair.
-    const privateKey: EC.GenKeyPairOptions = { entropy: process.env.OZ_NEW_ACCOUNT_PRIVKEY };
+    const privateKey = process.env.OZ_NEW_ACCOUNT_PRIVKEY ?? "";
     // or for random private key :
-    // const privateKey: EC.GenKeyPairOptions = { entropy: stark.randomAddress() };
-    console.log('privateKey=', privateKey.entropy);
-    const starkKeyPair = ec.genKeyPair(privateKey);
+    //const privateKey=stark.randomAddress() ;
+    console.log('privateKey=', privateKey);
+    const starkKeyPair = ec.getKeyPair(privateKey);
     const starkKeyPub = ec.getStarkKey(starkKeyPair);
     console.log('publicKey=', starkKeyPub);
     //declare OZ wallet contract
@@ -48,8 +48,9 @@ async function main() {
     // Calculate Class Hash (calculated manually outside of this script)
     const OZaccountClashHass = "0x4d07e40e93398ed3c76981e72dd1fd22557a78ce36c0515f679e27f0bb5bc5f";
     const { transaction_hash: declTH, class_hash: decCH } = await account0.declare({ classHash: OZaccountClashHass, contract: compiledOZAccount });
-
     console.log('OpenZeppelin account class hash =', decCH);
+    await provider.waitForTransaction(declTH);
+
     // Calculate future address of the account
     const OZaccountConstructorCallData = stark.compileCalldata({ publicKey: starkKeyPub });
     const OZcontractAddress = hash.calculateContractAddressFromHash(starkKeyPub, OZaccountClashHass, OZaccountConstructorCallData, 0);
@@ -60,9 +61,8 @@ async function main() {
     // deploy account
     const OZaccount = new Account(provider, OZcontractAddress, starkKeyPair);
     const { transaction_hash, contract_address } = await OZaccount.deployAccount({ classHash: OZaccountClashHass, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub });
-    console.log('New OpenZeppelin account deployed.\n   final address =', contract_address);
-
-
+    console.log('✅ New OpenZeppelin account created.\n   final address =', contract_address);
+    await provider.waitForTransaction(transaction_hash);
 
 }
 main()

@@ -13,8 +13,6 @@ dotenv.config();
 
 //          👇👇👇
 // 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
-//          Launch also the script for deployement of myUniversalDeployer.
-//          Launch also the script for deployement of Test.
 //          👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
@@ -38,12 +36,12 @@ async function main() {
     // Deploy Test instance in devnet
     const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
-    const deployResponse = await account0.declareDeploy({ contract: compiledTest, classHash: testClassHash });
-    // In case of constructor, add : ,constructorCalldata: [encodeShortString('Token'),encodeShortString('ERC20'),account.address,],
+    const deployResponse = await account0.declareDeploy({ contract: compiledTest, classHash: testClassHash, salt: "0" });
+    // In case of constructor, add for example : ,constructorCalldata: [encodeShortString('Token'),encodeShortString('ERC20'),account.address,],
 
     // Connect the new contract :
     const myTestContract = new Contract(compiledTest.abi, deployResponse.deploy.contract_address, provider);
-    console.log('✅ Test Contract connected at =', myTestContract.deploy.address);
+    console.log('✅ Test Contract connected at =', myTestContract.address);
 
 }
 main()

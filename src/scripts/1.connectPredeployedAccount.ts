@@ -23,11 +23,7 @@ async function main() {
     const privateKey = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
     const starkKeyPair = ec.getKeyPair(privateKey);
     const accountAddress: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
-    const account = new Account(
-        provider,
-        accountAddress,
-        starkKeyPair
-    );
+    const account = new Account(provider, accountAddress, starkKeyPair);
     console.log('✅ OZ predeployed account 0 connected.');
 
 
