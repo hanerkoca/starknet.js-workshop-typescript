@@ -1,4 +1,4 @@
-# Starkware Starknet network ^0.13.0
+# Starkware Starknet network ^0.10.3
 # Cairo Accounts and ERC20 Demo 
 # Typescript code, using starknet.js and local Starknet-devnet 
 
@@ -20,7 +20,7 @@ If necessary :
 
 - Install latest LTS version of node [here](https://kinsta.com/blog/how-to-install-node-js/#how-to-install-nodejs-on-linux)
 - Install Python 3.9  [here](https://linuxize.com/post/how-to-install-python-3-9-on-ubuntu-20-04/)
-- Create a Starknet environment [here](https://starknet.io/docs/quickstart.html), with cairo 0.13.0 minimum.
+- Create a Starknet environment [here](https://starknet.io/docs/quickstart.html), with cairo 0.10.3 minimum.
 - Install Starknet-devnet  [here](https://shard-labs.github.io/starknet-devnet/docs/intro)
   
 Run `npm install` in this directory.
@@ -62,20 +62,20 @@ In the folder 'scripts', you can find many pedagogical codes :
 
 ### Accounts :
 - Create accounts
-    - Create OZ account [1.openPredeployedAccount](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
-    - Create ArgentX account [1.openPredeployedAccount](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
+    - Create OZ account [script2](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/2.createNewOZaccount.ts)
+    - Create ArgentX account [script3](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/3.createNewArgentXaccount.ts)
     - Create your abstracted account
 - Connect account
-    - Connect predeployed account (only on devnet) [1.openPredeployedAccount](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
+    - Connect predeployed account (only on devnet) [script1](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
     - Connect created account 
 ### Contracts :
 - Declare contract
 - Deploy contract
     - Deploy with OZ deployer (UDC)
     - Deploy with a custom deployer
-- Declare & deploy contract with OZ deployer (UDC) [5](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
+- Declare & deploy contract with OZ deployer (UDC) [script5](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/5.declareDeployContractOZ.ts)
 ### Interactions
-- Connect a contract [7](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
+- Connect a contract [script7](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/7.connectContract.ts)
 - Call
     - contract.nameFunction
     - contract.call

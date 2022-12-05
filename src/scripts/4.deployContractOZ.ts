@@ -1,13 +1,10 @@
 // Deploy an instance of an already declared contract.
 // use of OZ deployer
+// launch with npx ts-node src/scripts/4.deployContractOZ.ts
 
-import { Provider, Account, Contract, defaultProvider, ec, json, stark, number, hash } from "starknet";
-import { ec as EC } from "elliptic";
+import { Provider, Account, Contract, ec, json } from "starknet";
 import fs from "fs";
-import readline from "readline";
-import axios from "axios";
 import * as dotenv from "dotenv";
-import { starknetKeccak } from "starknet/dist/utils/hash";
 dotenv.config();
 
 
@@ -36,7 +33,6 @@ async function main() {
 
     // Deploy Test instance in devnet
     const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
-    //const testConstructorClassHash = "0x5bc924cef85dae2e453f515f520de4a4e98962d3a3ccadbe7891ef34bb04348";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
     const deployResponse = await account0.deployContract({ classHash: testClassHash });
 

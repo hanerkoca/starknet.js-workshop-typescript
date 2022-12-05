@@ -1,13 +1,11 @@
+// ⛔ not yet operational : 
 // deploy an instance of an already declared contract.
 // use of your custom deployer
+// launch with npx ts-node src/scripts/6.deployContractCustom.ts
 
-import { Provider, Account, Contract, defaultProvider, ec, json, stark, number, hash } from "starknet";
-import { ec as EC } from "elliptic";
+import { Provider, Account, Contract, ec, json } from "starknet";
 import fs from "fs";
-import readline from "readline";
-import axios from "axios";
 import * as dotenv from "dotenv";
-import { starknetKeccak } from "starknet/dist/utils/hash";
 dotenv.config();
 
 

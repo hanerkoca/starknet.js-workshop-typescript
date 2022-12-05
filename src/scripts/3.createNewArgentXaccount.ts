@@ -1,12 +1,10 @@
 // Deploy a new ArgentX wallet.
+// launch with npx ts-node src/scripts/3.createNewArgentXaccount.ts
 
-import { Provider, Account, Contract, defaultProvider, ec, json, stark, number, hash } from "starknet";
-import { ec as EC } from "elliptic";
+import { Provider, Account, ec, json, stark, hash } from "starknet";
 import fs from "fs";
-import readline from "readline";
 import axios from "axios";
 import * as dotenv from "dotenv";
-import { starknetKeccak } from "starknet/dist/utils/hash";
 dotenv.config();
 
 

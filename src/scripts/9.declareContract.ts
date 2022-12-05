@@ -1,6 +1,5 @@
-// declare & deploy a contract.
-// use of OZ deployer
-// launch with npx ts-node src/scripts/5.declareDeployContractOZ.ts
+// Declare a contract contract.
+// launch with npx ts-node src/scripts/9.declareContract.ts
 
 import { Provider, Account, Contract, ec, json } from "starknet";
 import fs from "fs";
@@ -10,6 +9,7 @@ dotenv.config();
 
 //          👇👇👇
 // 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
+//          Launch also the script for declaration of Test contract : .
 //          👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
@@ -30,15 +30,14 @@ async function main() {
     const account0 = new Account(provider, account0Address, starkKeyPair0);
     console.log('existing OZ account0 connected.');
 
-    // Declare & deploy Test contract in devnet
+    // Declare Test contract in devnet
+    // testClassHash has been previously calculated, as explained in README.md
     const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
-    const deployResponse = await account0.declareDeploy({ contract: compiledTest, classHash: testClassHash, salt: "0" });
-    // In case of constructor, add for example : ,constructorCalldata: [encodeShortString('Token'),encodeShortString('ERC20'),account.address,],
+    const declareResponse = await account0.declare({ contract: compiledTest, classHash: testClassHash });
 
-    // Connect the new contract instance :
-    const myTestContract = new Contract(compiledTest.abi, deployResponse.deploy.contract_address, provider);
-    console.log('✅ Test Contract connected at =', myTestContract.address);
+    console.log('✅ Test Contract Class Hash =', declareResponse.class_hash);
+    await provider.waitForTransaction(declareResponse.transaction_hash);
 
 }
 main()

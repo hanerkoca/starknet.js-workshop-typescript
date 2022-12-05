@@ -1,8 +1,8 @@
 // create a new OZ account in devnet
-import { Account, Contract, defaultProvider, ec, json, stark, Provider, number, hash } from "starknet";
-import { ec as EC } from "elliptic";
+// launch with npx ts-node src/scripts/2.createNewOZaccount.ts
+
+import { Account, ec, json, stark, Provider, hash } from "starknet";
 import fs from "fs";
-import readline from "readline";
 import axios from "axios";
 import * as dotenv from "dotenv";
 dotenv.config();

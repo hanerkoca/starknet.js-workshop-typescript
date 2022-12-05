@@ -1,11 +1,13 @@
 // Connect a predeployed OZ account in devnet. 
 // address and PrivKey are displayed when lanching starknet-devnet, and have been  stored in .env file.
-import { Account, defaultProvider, ec, Provider } from "starknet";
+// launch with npx ts-node src/scripts/1.connectPredeployedAccount.ts
+
+import { Account, ec, Provider } from "starknet";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 //    👇👇👇
-// 🚧 launch 'starknet-devnet --seed 0' before using this script
+// 🚨 launch 'starknet-devnet --seed 0' before using this script
 //    👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
