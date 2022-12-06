@@ -23,7 +23,6 @@ async function main() {
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
 
     // Connect the deployed Test instance in devnet
-    const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d"; // just for info
     const testAddress = "0x7667469b8e93faa642573078b6bf8c790d3a6184b2a1bb39c5c923a732862e1";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, testAddress, provider);

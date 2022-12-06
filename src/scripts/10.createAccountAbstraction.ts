@@ -1,5 +1,5 @@
-// create a new OZ account in devnet
-// launch with npx ts-node src/scripts/2.createNewOZaccount.ts
+// create a new abstracted account in devnet
+// launch with npx ts-node src/scripts/10.createAccountAbstraction.ts
 
 import { Account, ec, json, stark, Provider, hash } from "starknet";
 import fs from "fs";
@@ -31,37 +31,37 @@ async function main() {
     console.log('OZ account0 connected.\n');
 
 
-    // new Open Zeppelin account v0.5.1 :
+    // my customized account, with administrators :
 
     // Generate public and private key pair.
-    const privateKey = process.env.OZ_NEW_ACCOUNT_PRIVKEY ?? "";
+    const AAprivateKey = process.env.AA_NEW_ACCOUNT_PRIVKEY ?? "";
     // or for random private key :
     //const privateKey=stark.randomAddress() ;
-    console.log('privateKey=', privateKey);
-    const starkKeyPair = ec.getKeyPair(privateKey);
-    const starkKeyPub = ec.getStarkKey(starkKeyPair);
-    console.log('publicKey=', starkKeyPub);
-    //declare OZ wallet contract
-    const compiledOZAccount = json.parse(
-        fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii")
+    console.log('privateKey=', AAprivateKey);
+    const AAstarkKeyPair = ec.getKeyPair(AAprivateKey);
+    const AAstarkKeyPub = ec.getStarkKey(AAstarkKeyPair);
+    console.log('publicKey=', AAstarkKeyPub);
+    //declare my wallet contract
+    const compiledAAaccount = json.parse(
+        fs.readFileSync("./compiledContracts/myAccountAbstraction.json").toString("ascii")
     );
     // Calculate Class Hash (calculated manually outside of this script)
-    const OZaccountClashHass = "0x2794ce20e5f2ff0d40e632cb53845b9f4e526ebd8471983f7dbd355b721d5a";
-    const { transaction_hash: declTH, class_hash: decCH } = await account0.declare({ classHash: OZaccountClashHass, contract: compiledOZAccount });
-    console.log('OpenZeppelin account class hash =', decCH);
+    const AAaccountClashHass = "0x5139780c7ec8246e21a22e49f4fa0ce430237df4a4b241214a3a5a5c120120d";
+    const { transaction_hash: declTH, class_hash: decCH } = await account0.declare({ classHash: AAaccountClashHass, contract: compiledAAaccount });
+    console.log('Customized account class hash =', decCH);
     await provider.waitForTransaction(declTH);
 
     // Calculate future address of the account
-    const OZaccountConstructorCallData = stark.compileCalldata({ publicKey: starkKeyPub });
-    const OZcontractAddress = hash.calculateContractAddressFromHash(starkKeyPub, OZaccountClashHass, OZaccountConstructorCallData, 0);
-    console.log('Precalculated account address=', OZcontractAddress);
+    const AAaccountConstructorCallData = stark.compileCalldata({ super_admin_address: account0.address, publicKey: AAstarkKeyPub });
+    const AAcontractAddress = hash.calculateContractAddressFromHash(AAstarkKeyPub, AAaccountClashHass, AAaccountConstructorCallData, 0);
+    console.log('Precalculated account address=', AAcontractAddress);
     // fund account address before account creation
-    const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": OZcontractAddress, "amount": 50_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
+    const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": AAcontractAddress, "amount": 50_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
     console.log('Answer mint =', answer);
     // deploy account
-    const OZaccount = new Account(provider, OZcontractAddress, starkKeyPair);
-    const { transaction_hash, contract_address } = await OZaccount.deployAccount({ classHash: OZaccountClashHass, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub });
-    console.log('✅ New OpenZeppelin account created.\n   final address =', contract_address);
+    const AAaccount = new Account(provider, AAcontractAddress, AAstarkKeyPair);
+    const { transaction_hash, contract_address } = await AAaccount.deployAccount({ classHash: AAaccountClashHass, constructorCalldata: AAaccountConstructorCallData, addressSalt: AAstarkKeyPub });
+    console.log('✅ New customized account created.\n   final address =', contract_address);
     await provider.waitForTransaction(transaction_hash);
 
 }
@@ -71,3 +71,4 @@ main()
         console.error(error);
         process.exit(1);
     });
+

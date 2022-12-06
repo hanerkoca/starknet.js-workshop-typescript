@@ -10,7 +10,7 @@ dotenv.config();
 
 //          👇👇👇
 // 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
-//          Launch also the script for declaration of Test contract : .
+//          Launch also the script for declaration of Test contract : script 9.
 //          👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file

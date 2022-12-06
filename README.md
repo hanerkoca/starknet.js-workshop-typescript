@@ -64,15 +64,15 @@ In the folder 'scripts', you can find many pedagogical codes :
 - Create accounts
     - Create OZ account [script2](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/2.createNewOZaccount.ts)
     - Create ArgentX account [script3](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/3.createNewArgentXaccount.ts)
-    - Create your abstracted account
+    - Create your abstracted account [script10](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/10.createAccountAbstraction.ts)
 - Connect account
     - Connect predeployed account (only on devnet) [script1](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
-    - Connect created account 
+    - Connect created account [script8](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/8.ConnectWallet.ts)
 ### Contracts :
-- Declare contract
+- Declare contract [script9](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/9.declareContract.ts)
 - Deploy contract
-    - Deploy with OZ deployer (UDC)
-    - Deploy with a custom deployer
+    - Deploy with OZ deployer (UDC) [script4](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/4.deployContractOZ.ts)
+    - Deploy with a custom deployer [script6](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/6.deployContractMyDeployer.ts)
 - Declare & deploy contract with OZ deployer (UDC) [script5](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/5.declareDeployContractOZ.ts)
 ### Interactions
 - Connect a contract [script7](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/7.connectContract.ts)

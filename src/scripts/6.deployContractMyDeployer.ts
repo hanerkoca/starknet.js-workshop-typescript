@@ -1,9 +1,8 @@
-// ⛔ not yet operational : 
-// deploy an instance of an already declared contract.
+// Deploy an instance of an already declared contract.
 // use of your custom deployer
-// launch with npx ts-node src/scripts/6.deployContractCustom.ts
+// launch with npx ts-node src/scripts/6.deployContractMyDeployer.ts
 
-import { Provider, Account, Contract, ec, json } from "starknet";
+import { Provider, Account, Contract, ec, json, number, stark } from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -11,8 +10,7 @@ dotenv.config();
 
 //          👇👇👇
 // 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
-//          Launch also the script for deployement of myUniversalDeployer.
-//          Launch also the script for deployement of Test.
+//          Launch also the script for declaration of Test contract : script 9.
 //          👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
@@ -33,13 +31,24 @@ async function main() {
     const account0 = new Account(provider, account0Address, starkKeyPair0);
     console.log('existing OZ account0 connected.');
 
-    // Deploy Test instance in devnet
+    //declare & deploy myDeployer
+    const myDeployerClassHash = "0x2cfbde0971a5000868447d421945922ee66968eba14d1ea675f992f6bd52621";
+    const myDeployercompiled = json.parse(fs.readFileSync("./compiledContracts/myUniversalDeployer.json").toString("ascii"));
+    const deployDeployerResponse = await account0.declareDeploy({ contract: myDeployercompiled, classHash: myDeployerClassHash, salt: "0" });
+    console.log("deployer address =", deployDeployerResponse.deploy.address);
+
+    // Deploy Test instance in devnet, with my deployer
     const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
-    const deployResponse = await account0.deployContract({ classHash: testClassHash });
+    const deployerParams = stark.compileCalldata({ class_hash: testClassHash, params: [] });
+    const deployResponse = await account0.execute({ contractAddress: deployDeployerResponse.deploy.address, entrypoint: "deploy_contract", calldata: deployerParams });
+    const txReceiptDeployTest = await provider.waitForTransaction(deployResponse.transaction_hash);
+    const event = txReceiptDeployTest.events.find(
+        (it: any) => number.cleanHex(it.from_address) === number.cleanHex(deployDeployerResponse.deploy.address)
+    )
 
     // Connect the new contract :
-    const myTestContract = new Contract(compiledTest.abi, deployResponse.contract_address, provider);
+    const myTestContract = new Contract(compiledTest.abi, event.data[0], provider);
     console.log('✅ Test Contract connected at =', myTestContract.address);
 
 }
