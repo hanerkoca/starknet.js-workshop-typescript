@@ -1,22 +1,14 @@
-import { ec as EC } from "elliptic";
+// Deploy and use an ERC20, monetized by an existing account
+// Launch with : npx ts-node src/starknet_jsExistingAccount.ts
+
 import fs from "fs";
-import readline from "readline";
+import { Account, Contract, defaultProvider, ec, json, stark, Provider, shortString, uint256 } from "starknet";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import {
-    Account,
-    Contract,
-    defaultProvider,
-    ec,
-    json,
-    stark,
-    Provider,
-    number,
-    ProviderOptions,
-} from "starknet";
-
-// launch 'starknet-devnet --seed 0' before using this script
+//        👇👇👇
+// 🚨🚨🚨 launch 'starknet-devnet --seed 0' before using this script
+//        👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
     if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
@@ -35,81 +27,54 @@ async function main() {
     const privateKey = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
     const starkKeyPair = ec.getKeyPair(privateKey);
     const accountAddress: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
-    const account = new Account(
-        provider,
-        accountAddress,
-        starkKeyPair
-    );
-    console.log('OZ account 0 connected.');
+    const account0 = new Account(provider, accountAddress, starkKeyPair);
+    console.log('OZ account 0 connected.\n');
 
-    // Deploy an ERC20 contract and wait for it to be verified on StarkNet.
-    console.log("Reading ERC20 Contract...");
-    const compiledErc20 = json.parse(
-        fs.readFileSync("./ERC20.json").toString("ascii")
-    );
+    // Deploy an ERC20 contract 
     console.log("Deployment Tx - ERC20 Contract to StarkNet...");
-    const erc20Response = await provider.deployContract({
-        contract: compiledErc20,
-    });
-    console.log("ERC20 deploy Address: ", erc20Response.contract_address);
-    console.log("ERC20 deploy Hash: ", erc20Response.transaction_hash);
-    console.log("Waiting for Tx to be Accepted on Starknet - ERC20 Deployment...");
-    await provider.waitForTransaction(erc20Response.transaction_hash);
+    const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20Mintable.json").toString("ascii"));
+    const ERC20mintableClassHash = "0x795be772eab12ee65d5f3d9e8922d509d6672039978acc98697c0a563669e8";
+    const initialTk: uint256.Uint256 = { low: 100, high: 0 };
+    const ERC20ConstructorCallData = stark.compileCalldata({ name: shortString.encodeShortString('MyToken'), symbol: shortString.encodeShortString('MTK'), decimals: "18", initial_supply: { type: 'struct', low: initialTk.low, high: initialTk.high }, recipient: account0.address, owner: account0.address });
+    const deployERC20Response = await account0.declareDeploy({ classHash: ERC20mintableClassHash, contract: compiledErc20mintable, constructorCalldata: ERC20ConstructorCallData, salt: "0" });
+    console.log("ERC20 deployed at address: ", deployERC20Response.deploy.contract_address);
 
     // Get the erc20 contract address
-    const erc20Address = erc20Response.contract_address;
-    console.log("ERC20 Address: ", erc20Address);
+    const erc20Address = deployERC20Response.deploy.contract_address;
     // Create a new erc20 contract object
-    const erc20 = new Contract(compiledErc20.abi, erc20Address, provider);
-    erc20.connect(account);
+    const erc20 = new Contract(compiledErc20mintable.abi, erc20Address, provider);
+    erc20.connect(account0);
 
-    // Check balance - should be 0
+    // Check balance - should be 100
     console.log(`Calling StarkNet for account balance...`);
-    const balanceInitial = await erc20.balance_of(account.address);
-    console.log(`account Address ${account.address} has a balance of:`, number.toBN(balanceInitial.res, 16).toString());
+    const balanceInitial = await erc20.balanceOf(account0.address);
+    console.log("account0 has a balance of :", uint256.uint256ToBN(balanceInitial.balance).toString());
 
     // Mint 1000 tokens to account address
-    console.log(`Invoke Tx - Minting 1000 tokens to ${account.address}...`);
-    const { transaction_hash: mintTxHash } = await erc20.mint(
-        account.address,
-        "1000",
-        {
-            // transaction can be rejected if maxFee is lower than actual
-            // Error: REJECTED: FEE_TRANSFER_FAILURE
-            // Actual fee exceeded max fee.
-            maxFee: "999999995330000"
-        }
-    );
-
+    const base = uint256.bnToUint256(1000);
+    console.log("Invoke Tx - Minting 1000 tokens to account0...");
+    const { transaction_hash: mintTxHash } = await erc20.mint(account0.address, base, { maxFee: 900_000_000_000_000 });
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Minting...`);
     await provider.waitForTransaction(mintTxHash);
-    // Check balance - should be 1000
+    // Check balance - should be 1100
     console.log(`Calling StarkNet for account balance...`);
-    const balanceBeforeTransfer = await erc20.balance_of(account.address);
-    console.log(`account Address ${account.address} has a balance of:`, number.toBN(balanceBeforeTransfer.res, 16).toString());
+    const balanceBeforeTransfer = await erc20.balanceOf(account0.address);
+    console.log("account0 has a balance of :", uint256.uint256ToBN(balanceBeforeTransfer.balance).toString());
 
     // Execute tx transfer of 10 tokens
     console.log(`Invoke Tx - Transfer 10 tokens back to erc20 contract...`);
-    const { transaction_hash: transferTxHash } = await account.execute(
-        {
-            contractAddress: erc20Address,
-            entrypoint: "transfer",
-            calldata: [erc20Address, "10"],
-        },
-        undefined,
-        {
-            maxFee: "999999995330000"
-        }
-    );
-
+    const toTransferTk: uint256.Uint256 = uint256.bnToUint256(10);
+    const transferCallData = stark.compileCalldata({ recipient: erc20Address, initial_supply: { type: 'struct', low: toTransferTk.low, high: toTransferTk.high } });
+    const { transaction_hash: transferTxHash } = await account0.execute({ contractAddress: erc20Address, entrypoint: "transfer", calldata: transferCallData, }, undefined, { maxFee: 900_000_000_000_000 });
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Transfer...`);
     await provider.waitForTransaction(transferTxHash);
-    // Check balance after transfer - should be 990
+    // Check balance after transfer - should be 1090
     console.log(`Calling StarkNet for account balance...`);
-    const balanceAfterTransfer = await erc20.balance_of(account.address);
-    console.log(`account Address ${account.address} has a balance of:`, number.toBN(balanceAfterTransfer.res, 16).toString());
+    const balanceAfterTransfer = await erc20.balanceOf(account0.address);
+    console.log("account0 has a balance of :", uint256.uint256ToBN(balanceAfterTransfer.balance).toString());
+    console.log("✅ Test completed.");
 }
 main()
     .then(() => process.exit(0))

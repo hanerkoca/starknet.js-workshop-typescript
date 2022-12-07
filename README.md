@@ -29,7 +29,7 @@ The file .env defines the network to use. It's currently configured for the loca
 
 This repo is configured to be able to perform debugging of your typescript code. Just CTRL+SHIFT+D, then click on the green arrow.
 
-This script has been written with cairo v0.10.3, starknet-devnet v0.4.0, starknet.js v4.14.0. Due to fast iterations of Starknet and Cairo, this script will probably be quickly out-of-date.
+This script has been written with cairo v0.10.3, starknet-devnet v0.4.2, starknet.js v4.14.0. Due to fast iterations of Starknet and Cairo, this script will probably be quickly out-of-date.
 
 
 
@@ -71,19 +71,19 @@ In the folder 'scripts', you can find many pedagogical codes :
 ### Contracts :
 - Declare contract [script9](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/9.declareContract.ts)
 - Deploy contract
-    - Deploy with OZ deployer (UDC) [script4](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/4.deployContractOZ.ts)
+    - Deploy with OZ deployer 0.5.0 (UDC) [script4](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/4.deployContractOZ.ts)
     - Deploy with a custom deployer [script6](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/6.deployContractMyDeployer.ts)
-- Declare & deploy contract with OZ deployer (UDC) [script5](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/5.declareDeployContractOZ.ts)
+- Declare & deploy contract with OZ deployer 0.5.0 (UDC) [script5](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/5.declareDeployContractOZ.ts)
 ### Interactions
 - Connect a contract [script7](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/7.connectContract.ts)
 - Call
-    - contract.nameFunction
-    - contract.call
+    - contract.nameFunction [workshop](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/starknet_jsExistingAccount.ts#L50)
+    - contract.call [script11](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/11.CallInvokeContract.ts)
 - Invoke  
     - without need of signature
-        - contract.nameFunction
-        - contract.invoke
-    - with a signature : account.execute 
+        - contract.nameFunction [workshop](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/starknet_jsExistingAccount.ts#L56)
+        - contract.invoke [script11](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/11.CallInvokeContract.ts)
+    - with a signature : account.execute [workshop](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/starknet_jsExistingAccount.ts#L69)
 
 
 ## 🤔 Questions?

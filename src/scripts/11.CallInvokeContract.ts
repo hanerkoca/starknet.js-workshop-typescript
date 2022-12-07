@@ -1,7 +1,7 @@
-// Declare a contract contract.
-// launch with npx ts-node src/scripts/9.declareContract.ts
+// connect a contract that is already deployed on devnet.
+// launch with npx ts-node src/scripts/7.connectContract.ts
 
-import { Provider, Account, Contract, ec, json } from "starknet";
+import { Provider, Contract, Account, json, ec } from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -9,6 +9,7 @@ dotenv.config();
 
 //          👇👇👇
 // 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
+//          Launch also the script for deployement of Test (script5).
 //          👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
@@ -17,7 +18,6 @@ async function main() {
         process.exit(1);
     }
     const provider = new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });
-
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
 
     // connect existing predeployed account 0 of Devnet
@@ -29,14 +29,22 @@ async function main() {
     const account0 = new Account(provider, account0Address, starkKeyPair0);
     console.log('existing OZ account0 connected.\n');
 
-    // Declare Test contract in devnet
-    // testClassHash has been previously calculated, as explained in README.md
-    const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
-    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
-    const declareResponse = await account0.declare({ contract: compiledTest, classHash: testClassHash });
 
-    console.log('✅ Test Contract Class Hash =', declareResponse.class_hash);
-    await provider.waitForTransaction(declareResponse.transaction_hash);
+    // Connect the deployed Test instance in devnet
+    const testAddress = "0xb0b796eb0faaf4e9a9a534456e31bd9a053e255de17dbb6544a640eeedda7c"; // modify in accordance with result of script 5
+    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
+    const myTestContract = new Contract(compiledTest.abi, testAddress, provider);
+    console.log('Test Contract connected at =', myTestContract.address);
+
+    // Intractions with the contract with call & invoke
+    myTestContract.connect(account0);
+    const bal1 = await myTestContract.call("get_balance");
+    console.log("Initial balance =", bal1.res.toString());
+    const resu = await myTestContract.invoke("increase_balance", [10, 30]);
+    await provider.waitForTransaction(resu.transaction_hash);
+    const bal2 = await myTestContract.call("get_balance");
+    console.log("Initial balance =", bal2.res.toString());
+    console.log('✅ Test completed.');
 
 }
 main()

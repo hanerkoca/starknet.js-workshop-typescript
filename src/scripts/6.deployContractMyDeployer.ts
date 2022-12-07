@@ -29,7 +29,7 @@ async function main() {
     const starkKeyPair0 = ec.getKeyPair(privateKey0);
     const account0Address: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
     const account0 = new Account(provider, account0Address, starkKeyPair0);
-    console.log('existing OZ account0 connected.');
+    console.log('existing OZ account0 connected.\n');
 
     //declare & deploy myDeployer
     const myDeployerClassHash = "0x2cfbde0971a5000868447d421945922ee66968eba14d1ea675f992f6bd52621";

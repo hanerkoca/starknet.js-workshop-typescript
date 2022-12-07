@@ -9,8 +9,7 @@ dotenv.config();
 
 //          👇👇👇
 // 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
-//          Launch also the script for deployement of myUniversalDeployer.
-//          Launch also the script for deployement of Test.
+//          Launch also the script for deployement of Test (script5).
 //          👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
