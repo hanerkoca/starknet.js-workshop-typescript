@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "typescript",
-            "program": "${workspaceFolder}/src/scripts/11.CallInvokeContract.ts",
+            "program": "${workspaceFolder}/src/scriptsA2/2.1.createNewOZaccountTestnet.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,
