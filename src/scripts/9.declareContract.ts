@@ -3,6 +3,7 @@
 
 import { Provider, Account, Contract, ec, json } from "starknet";
 import fs from "fs";
+import BN from "bn.js";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -33,7 +34,9 @@ async function main() {
     // testClassHash has been previously calculated, as explained in README.md
     const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
-    const declareResponse = await account0.declare({ contract: compiledTest, classHash: testClassHash });
+    const { suggestedMaxFee: fee1 } = await account0.estimateDeclareFee({ contract: compiledTest, classHash: testClassHash });
+    console.log("suggestedMaxFee =", fee1.toString());
+    const declareResponse = await account0.declare({ contract: compiledTest, classHash: testClassHash }, { maxFee: fee1.mul(new BN(11)).div(new BN(10)) });
 
     console.log('✅ Test Contract Class Hash =', declareResponse.class_hash);
     await provider.waitForTransaction(declareResponse.transaction_hash);

@@ -4,6 +4,7 @@
 
 import { Provider, Account, Contract, ec, json } from "starknet";
 import fs from "fs";
+import BN from "bn.js"
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -34,7 +35,9 @@ async function main() {
     // Deploy Test instance in devnet
     const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
-    const deployResponse = await account0.deployContract({ classHash: testClassHash });
+    //estimate fee
+    const { suggestedMaxFee: estimatedFee1 } = await account0.estimateDeployFee({ classHash: testClassHash });
+    const deployResponse = await account0.deployContract({ classHash: testClassHash }, { maxFee: estimatedFee1.mul(new BN(11)).div(new BN(10)) });
 
     // Connect the new contract :
     const myTestContract = new Contract(compiledTest.abi, deployResponse.contract_address, provider);

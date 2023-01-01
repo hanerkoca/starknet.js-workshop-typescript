@@ -41,6 +41,7 @@ async function main() {
     // declare ArgentXaccount
     const { transaction_hash: AXAth, class_hash: AXAch } = await account0.declare({ classHash: argentXaccountClassHash, contract: ArgentXaccountCompiled });
     await provider.waitForTransaction(AXPth);
+    await provider.waitForTransaction(AXAth);
 
     // Calculate future address of the ArgentX account
     const privateKeyAX = process.env.AX_NEW_ACCOUNT_PRIVKEY ?? "";

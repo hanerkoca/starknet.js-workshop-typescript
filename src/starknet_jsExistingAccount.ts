@@ -32,11 +32,12 @@ async function main() {
 
     // Deploy an ERC20 contract 
     console.log("Deployment Tx - ERC20 Contract to StarkNet...");
-    const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20Mintable.json").toString("ascii"));
+    const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20MintableOZ051.json").toString("ascii"));
     const ERC20mintableClassHash = "0x795be772eab12ee65d5f3d9e8922d509d6672039978acc98697c0a563669e8";
     const initialTk: uint256.Uint256 = { low: 100, high: 0 };
     const ERC20ConstructorCallData = stark.compileCalldata({ name: shortString.encodeShortString('MyToken'), symbol: shortString.encodeShortString('MTK'), decimals: "18", initial_supply: { type: 'struct', low: initialTk.low, high: initialTk.high }, recipient: account0.address, owner: account0.address });
-    const deployERC20Response = await account0.declareDeploy({ classHash: ERC20mintableClassHash, contract: compiledErc20mintable, constructorCalldata: ERC20ConstructorCallData, salt: "0" });
+    console.log("constructor=", ERC20ConstructorCallData);
+    const deployERC20Response = await account0.declareDeploy({ classHash: ERC20mintableClassHash, contract: compiledErc20mintable, constructorCalldata: ERC20ConstructorCallData });
     console.log("ERC20 deployed at address: ", deployERC20Response.deploy.contract_address);
 
     // Get the erc20 contract address
@@ -51,9 +52,9 @@ async function main() {
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceInitial.balance).toString());
 
     // Mint 1000 tokens to account address
-    const base = uint256.bnToUint256(1000);
+    const amountToMint = uint256.bnToUint256(1000);
     console.log("Invoke Tx - Minting 1000 tokens to account0...");
-    const { transaction_hash: mintTxHash } = await erc20.mint(account0.address, base, { maxFee: 900_000_000_000_000 });
+    const { transaction_hash: mintTxHash } = await erc20.mint(account0.address, amountToMint, { maxFee: 900_000_000_000_000 });
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Minting...`);
     await provider.waitForTransaction(mintTxHash);

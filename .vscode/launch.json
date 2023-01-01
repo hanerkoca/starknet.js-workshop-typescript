@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "typescript",
-            "program": "${workspaceFolder}/src/scriptsA2/2.1.createNewOZaccountTestnet.ts",
+            "program": "${workspaceFolder}/src/tmp/callTestData.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,

@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "devnet": "starknet-devnet --seed 0 2> /dev/null &",
+    "fork2": "starknet-devnet --fork-network alpha-goerli2 2> /dev/null &",
+    "stop-devnet": "pkill starknet-devnet || /bin/true",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node out/app.js",
     "prestart": "npm run build",
@@ -16,7 +19,7 @@
     "@toruslabs/starkware-crypto": "^1.1.0",
     "axios": "^0.24.0",
     "fs": "^0.0.1-security",
-    "starknet": "^4.15.1"
+    "starknet": "^4.17.1"
   },
   "devDependencies": {
     "@types/elliptic": "^6.4.14",

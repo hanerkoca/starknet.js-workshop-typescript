@@ -81,9 +81,9 @@ async function main() {
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceInitial.balance).toString());
 
     // Mint 1000 tokens to account address
-    const base = uint256.bnToUint256(1000);
+    const amountToMint = uint256.bnToUint256(1000);
     console.log("Invoke Tx - Minting 1000 tokens to account0...");
-    const { transaction_hash: mintTxHash } = await erc20.mint(accountOZ.address, base, { maxFee: 900_000_000_000_000 });
+    const { transaction_hash: mintTxHash } = await erc20.mint(accountOZ.address, amountToMint, { maxFee: 900_000_000_000_000 });
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Minting...`);
     await provider.waitForTransaction(mintTxHash);

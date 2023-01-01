@@ -3,6 +3,7 @@
 
 import { Account, ec, json, stark, Provider, hash } from "starknet";
 import fs from "fs";
+import BN from "bn.js";
 import axios from "axios";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -34,9 +35,9 @@ async function main() {
     // new Open Zeppelin account v0.5.1 :
 
     // Generate public and private key pair.
-    const privateKey = process.env.OZ_NEW_ACCOUNT_PRIVKEY ?? "";
+    //const privateKey = process.env.OZ_NEW_ACCOUNT_PRIVKEY ?? "";
     // or for random private key :
-    //const privateKey=stark.randomAddress() ;
+    const privateKey = stark.randomAddress();
     console.log('privateKey=', privateKey);
     const starkKeyPair = ec.getKeyPair(privateKey);
     const starkKeyPub = ec.getStarkKey(starkKeyPair);
@@ -56,10 +57,12 @@ async function main() {
     const OZcontractAddress = hash.calculateContractAddressFromHash(starkKeyPub, OZaccountClashHass, OZaccountConstructorCallData, 0);
     console.log('Precalculated account address=', OZcontractAddress);
     // fund account address before account creation
+    //const { suggestedMaxFee: estimatedFee1 } = await account0.estimateAccountDeployFee({ classHash: OZaccountClashHass, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub, contractAddress: OZcontractAddress });
     const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": OZcontractAddress, "amount": 50_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
     console.log('Answer mint =', answer);
     // deploy account
     const OZaccount = new Account(provider, OZcontractAddress, starkKeyPair);
+    //const { transaction_hash, contract_address } = await OZaccount.deployAccount({ classHash: OZaccountClashHass, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub }, { maxFee: estimatedFee1.mul(new BN(11)).div(new BN(10)) });
     const { transaction_hash, contract_address } = await OZaccount.deployAccount({ classHash: OZaccountClashHass, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub });
     console.log('✅ New OpenZeppelin account created.\n   final address =', contract_address);
     await provider.waitForTransaction(transaction_hash);

@@ -1,5 +1,5 @@
 // connect a contract that is already deployed on devnet.
-// launch with npx ts-node src/scripts/7.connectContract.ts
+// launch with npx ts-node src/scripts/11.CallInvokeContract.ts
 
 import { Provider, Contract, Account, json, ec } from "starknet";
 import fs from "fs";
@@ -31,15 +31,18 @@ async function main() {
 
 
     // Connect the deployed Test instance in devnet
-    const testAddress = "0xb0b796eb0faaf4e9a9a534456e31bd9a053e255de17dbb6544a640eeedda7c"; // modify in accordance with result of script 5
+    const testAddress = "0x1e90aef7a2d5489f2f3707aae854c77e27f16dee6d34339eb93d18451c317c6"; // modify in accordance with result of script 5
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, testAddress, provider);
     console.log('Test Contract connected at =', myTestContract.address);
 
-    // Intractions with the contract with call & invoke
+    // Inetractions with the contract with call & invoke
     myTestContract.connect(account0);
     const bal1 = await myTestContract.call("get_balance");
     console.log("Initial balance =", bal1.res.toString());
+    // estimate fee
+    const { suggestedMaxFee: estimatedFee1 } = await account0.estimateInvokeFee({ contractAddress: testAddress, entrypoint: "increase_balance", calldata: ["10", "30"] });
+
     const resu = await myTestContract.invoke("increase_balance", [10, 30]);
     await provider.waitForTransaction(resu.transaction_hash);
     const bal2 = await myTestContract.call("get_balance");
