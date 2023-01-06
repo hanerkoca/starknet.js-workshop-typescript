@@ -46,7 +46,7 @@ async function main() {
         fs.readFileSync("./compiledContracts/myAccountAbstraction.json").toString("ascii")
     );
     // Calculate Class Hash (calculated manually outside of this script)
-    const AAaccountClashHass = "0x5139780c7ec8246e21a22e49f4fa0ce430237df4a4b241214a3a5a5c120120d";
+    const AAaccountClashHass = "0x1d926edb81b7ef0efcb67dd4558a6dffc2bf31a8bc9c3fe7832a5ec3d1b70da";
     const { transaction_hash: declTH, class_hash: decCH } = await account0.declare({ classHash: AAaccountClashHass, contract: compiledAAaccount });
     console.log('Customized account class hash =', decCH);
     await provider.waitForTransaction(declTH);

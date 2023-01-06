@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "typescript",
-            "program": "${workspaceFolder}/src/tmp/callTestData.ts",
+            "program": "${workspaceFolder}/src/scripts/13.signer.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,
