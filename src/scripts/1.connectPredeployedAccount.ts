@@ -17,6 +17,7 @@ async function main() {
     }
     const provider = new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });
 
+
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
 
     // initialize existing predeployed account 0 of Devnet

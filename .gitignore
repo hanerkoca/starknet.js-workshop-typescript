@@ -19,6 +19,7 @@ __pycache__
 starknet-artifacts
 
 #project
-tmp/
+src/tmp/
 src/scriptsA2/
 src/scriptsA1/
+.env

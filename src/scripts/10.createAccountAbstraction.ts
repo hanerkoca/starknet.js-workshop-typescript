@@ -1,7 +1,7 @@
 // create a new abstracted account in devnet
 // launch with npx ts-node src/scripts/10.createAccountAbstraction.ts
 
-import { Account, ec, json, stark, Provider, hash } from "starknet";
+import { Account, ec, json, stark, Provider, hash, number } from "starknet";
 import fs from "fs";
 import axios from "axios";
 import * as dotenv from "dotenv";
@@ -40,7 +40,7 @@ async function main() {
     console.log('privateKey=', AAprivateKey);
     const AAstarkKeyPair = ec.getKeyPair(AAprivateKey);
     const AAstarkKeyPub = ec.getStarkKey(AAstarkKeyPair);
-    console.log('publicKey=', AAstarkKeyPub);
+    console.log('publicKey=', AAstarkKeyPub, number.toBN(AAstarkKeyPub).toString());
     //declare my wallet contract
     const compiledAAaccount = json.parse(
         fs.readFileSync("./compiledContracts/myAccountAbstraction.json").toString("ascii")
@@ -60,7 +60,7 @@ async function main() {
     console.log('Answer mint =', answer);
     // deploy account
     const AAaccount = new Account(provider, AAcontractAddress, AAstarkKeyPair);
-    const { transaction_hash, contract_address } = await AAaccount.deployAccount({ classHash: AAaccountClashHass, constructorCalldata: AAaccountConstructorCallData, addressSalt: AAstarkKeyPub });
+    const { transaction_hash, contract_address } = await AAaccount.deployAccount({ classHash: AAaccountClashHass, constructorCalldata: AAaccountConstructorCallData, addressSalt: AAstarkKeyPub }, { maxFee: 9000000000000000 });
     console.log('✅ New customized account created.\n   final address =', contract_address);
     await provider.waitForTransaction(transaction_hash);
 
