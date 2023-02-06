@@ -1,0 +1,18 @@
+{
+    "erc20": [
+        {
+            "name": "ECU",
+            "addressDevnet": "0x0de79e1",
+            "AddressTestnet": "0xeeaa21",
+            "AddressTestnet2": "0xeeaa22",
+            "AddressMainnet": "0xeeaa23"
+        },
+        {
+            "name": "ETH",
+            "addressDevnet": "0x000001",
+            "AddressTestnet": "0x00002",
+            "AddressTestnet2": "0xeeaa24",
+            "AddressMainnet": "0xeeaa25"
+        }
+    ]
+}

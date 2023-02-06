@@ -1,0 +1,75 @@
+//
+//
+// Recover the full private key (X & Y) from a Starknet public key (with only X)
+// launch with npx ts-node src/scripts/signature/getFullPubKey.ts
+
+import { modularExp, modularSquareRoot } from "./ecMath";
+import { ec, constants } from "starknet";
+
+// const ALPHA = 1;
+// const BETA = "0x6f21413efbe40de150e596d72f7a8c5609ad26c15c915c1f4cdfcb99cee9e89";
+const ALPHA = "0x" + constants.ALPHA;
+const BETA = "0x" + constants.BETA;
+const ORDER = "0x800000000000010ffffffffffffffffb781126dcae7b2321e66a241adc64d2f";
+const GEN_X = "0x1ef15c18599971b7beced415a40f0c7deacfd9b0d1819e03d723d8bc943cfca";
+const GEN_Y = "0x5668060aa49730b7be4801df46ec62de53ecd11abe43a32873000c36e8dc1f";
+const FIELD_PRIME = "0x" + constants.FIELD_PRIME;
+
+const privateKey = '0x019800ea6a9a73f94aee6a3d2edf018fc770443e90c7ba121e8303ec6b349279';
+
+
+
+// Recovers the y coordinate of a point on the EC.
+//
+// Arguments:
+//   x - the x coordinate of an EC point.
+//
+// Returns:
+//   p - one of the two EC points with the given x coordinate (x, y).
+//
+// Assumptions:
+//   There exists y such that (x, y) is on the curve. Otherwise the function's hint will throw a
+//   python exception.
+//
+// Note:
+//   This function will fail on x = 0 because there is no such point on the curve. The point at
+//   infinity is represented as (0, 0), but this is just a representation, not actual coordinates.
+export function recoverY(x: bigint): bigint {
+    // alloc_locals;
+    // local p: EcPoint;
+    // %{
+    //     from starkware.crypto.signature.signature import ALPHA, BETA, FIELD_PRIME
+    //     from starkware.python.math_utils import recover_y
+    //     ids.p.x = ids.x
+    //    # This raises an exception if `x` is not on the curve.
+    //    ids.p.y = recover_y(ids.x, ALPHA, BETA, FIELD_PRIME)
+    //%}
+    // assert p.x = x;
+    // assert_on_curve(p);
+
+    // Recovers the corresponding y coordinate on the elliptic curve
+    // y^2 = x^3 + alpha * x + beta (mod field_prime)
+    // of a given x coordinate.
+    const mE = modularExp(x, 3n, BigInt(FIELD_PRIME));
+    console.log("mE =", mE.toString(16));
+    const y_squared = mE + BigInt(ALPHA) * BigInt(x) + BigInt(BETA);
+    console.log("y_squared =", y_squared.toString(16));
+    //if is_quad_residue(y_squared, field_prime):
+    return modularSquareRoot(y_squared, BigInt(FIELD_PRIME));
+    //raise NotOnCurveException(f"{x} does not represent the x coordinate of a point on the curve.")
+
+
+
+    //return y ;
+}
+
+
+const keyPair = ec.getKeyPair(privateKey);
+const pubKey = keyPair.getPublic('hex');//longPubKey
+console.log('pubKey =', pubKey);
+const pubKey2 = ec.getStarkKey(keyPair);//shortPubKey
+console.log('pubKey2 =', pubKey2);
+const x: bigint = BigInt(pubKey2);
+const y: bigint = recoverY(x);
+console.log("y =", y.toString(16));
+
