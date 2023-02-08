@@ -55,7 +55,7 @@ export function recoverY(x: bigint): bigint {
     const y_squared = mE + BigInt(ALPHA) * BigInt(x) + BigInt(BETA);
     console.log("y_squared =", y_squared.toString(16));
     //if is_quad_residue(y_squared, field_prime):
-    return modularSquareRoot(y_squared, BigInt(FIELD_PRIME));
+    return modularSquareRoot(y_squared, BigInt(FIELD_PRIME)); // ********  too slow for Starknet *******************
     //raise NotOnCurveException(f"{x} does not represent the x coordinate of a point on the curve.")
 
 

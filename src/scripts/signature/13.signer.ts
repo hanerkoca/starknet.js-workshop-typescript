@@ -37,25 +37,45 @@ async function main() {
     const message: BigNumberish[] = [1, 128, 18, 14];
     const msgHash = hash.computeHashOnElements(message);
     const signature = ec.sign(starkKeyPair, msgHash);
-    const publicKey = ec.getStarkKey(starkKeyPair);
-    console.log("publicKey calculated =", publicKey, typeof (publicKey));
-    const publicKey2 = starkKeyPair.getPublic("hex");
-    console.log("publicKey calculated =", publicKey2, typeof (publicKey2));
+    const starknetPublicKey = ec.getStarkKey(starkKeyPair);
+    const fullPublicKey = encode.addHexPrefix(starkKeyPair.getPublic("hex"));
+    console.log("     publicKey calculated =", starknetPublicKey, typeof (starknetPublicKey));
+    console.log("full publicKey calculated =", fullPublicKey, typeof (fullPublicKey));
     // const compiledAccount = json.parse(fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii"));
     // const contractAccount = new Contract(compiledAccount.abi, accountAddress, provider);
     // const res2 = await contractAccount.call("getPublicKey");
     // const accountPublicKey: string = "0x" + res2.publicKey.toString(16);
     // console.log("pub2 from account =", accountPublicKey);
 
-    // reception of data
-
-    const pub2 = "0x" + publicKey2;
-    console.log("publicKey 2 =", pub2, typeof (pub2));
-    const starkKeyPair1 = ec.getKeyPairFromPublicKey(pub2);
+    // verify message outside of StarkNet
+    console.log("Outside Starknet =");
+    const starkKeyPair1 = ec.getKeyPairFromPublicKey(fullPublicKey);
     const msgHash1 = hash.computeHashOnElements(message);
-    const result = ec.verify(starkKeyPair1, msgHash1, signature);
-    console.log("Result =", result);
+    const result1 = ec.verify(starkKeyPair1, msgHash1, signature);
+    console.log("Result (boolean) =", result1);
 
+    // verify message in the network, using the account linked to the privatekey
+    console.log("With Starknet =");
+    const compiledAccount = json.parse(fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii"));
+    const contractAccount = new Contract(compiledAccount.abi, accountAddress, provider);
+    const msgHash2 = hash.computeHashOnElements(message);
+    // The call of isValidSignature will generate an error if not valid
+    let result2: boolean;
+    try {
+        await contractAccount.call("isValidSignature", [msgHash2, signature]);
+        result2 = true;
+    } catch {
+        result2 = false;
+    }
+    console.log("Result (boolean) =", result2);
+
+    // check fullPubKey
+    console.log("full pub key check with account =");
+    const pubKey3 = await contractAccount.call("getPublicKey");
+    const isFullPubKeyRelatedToAccount: boolean =
+        BigInt(pubKey3.publicKey.toString()) ==
+        BigInt(encode.addHexPrefix(fullPublicKey.slice(4, 68)));
+    console.log("Result (boolean)=", isFullPubKeyRelatedToAccount);
 
 }
 main()

@@ -35,7 +35,7 @@ async function main() {
 
     //
     // address of account to mint 👇👇👇
-    const addrDest = "0x0569c3e6197Fb1760E436AcFf9ac32Adfc1168408A9961240A2ca69Ae9712cEb";
+    const addrDest = "0x0592d37DF7702c411BD72b577687A7F7c9759362cDDe76299e7c0865f47a883C";
     //
     //
 

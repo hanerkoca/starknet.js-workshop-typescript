@@ -6,6 +6,7 @@
     "incremental": true,
     "module": "commonjs",
     "moduleResolution": "Node",
+    "resolveJsonModule": true,
     "strict": true,
     "esModuleInterop": true,
     "sourceMap": true,

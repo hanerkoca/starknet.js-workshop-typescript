@@ -1,4 +1,9 @@
+//
 // 
+// code valid only for small numbers, so not for Starknet
+//
+//
+
 // https://stackoverflow.com/questions/5989429/pow-and-mod-function-optimization
 export function modularExp(base: bigint, exp: bigint, mod: bigint): bigint {
     if (exp == 0n) return 1n;
