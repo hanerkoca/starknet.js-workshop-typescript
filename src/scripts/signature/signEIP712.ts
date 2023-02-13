@@ -2,7 +2,8 @@
 // address and PrivKey are displayed when lanching starknet-devnet, and have been  stored in .env file.
 // launch with npx ts-node src/scripts/13.signer.ts
 
-import { Account, ec, hash, Provider, number, json, Contract, encode, Signature, typedData } from "starknet";
+import { Account, ec, hash, Provider, number, json, Contract, encode, Signature, shortString, } from "starknet";
+import * as typedData from "./typedData";
 import * as dotenv from "dotenv";
 import fs from "fs";
 import { BigNumberish } from "starknet/src/utils/number";
@@ -46,35 +47,61 @@ async function main() {
     const typedDataValidate: typedData.TypedData = {
         types: {
             StarkNetDomain: [
-                { name: 'name', type: 'string' },
-                { name: 'version', type: 'felt' },
-                { name: 'chainId', type: 'felt' },
-                { name: 'verifyingContract', type: 'felt' },
+                { name: "name", type: "string" },
+                { name: "version", type: "felt" },
+                { name: "chainId", type: "felt" },
+            ],
+            Airdrop: [
+                { name: "address", type: "felt" },
+                { name: "amount", type: "felt" }
             ],
             Validate: [
-                { name: 'from', type: 'felt' },
-                { name: 'starknetAddress', type: 'felt' },
-                { name: 'yourSelection', type: 'felt' },
-            ],
+                { name: "id", type: "felt" },
+                { name: "from", type: "felt" },
+                { name: "amount", type: "felt" },
+                { name: "nameGamer", type: "string" },
+                { name: "endDate", type: "felt" },
+                { name: "itemsAuthorized", type: "felt*" }, // array of felt
+                { name: "chkFunction", type: "selector" }, // name of function
+                { name: "rootList", type: "merkletree", contains: "Airdrop" } // root of a merkle tree
+            ]
         },
-        primaryType: 'Validate',
+        primaryType: "Validate",
         domain: {
-            name: 'Confirm the address',
-            version: '1',
-            chainId: "0x534e5f474f45524c49",
-            verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+            name: "myDapp", // put the name of your dapp to ensure that the signatures will not be used by other DAPP
+            version: "1",
+            chainId: shortString.encodeShortString("SN_GOERLI"), // shortString of 'SN_GOERLI' (or 'SN_MAIN' or 'SN_GOERLI2'), to be sure that signature can't be used by other network.
         },
         message: {
-            from: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
-            starknetAddress: "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a",
-            yourSelection: "4",
+            id: "0x0000004f000f",
+            from: "0x2c94f628d125cd0e86eaefea735ba24c262b9a441728f63e5776661829a4066",
+            amount: "400",
+            nameGamer: "Hector26",
+            endDate: "0x27d32a3033df4277caa9e9396100b7ca8c66a4ef8ea5f6765b91a7c17f0109c",
+            itemsAuthorized: ["0x01", "0x03", "0x0a", "0x0e"],
+            chkFunction: "check_authorization",
+            rootList: [
+                {
+                    address: "0x69b49c2cc8b16e80e86bfc5b0614a59aa8c9b601569c7b80dde04d3f3151b79",
+                    amount: "1554785",
+                }, {
+                    address: "0x7447084f620ba316a42c72ca5b8eefb3fe9a05ca5fe6430c65a69ecc4349b3b",
+                    amount: "2578248",
+                }, {
+                    address: "0x3cad9a072d3cf29729ab2fad2e08972b8cfde01d4979083fb6d15e8e66f8ab1",
+                    amount: "4732581",
+                }, {
+                    address: "0x7f14339f5d364946ae5e27eccbf60757a5c496bf45baf35ddf2ad30b583541a",
+                    amount: "913548",
+                },
+            ]
         },
     };
     const signature4 = await account.signMessage(typedDataValidate);
 
     // on receiver side, with account (that needs privKey)
     const result4 = await account.verifyMessage(typedDataValidate, signature4);
-    console.log("Result4 (boolean)=", result4);
+    console.log("Result4 off-chain (boolean)=", result4);
 
     // on receiver side, without account  (so, without privKey)
     const compiledAccount = json.parse(fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii"));
@@ -89,7 +116,7 @@ async function main() {
     } catch {
         result5 = false;
     }
-    console.log("Result5 (boolean) =", result5);
+    console.log("Result5 in-chain (boolean) =", result5);
 
 
     // // verify message outside of StarkNet

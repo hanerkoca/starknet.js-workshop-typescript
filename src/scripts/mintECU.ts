@@ -35,7 +35,7 @@ async function main() {
 
     //
     // address of account to mint 👇👇👇
-    const addrDest = "0x0592d37DF7702c411BD72b577687A7F7c9759362cDDe76299e7c0865f47a883C";
+    const addrDest = "0x7e9581744cdcc49f9a75facb083c7c76cac48eb13ba6773fbb653cd5a8a5f71";
     //
     //
 
@@ -59,7 +59,7 @@ async function main() {
     await provider.waitForTransaction(mintTxHash);
     const bal2 = await ERC20Contract.call("balanceOf", [addrDest]);
     console.log("Final balance =", uint256.uint256ToBN(bal2.balance).toString());
-    console.log('✅ Test completed.');
+    console.log('✅ Mint completed.');
 
 }
 main()

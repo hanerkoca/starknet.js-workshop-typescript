@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2020",
+    "target": "ES6",
+    "lib": [
+      "es2017",
+      "es7",
+      "es6",
+      "dom"
+    ],
     "outDir": "./out",
     "rootDir": "./src",
     "incremental": true,
@@ -11,7 +17,10 @@
     "esModuleInterop": true,
     "sourceMap": true,
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
-    "./node_modules/"
+    "node_modules"
   ]
 }
