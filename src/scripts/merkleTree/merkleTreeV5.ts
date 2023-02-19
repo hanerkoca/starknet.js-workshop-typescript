@@ -1,5 +1,5 @@
 // Test a Merkle tree
-// launch with npx ts-node src/scripts/merkleTree.ts
+// launch with npx ts-node src/scripts/merkleTree/merkleTreeV5.ts
 
 import { Account, ec, hash, Provider, number, json, Contract, encode, Signature, typedData, merkle, uint256 } from "starknet";
 import * as dotenv from "dotenv";
@@ -34,24 +34,31 @@ async function main() {
         address: string;
         amount: string;
     }
-    const airdrops: Airdrop[] = [
-        { address: "0x3456347545764578", amount: "256" },
-        { address: "0x345634772676164578", amount: "25" },
-        { address: "0x345634751544355764578", amount: "56" },
-        { address: "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a", amount: "26" },
-        { address: "0x34532461681464578", amount: "56" },
+    // Connect the deployed contract in devnet
+    //    👇👇👇
+    const testAddress = "0x6dce091932236915ef5699295cedbded9aa5c6dd2558ade397938ddcc53ad96"; // modify
+    //    👆👆👆
+    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/merkle-verify.json").toString("ascii"));
+    const myContract = new Contract(compiledTest.abi, testAddress, provider);
+    console.log('Contract connected at =', myContract.address);
+
+    // Inetractions with the contract with call & invoke
+    myContract.connect(account);
+    const proof = ['0x2fe51a397bc6729bb99d27ffadf5d3826a013ed49ae0f00326ee043fd2b668c',
+        '0x77202149831fe68628fc19be9879f77727f52c4d455ab4b2531a3bc5e59441f',
+        '0x7048f1ce20e899d5a5db552ecae56179510b7035b62066b0a12545a4d5c17e9'
     ]
-    const leafs: string[] = airdrops.map((airdop: Airdrop) => { return merkle.MerkleTree.hash(airdop.address, airdop.amount) });
-    console.log("leafs =", leafs);
-    const merkleT: merkle.MerkleTree = new merkle.MerkleTree(leafs);
-    console.log("tree =", merkleT);
-    const addressToCheck: string = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
-    const posToCheck: number = airdrops.findIndex((airdrop, index) => { if (airdrop.address == addressToCheck) { return index } });
-    console.log("pos =", posToCheck);
-    const proof: string[] = merkleT.getProof(leafs[posToCheck]);
-    console.log("proof =", proof);
-    const verified: boolean = merkle.proofMerklePath(merkleT.root, leafs[posToCheck], proof);
-    console.log("verified =", verified);
+    const result1 = await myContract.call("verify_proof", ["0x1ec6375477dd0822dc2c77c5c0a6efc97915a93df1ccc5c6b89b684c0ae2cef", proof]);
+    console.log("Result =", "0x" + result1.res.toString(16));
+    let airdropPerformed: boolean;
+    try {
+        await myContract.invoke("request_airdrop", ['0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a', 26, proof]);
+        airdropPerformed = true
+    }
+    catch {
+        airdropPerformed = false
+    }
+    console.log("Result =", airdropPerformed);
 }
 main()
     .then(() => process.exit(0))
