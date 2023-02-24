@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "typescript",
-            "program": "${workspaceFolder}/src/scripts/merkleTree/verifData.ts",
+            "program": "${workspaceFolder}/src/scripts/signature/signatureIssue479.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,

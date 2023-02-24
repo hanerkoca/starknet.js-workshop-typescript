@@ -36,7 +36,7 @@ async function main() {
     }
     // Connect the deployed contract in devnet
     //    👇👇👇
-    const testAddress = "0x6dce091932236915ef5699295cedbded9aa5c6dd2558ade397938ddcc53ad96"; // modify
+    const testAddress = "0x4a67a280ab6500f7d2f114a75d2ecf3d373b483f7d4c6b26f983715bc4bc1e2"; // modify
     //    👆👆👆
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/merkle-verify.json").toString("ascii"));
     const myContract = new Contract(compiledTest.abi, testAddress, provider);

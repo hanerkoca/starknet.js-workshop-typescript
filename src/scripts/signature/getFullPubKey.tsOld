@@ -14,7 +14,7 @@ const ORDER = "0x800000000000010ffffffffffffffffb781126dcae7b2321e66a241adc64d2f
 const GEN_X = "0x1ef15c18599971b7beced415a40f0c7deacfd9b0d1819e03d723d8bc943cfca";
 const GEN_Y = "0x5668060aa49730b7be4801df46ec62de53ecd11abe43a32873000c36e8dc1f";
 const FIELD_PRIME = "0x" + constants.FIELD_PRIME;
-
+const Fp = BigInt(FIELD_PRIME);
 const privateKey = '0x019800ea6a9a73f94aee6a3d2edf018fc770443e90c7ba121e8303ec6b349279';
 
 
@@ -34,7 +34,7 @@ const privateKey = '0x019800ea6a9a73f94aee6a3d2edf018fc770443e90c7ba121e8303ec6b
 // Note:
 //   This function will fail on x = 0 because there is no such point on the curve. The point at
 //   infinity is represented as (0, 0), but this is just a representation, not actual coordinates.
-export function recoverY(x: bigint): bigint {
+export function recoverY(SpubKey: bigint): bigint {
     // alloc_locals;
     // local p: EcPoint;
     // %{
@@ -50,17 +50,42 @@ export function recoverY(x: bigint): bigint {
     // Recovers the corresponding y coordinate on the elliptic curve
     // y^2 = x^3 + alpha * x + beta (mod field_prime)
     // of a given x coordinate.
-    const mE = modularExp(x, 3n, BigInt(FIELD_PRIME));
-    console.log("mE =", mE.toString(16));
-    const y_squared = mE + BigInt(ALPHA) * BigInt(x) + BigInt(BETA);
-    console.log("y_squared =", y_squared.toString(16));
-    //if is_quad_residue(y_squared, field_prime):
-    return modularSquareRoot(y_squared, BigInt(FIELD_PRIME)); // ********  too slow for Starknet *******************
+    // const mE = modularExp(x, 3n, BigInt(FIELD_PRIME));
+    // console.log("mE =", mE.toString(16));
+    // const y_squared = mE + BigInt(ALPHA) * BigInt(x) + BigInt(BETA);
+    // console.log("y_squared =", y_squared.toString(16));
+    // //if is_quad_residue(y_squared, field_prime):
+    // return modularSquareRoot(y_squared, BigInt(FIELD_PRIME)); // ********  too slow for Starknet *******************
     //raise NotOnCurveException(f"{x} does not represent the x coordinate of a point on the curve.")
+    const _0n = BigInt(0);
+    const _1n = BigInt(1);
+    const a = BigInt(ALPHA);
+    const b = BigInt(BETA);
 
 
+    function isValidFieldElement(num: bigint): boolean {
+        return _0n < num && num < Fp; // 0 is banned since it's not invertible FE
+    }
+    /**
+   * y² = x³ + ax + b: Short weierstrass curve formula
+   * @returns y²
+   */
+    function weierstrassEquation(x: T): T {
+        //const { a, b } = CURVE;
+        const x2 = Fp.sqr(x); // x * x
+        const x3 = Fp.mul(x2, x); // x2 * x
+        return Fp.add(Fp.add(x3, Fp.mul(x, a)), b); // x3 + a * x + b
+    }
 
     //return y ;
+    if (!isValidFieldElement(x)) throw new Error('Public key provided not valid : Point is not on curve');
+    const y2 = weierstrassEquation(x); // y² = x³ + ax + b
+    let y = Fp.sqrt(y2); // y = y² ^ (p+1)/4
+    const isYOdd = (y & _1n) === _1n;
+    // ECDSA
+    const isHeadOdd = (head & 1) === 1;
+    if (isHeadOdd !== isYOdd) y = Fp.neg(y);
+    return y;
 }
 
 
@@ -71,5 +96,5 @@ const pubKey2 = ec.getStarkKey(keyPair);//shortPubKey
 console.log('pubKey2 =', pubKey2);
 const x: bigint = BigInt(pubKey2);
 const y: bigint = recoverY(x);
-console.log("y =", y.toString(16));
+// console.log("y =", y.toString(16));
 
