@@ -6,7 +6,7 @@ import { Account, ec, hash, Provider, number, json, Contract, encode, Signature,
 import * as typedData from "./typedData";
 import * as dotenv from "dotenv";
 import fs from "fs";
-import { BigNumberish } from "starknet/src/utils/number";
+//import { BigNumberish } from "starknet/src/utils/number";
 import BN from "bn.js";
 dotenv.config();
 
@@ -35,7 +35,7 @@ async function main() {
     //const privateKey = stark.randomAddress();
     const privateKey = privateKey0;
     const starkKeyPair = ec.getKeyPair(privateKey);
-    const message: BigNumberish[] = [1, 128, 18, 14];
+    const message = [1, 128, 18, 14];
     const msgHash = hash.computeHashOnElements(message);
     const signature = ec.sign(starkKeyPair, msgHash);
     const starknetPublicKey = ec.getStarkKey(starkKeyPair);
