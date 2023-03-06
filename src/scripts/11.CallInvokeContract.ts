@@ -24,9 +24,8 @@ async function main() {
     console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
     console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
     const privateKey0 = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
-    const starkKeyPair0 = ec.getKeyPair(privateKey0);
     const account0Address: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
-    const account0 = new Account(provider, account0Address, starkKeyPair0);
+    const account0 = new Account(provider, account0Address, privateKey0);
     console.log('existing OZ account0 connected.\n');
 
 
@@ -38,8 +37,11 @@ async function main() {
 
     // Inetractions with the contract with call & invoke
     myTestContract.connect(account0);
-    const bal1 = await myTestContract.call("get_balance");
+    //const bal1 = await myTestContract.call("get_balance");
+    const bal1 = await myTestContract.get_balance();
+    const bal1b = await myTestContract.call("get_balance");
     console.log("Initial balance =", bal1.res.toString());
+    console.log("Initial balance =", bal1b.res.toString());
     // estimate fee
     const { suggestedMaxFee: estimatedFee1 } = await account0.estimateInvokeFee({ contractAddress: testAddress, entrypoint: "increase_balance", calldata: ["10", "30"] });
 
