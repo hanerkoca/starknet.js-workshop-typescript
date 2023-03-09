@@ -104,23 +104,7 @@ export function hashDataToBigint(data: inputForMerkle): bigint {
   } else {
     aa.push(data);
   }
-  return BigInt(ec.starkCurve.computeHashOnElements(aa)as string);
-}
-
-function isValidMerkleTree(tree: bigint[]): boolean {
-  // eslint-disable-next-line no-restricted-syntax
-  for (const [i, node] of tree.entries()) {
-    const l = leftChildIndex(i);
-    const r = rightChildIndex(i);
-    if (r >= tree.length) {
-      if (l < tree.length) {
-        return false;
-      }
-    } else if (!(node === hashPair(tree[l], tree[r]))) {
-      return false;
-    }
-  }
-  return tree.length > 0;
+  return BigInt(ec.starkCurve.computeHashOnElements(aa) as string);
 }
 
 function makeMerkleTree(leaves: bigint[]): bigint[] {
@@ -138,6 +122,21 @@ function makeMerkleTree(leaves: bigint[]): bigint[] {
   return tree;
 }
 
+function isValidMerkleTree(tree: bigint[]): boolean {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [i, node] of tree.entries()) {
+    const l = leftChildIndex(i);
+    const r = rightChildIndex(i);
+    if (r >= tree.length) {
+      if (l < tree.length) {
+        return false;
+      }
+    } else if (!(node === hashPair(tree[l], tree[r]))) {
+      return false;
+    }
+  }
+  return tree.length > 0;
+}
 
 const isTreeNode = (tree: bigint[], i: number) => i >= 0 && i < tree.length;
 const isInternalNode = (tree: bigint[], i: number) => isTreeNode(tree, leftChildIndex(i));
@@ -214,8 +213,6 @@ export class StarknetMerkleTree {
     return num.getHexString(element);
   }
 
-  getInputData(pos:number):inputForMerkle{return this.values[pos].value}
-
   /**
    * Creates a standard merkle tree out of an array.
    *
@@ -264,24 +261,19 @@ export class StarknetMerkleTree {
     return new StarknetMerkleTree(tree, indexedValues, hashLookup);
   }
 
-    /**
-   * Verify the consistancy of the tree. Useful after a load().
-   * Take care that this method is time-consuming.
-   * Throw an error if validation fail.
+  /**
+   * return the nth data used for the tree creation.
+   *
+   * @param pos - input data order (0 first).
+   * @returns
    * @example
    * ```typescript
-   * tree.validate();
+   * const data= tree.getInputData(3);
    * ```
    */
-    validate() {
-      for (let i = 0; i < this.values.length; i += 1) {
-        this.validateValue(i);
-      }
-      if (!isValidMerkleTree(this.tree)) {
-        throw new Error('Merkle tree is invalid');
-      }
-    }
-  
+  getInputData(pos: number): inputForMerkle {
+    return this.values[pos].value;
+  }
 
   /**
    * Loads the tree from a description previously returned by {@link dump}.
@@ -366,6 +358,24 @@ export class StarknetMerkleTree {
     // eslint-disable-next-line no-restricted-syntax
     for (const [i, { value }] of this.values.entries()) {
       yield [i, value];
+    }
+  }
+
+  /**
+   * Verify the consistancy of the tree. Useful after a load().
+   * Take care that this method is time-consuming.
+   * Throw an error if validation fail.
+   * @example
+   * ```typescript
+   * tree.validate();
+   * ```
+   */
+  validate() {
+    for (let i = 0; i < this.values.length; i += 1) {
+      this.validateValue(i);
+    }
+    if (!isValidMerkleTree(this.tree)) {
+      throw new Error('Merkle tree is invalid');
     }
   }
 

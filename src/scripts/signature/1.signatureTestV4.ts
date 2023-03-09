@@ -2,6 +2,7 @@
 import { ec, encode, hash } from 'starknet';
 
 const privateKey = '0x5b7d4f8710b3581ebb2b8b74efaa23d25ab0ffea2a4f3e269bf91bf9f63d634';
+const keyPair = ec.getKeyPair(privateKey);
 const fullPubKey = encode.addHexPrefix(keyPair.getPublic("hex")); // 512 bits
 const starknetPubKey: string = ec.getStarkKey(keyPair); // 256 bits
 console.log('fullpubKey    =', fullPubKey);

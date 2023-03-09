@@ -31,36 +31,45 @@ async function main() {
     console.log('✅ OZ predeployed account 0 connected.');
 
     // create MERKLE TREE. To perform once.
-    
+
     const airdrop: merkle.inputForMerkle[] = [
         ['0x69b49c2cc8b16e80e86bfc5b0614a59aa8c9b601569c7b80dde04d3f3151b79', '256'],
         ['0x3cad9a072d3cf29729ab2fad2e08972b8cfde01d4979083fb6d15e8e66f8ab1', '25'],
         ['0x27d32a3033df4277caa9e9396100b7ca8c66a4ef8ea5f6765b91a7c17f0109c', '56'],
         ['0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a', '26'],
         ['0x53c615080d35defd55569488bc48c1a91d82f2d2ce6199463e095b4a4ead551', '56'],
-      ];
-    const tree1=merkle.StarknetMerkleTree.create(airdrop);
-    console.log("root =",tree1.root); // for smartcontract constructor
+    ];
+    const tree1 = merkle.StarknetMerkleTree.create(airdrop);
+    console.log("root =", tree1.root); // for smartcontract constructor
     fs.writeFileSync('src/scripts/merkleTree/treeTest.json', JSON.stringify(tree1.dump()));
 
     // Connect the deployed contract in devnet
     //    👇👇👇
-    const testAddress = "0x13af6ca02e474d6dd0f5043f491754141a4cde4d6e63ce6adfd45a215bff30f"; // modify
+    const contractAddress = "0x55c37078b43bfa3a0ae6da58d3ac2bd1d8e80808199f6b4961d64b4e933ac0e"; // modify
     //    👆👆👆
-    
+
     // recover the saved merkle tree
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/merkle-verify.json").toString("ascii"));
-    const myContract = new Contract(compiledTest.abi, testAddress, provider);
+    const myContract = new Contract(compiledTest.abi, contractAddress, provider);
     console.log('Contract connected at =', myContract.address);
 
     const tree = merkle.StarknetMerkleTree.load(
         JSON.parse(fs.readFileSync('./src/scripts/merkleTree/treeTest.json', 'ascii'))
     );
     tree.validate(); // if necessary
-    const inp = ['0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a', '26'];
+    const walletAddress = '0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a';
+    const indexAddress = airdrop.findIndex((leaf) => {
+        if (leaf[0] == walletAddress) { return true }
+        return false
+    });
+    const inp = indexAddress;
+    if (inp === -1) {
+        throw new Error("address not found in the list.");
+    }
+    const inpData = tree.getInputData(inp);
 
-    console.log(inp);
-    const leafHash = merkle.StarknetMerkleTree.leafHash(inp);
+    console.log(inp, inpData);
+    const leafHash = merkle.StarknetMerkleTree.leafHash(inpData);
     console.log("leafHash =", leafHash);
     const proof = tree.getProof(inp);
 
@@ -69,12 +78,14 @@ async function main() {
     myContract.connect(account);
     const result1 = await myContract.verify_proof(leafHash, proof);
     // const idxResponse = Object.values(result1);
-    // console.log("Result =", "0x" + result1.res.toString(16));
-    console.log("result1 =", result1.res);
+    console.log("Result =", "0x" + result1.res.toString(16));
+    // console.log("result1 =", result1.res);
     // console.log("idxResponse =", idxResponse);
+    const params = [...inpData, proof];
+    console.log("params =", params);
     let airdropPerformed: boolean;
     try {
-        await myContract.invoke("request_airdrop", [...inp, proof]);
+        await myContract.invoke("request_airdrop", [...inpData, proof]);
         airdropPerformed = true
     }
     catch {

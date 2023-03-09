@@ -25,15 +25,15 @@ async function main() {
     console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
     console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
     const privateKey0 = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
-    const starkKeyPair0 = ec.getKeyPair(privateKey0);
+    // const starkKeyPair0 = ec.getKeyPair(privateKey0);
     const account0Address: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
-    const account0 = new Account(provider, account0Address, starkKeyPair0);
+    const account0 = new Account(provider, account0Address, privateKey0);
     console.log('existing OZ account0 connected.\n');
 
     // Declare & deploy Test contract in devnet
     const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
-    const deployResponse = await account0.declareDeploy({ contract: compiledTest, classHash: testClassHash, salt: "0" });
+    const deployResponse = await account0.declareAndDeploy({ contract: compiledTest, classHash: testClassHash, salt: "0" });
     // In case of constructor, add for example : ,constructorCalldata: [encodeShortString('Token'),encodeShortString('ERC20'),account.address,],
 
     // Connect the new contract instance :
