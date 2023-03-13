@@ -1,8 +1,9 @@
 // Deploy and use an ERC20, monetized by an existing account
 // Launch with : npx ts-node src/starknet_jsExistingAccount.ts
+// Uses Starknet.js 
 
 import fs from "fs";
-import { Account, Contract, defaultProvider, ec, json, stark, Provider, shortString, uint256 } from "starknet";
+import { Account, Contract, defaultProvider, json, stark, Provider, shortString, uint256 } from "starknet";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -25,19 +26,18 @@ async function main() {
     console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
     console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
     const privateKey = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
-    const starkKeyPair = ec.getKeyPair(privateKey);
     const accountAddress: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
-    const account0 = new Account(provider, accountAddress, starkKeyPair);
+    const account0 = new Account(provider, accountAddress, privateKey);
     console.log('OZ account 0 connected.\n');
 
     // Deploy an ERC20 contract 
     console.log("Deployment Tx - ERC20 Contract to StarkNet...");
-    const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20MintableOZ051.json").toString("ascii"));
-    const ERC20mintableClassHash = "0x795be772eab12ee65d5f3d9e8922d509d6672039978acc98697c0a563669e8";
+    const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20MintableOZ_0_6_1.json").toString("ascii"));
+    // const ERC20mintableClassHash = "0x795be772eab12ee65d5f3d9e8922d509d6672039978acc98697c0a563669e8";
     const initialTk: uint256.Uint256 = { low: 100, high: 0 };
     const ERC20ConstructorCallData = stark.compileCalldata({ name: shortString.encodeShortString('MyToken'), symbol: shortString.encodeShortString('MTK'), decimals: "18", initial_supply: { type: 'struct', low: initialTk.low, high: initialTk.high }, recipient: account0.address, owner: account0.address });
     console.log("constructor=", ERC20ConstructorCallData);
-    const deployERC20Response = await account0.declareDeploy({ classHash: ERC20mintableClassHash, contract: compiledErc20mintable, constructorCalldata: ERC20ConstructorCallData });
+    const deployERC20Response = await account0.declareAndDeploy({ contract: compiledErc20mintable, constructorCalldata: ERC20ConstructorCallData });
     console.log("ERC20 deployed at address: ", deployERC20Response.deploy.contract_address);
 
     // Get the erc20 contract address

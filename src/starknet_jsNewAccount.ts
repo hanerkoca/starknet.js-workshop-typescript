@@ -25,37 +25,37 @@ async function main() {
     console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
     console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
     const privateKey0 = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
-    const starkKeyPair0 = ec.getKeyPair(privateKey0);
+    // const starkKeyPair0 = ec.getKeyPair(privateKey0);
     const account0Address: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
-    const account0 = new Account(provider, account0Address, starkKeyPair0);
+    const account0 = new Account(provider, account0Address, privateKey0);
     console.log('OZ account0 connected.\n');
 
     // creation of new OZaccount in Devnet
     console.log('OZ_NEW_ACCOUNT_PRIVATE_KEY=', process.env.OZ_NEW_ACCOUNT_PRIVKEY);
     const privateKeyOZ = process.env.OZ_NEW_ACCOUNT_PRIVKEY ?? "";
-    const starkKeyPairOZ = ec.getKeyPair(privateKeyOZ);
-    const starkKeyPubOZ = ec.getStarkKey(starkKeyPairOZ);
-    console.log('OZ new account publicKey =', starkKeyPubOZ);
-    //declare OZ wallet contract
+    // const starkKeyPairOZ = ec.getKeyPair(privateKeyOZ);
+    const starkKeyPubOZ = ec.starkCurve.getStarkKey(privateKeyOZ);
+    // console.log('OZ new account publicKey =', starkKeyPubOZ);
+    // declare OZ wallet contract
     const compiledOZAccount = json.parse(
         fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii")
     );
     // Calculate Class Hash (calculated manually outside of this script)
-    const OZaccountClashHass = "0x2794ce20e5f2ff0d40e632cb53845b9f4e526ebd8471983f7dbd355b721d5a";
-    const { transaction_hash: declTH, class_hash: decCH } = await account0.declare({ classHash: OZaccountClashHass, contract: compiledOZAccount });
+    // const OZaccountClashHass = "0x2794ce20e5f2ff0d40e632cb53845b9f4e526ebd8471983f7dbd355b721d5a";
+    const { transaction_hash: declTH, class_hash: decCH } = await account0.declare({ contract: compiledOZAccount });
     console.log('OpenZeppelin account class hash =', decCH);
     await provider.waitForTransaction(declTH);
 
     // Calculate future address of the account
     const OZaccountConstructorCallData = stark.compileCalldata({ publicKey: starkKeyPubOZ });
-    const OZcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubOZ, OZaccountClashHass, OZaccountConstructorCallData, 0);
+    const OZcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubOZ, decCH, OZaccountConstructorCallData, 0);
     console.log('Precalculated account address=', OZcontractAddress);
     // fund account address before account creation
     const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": OZcontractAddress, "amount": 50_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
     console.log('Answer mint =', answer);
     // deploy account
-    const accountOZ = new Account(provider, OZcontractAddress, starkKeyPairOZ);
-    const { transaction_hash, contract_address } = await accountOZ.deployAccount({ classHash: OZaccountClashHass, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPubOZ });
+    const accountOZ = new Account(provider, OZcontractAddress, privateKeyOZ);
+    const { transaction_hash, contract_address } = await accountOZ.deployAccount({ classHash: decCH, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPubOZ });
     console.log('New OpenZeppelin account created.\n   final address =', contract_address);
     await provider.waitForTransaction(transaction_hash);
     console.log('new OZ account connected.\n');
@@ -63,10 +63,10 @@ async function main() {
     // Deploy an ERC20 contract 
     console.log("Deployment Tx - ERC20 Contract to StarkNet...");
     const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20Mintable.json").toString("ascii"));
-    const ERC20mintableClassHash = "0x795be772eab12ee65d5f3d9e8922d509d6672039978acc98697c0a563669e8";
+    // const ERC20mintableClassHash = "0x795be772eab12ee65d5f3d9e8922d509d6672039978acc98697c0a563669e8";
     const initialTk: uint256.Uint256 = { low: 100, high: 0 };
     const ERC20ConstructorCallData = stark.compileCalldata({ name: shortString.encodeShortString('MyToken'), symbol: shortString.encodeShortString('MTK'), decimals: "18", initial_supply: { type: 'struct', low: initialTk.low, high: initialTk.high }, recipient: accountOZ.address, owner: accountOZ.address });
-    const deployERC20Response = await accountOZ.declareDeploy({ classHash: ERC20mintableClassHash, contract: compiledErc20mintable, constructorCalldata: ERC20ConstructorCallData, salt: "0" });
+    const deployERC20Response = await accountOZ.declareAndDeploy({ contract: compiledErc20mintable, constructorCalldata: ERC20ConstructorCallData, salt: "0" });
     console.log("ERC20 deployed at address: ", deployERC20Response.deploy.contract_address);
 
     // Get the erc20 contract address

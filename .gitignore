@@ -22,4 +22,6 @@ starknet-artifacts
 src/tmp/
 src/scriptsA2/
 src/scriptsA1/
+src/A1priv/
 .env
+src/scripts/A1priv/A1priv.ts
