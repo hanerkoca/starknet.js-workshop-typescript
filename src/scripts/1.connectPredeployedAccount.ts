@@ -1,7 +1,7 @@
 // Connect a predeployed OZ account in devnet. 
 // address and PrivKey are displayed when lanching starknet-devnet, and have been  stored in .env file.
 // launch with npx ts-node src/scripts/1.connectPredeployedAccount.ts
-// for Starknet v5.1.1
+// Coded with Starknet.js v5.1.0
 
 import { Account, ec, Provider } from "starknet";
 import * as dotenv from "dotenv";
@@ -22,10 +22,10 @@ async function main() {
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
 
     // initialize existing predeployed account 0 of Devnet
-    console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
-    console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
-    const privateKey = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
-    const accountAddress: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
+    console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
+    console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
+    const privateKey = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
+    const accountAddress: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
     const account = new Account(provider, accountAddress, privateKey);
     console.log('✅ OZ predeployed account 0 connected.');
 

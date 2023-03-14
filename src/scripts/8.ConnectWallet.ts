@@ -1,5 +1,6 @@
 // Connect an existing account in devnet.
 // launch with : npx ts-node src/scripts/8.ConnectWallet.ts
+// Coded with Starknet.js v5.1.0
 
 import { Account, ec, Provider } from "starknet";
 import * as dotenv from "dotenv";
@@ -20,9 +21,8 @@ async function main() {
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
     // connect an existing OZ wallet
     const privateKeyOZaccount = process.env.OZ_NEW_ACCOUNT_PRIVKEY ?? "";
-    const starkKeyPairOZaccount = ec.getKeyPair(privateKeyOZaccount);
     const OZaccountAddress = process.env.OZ_NEW_ACCOUNT_ADDRESS ?? "";
-    const OZaccount = new Account(provider, OZaccountAddress, starkKeyPairOZaccount);
+    const OZaccount = new Account(provider, OZaccountAddress, privateKeyOZaccount);
     console.log('✅ Existing OpenZeppelin account connected.\n   at address =', OZaccount.address);
 
 }

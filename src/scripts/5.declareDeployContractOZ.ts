@@ -1,6 +1,7 @@
 // declare & deploy a contract.
 // use of OZ deployer
 // launch with npx ts-node src/scripts/5.declareDeployContractOZ.ts
+// Coded with Starknet.js v5.1.0
 
 import { Provider, Account, Contract, ec, json } from "starknet";
 import fs from "fs";
@@ -22,18 +23,17 @@ async function main() {
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
 
     // connect existing predeployed account 0 of Devnet
-    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
-    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
-    const privateKey0 = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
+    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
+    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
+    const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
     // const starkKeyPair0 = ec.getKeyPair(privateKey0);
-    const account0Address: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
+    const account0Address: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
     const account0 = new Account(provider, account0Address, privateKey0);
     console.log('existing OZ account0 connected.\n');
 
     // Declare & deploy Test contract in devnet
-    const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
-    const deployResponse = await account0.declareAndDeploy({ contract: compiledTest, classHash: testClassHash, salt: "0" });
+    const deployResponse = await account0.declareAndDeploy({ contract: compiledTest, salt: "0" });
     // In case of constructor, add for example : ,constructorCalldata: [encodeShortString('Token'),encodeShortString('ERC20'),account.address,],
 
     // Connect the new contract instance :

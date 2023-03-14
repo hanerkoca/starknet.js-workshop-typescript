@@ -1,6 +1,7 @@
 // Deploy an instance of an already declared contract.
 // use of OZ deployer
 // launch with npx ts-node src/scripts/4.deployContractOZ.ts
+// Coded with Starknet.js v5.1.0
 
 import { Provider, Account, Contract, ec, json } from "starknet";
 import fs from "fs";
@@ -24,12 +25,11 @@ async function main() {
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
 
     // connect existing predeployed account 0 of Devnet
-    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
-    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
-    const privateKey0 = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
-    const starkKeyPair0 = ec.getKeyPair(privateKey0);
-    const account0Address: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
-    const account0 = new Account(provider, account0Address, starkKeyPair0);
+    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
+    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
+    const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
+    const account0Address: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
+    const account0 = new Account(provider, account0Address, privateKey0);
     console.log('existing OZ account0 connected.\n');
 
     // Deploy Test instance in devnet
@@ -37,7 +37,7 @@ async function main() {
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
     //estimate fee
     const { suggestedMaxFee: estimatedFee1 } = await account0.estimateDeployFee({ classHash: testClassHash });
-    const deployResponse = await account0.deployContract({ classHash: testClassHash }, { maxFee: estimatedFee1.mul(new BN(11)).div(new BN(10)) });
+    const deployResponse = await account0.deployContract({ classHash: testClassHash }, { maxFee: estimatedFee1*11n/10n });
 
     // Connect the new contract :
     const myTestContract = new Contract(compiledTest.abi, deployResponse.contract_address, provider);

@@ -1,5 +1,6 @@
 // Deploy and use an ERC20, monetized by a new account
 // Launch with : npx ts-node src/starknet_jsNewAccount.ts
+// Coded with Starknet.js v5.1.0
 
 import fs from "fs";
 import { Account, Contract, defaultProvider, ec, json, stark, Provider, shortString, uint256, hash } from "starknet";
@@ -22,26 +23,23 @@ async function main() {
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
 
     // Connect existing predeployed account 0 of Devnet
-    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
-    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
-    const privateKey0 = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
+    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
+    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
+    const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
     // const starkKeyPair0 = ec.getKeyPair(privateKey0);
-    const account0Address: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
+    const account0Address: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
     const account0 = new Account(provider, account0Address, privateKey0);
     console.log('OZ account0 connected.\n');
 
     // creation of new OZaccount in Devnet
     console.log('OZ_NEW_ACCOUNT_PRIVATE_KEY=', process.env.OZ_NEW_ACCOUNT_PRIVKEY);
     const privateKeyOZ = process.env.OZ_NEW_ACCOUNT_PRIVKEY ?? "";
-    // const starkKeyPairOZ = ec.getKeyPair(privateKeyOZ);
     const starkKeyPubOZ = ec.starkCurve.getStarkKey(privateKeyOZ);
-    // console.log('OZ new account publicKey =', starkKeyPubOZ);
+    console.log('OZ new account publicKey =', starkKeyPubOZ);
     // declare OZ wallet contract
     const compiledOZAccount = json.parse(
-        fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii")
+        fs.readFileSync("./compiledContracts/Account_0_6_1.json").toString("ascii")
     );
-    // Calculate Class Hash (calculated manually outside of this script)
-    // const OZaccountClashHass = "0x2794ce20e5f2ff0d40e632cb53845b9f4e526ebd8471983f7dbd355b721d5a";
     const { transaction_hash: declTH, class_hash: decCH } = await account0.declare({ contract: compiledOZAccount });
     console.log('OpenZeppelin account class hash =', decCH);
     await provider.waitForTransaction(declTH);
@@ -62,11 +60,18 @@ async function main() {
 
     // Deploy an ERC20 contract 
     console.log("Deployment Tx - ERC20 Contract to StarkNet...");
-    const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20Mintable.json").toString("ascii"));
-    // const ERC20mintableClassHash = "0x795be772eab12ee65d5f3d9e8922d509d6672039978acc98697c0a563669e8";
+    const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20MintableOZ_0_6_1.json").toString("ascii"));
     const initialTk: uint256.Uint256 = { low: 100, high: 0 };
-    const ERC20ConstructorCallData = stark.compileCalldata({ name: shortString.encodeShortString('MyToken'), symbol: shortString.encodeShortString('MTK'), decimals: "18", initial_supply: { type: 'struct', low: initialTk.low, high: initialTk.high }, recipient: accountOZ.address, owner: accountOZ.address });
-    const deployERC20Response = await accountOZ.declareAndDeploy({ contract: compiledErc20mintable, constructorCalldata: ERC20ConstructorCallData, salt: "0" });
+    const ERC20ConstructorCallData = stark.compileCalldata({ 
+        name: shortString.encodeShortString('MyToken'), 
+        symbol: shortString.encodeShortString('MTK'), 
+        decimals: "18", 
+        initial_supply: { type: 'struct', low: initialTk.low, high: initialTk.high }, 
+        recipient: accountOZ.address, 
+        owner: accountOZ.address });
+    const deployERC20Response = await accountOZ.declareAndDeploy({ 
+        contract: compiledErc20mintable, 
+        constructorCalldata: ERC20ConstructorCallData});
     console.log("ERC20 deployed at address: ", deployERC20Response.deploy.contract_address);
 
     // Get the erc20 contract address

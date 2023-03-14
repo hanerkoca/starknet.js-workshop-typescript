@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@types/elliptic": "^6.4.14",
-    "@types/node": "^18.11.18",
+    "@types/node": "^18.15.1",
     "@types/url-join": "^4.0.1",
     "dotenv": "^16.0.3",
     "ts-node": "^10.9.1",

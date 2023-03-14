@@ -1,5 +1,6 @@
 // connect a contract that is already deployed on devnet.
 // launch with npx ts-node src/scripts/11.CallInvokeContract.ts
+// Coded with Starknet.js v5.1.0
 
 import { Provider, Contract, Account, json, ec } from "starknet";
 import fs from "fs";
@@ -21,10 +22,10 @@ async function main() {
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
 
     // connect existing predeployed account 0 of Devnet
-    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
-    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
-    const privateKey0 = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
-    const account0Address: string = process.env.OZ_ACCOUNT_ADDRESS ?? "";
+    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
+    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
+    const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
+    const account0Address: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
     const account0 = new Account(provider, account0Address, privateKey0);
     console.log('existing OZ account0 connected.\n');
 
@@ -35,19 +36,19 @@ async function main() {
     const myTestContract = new Contract(compiledTest.abi, testAddress, provider);
     console.log('Test Contract connected at =', myTestContract.address);
 
-    // Inetractions with the contract with call & invoke
+    // Interactions with the contract with call & invoke
     myTestContract.connect(account0);
-    //const bal1 = await myTestContract.call("get_balance");
     const bal1 = await myTestContract.get_balance();
-    const bal1b = await myTestContract.call("get_balance");
+    // 🚨 do not work in V5.1.0
+    // const bal1b = await myTestContract.call("get_balance");
     console.log("Initial balance =", bal1.res.toString());
-    console.log("Initial balance =", bal1b.res.toString());
+    // console.log("Initial balance =", bal1b.res.toString());
     // estimate fee
     const { suggestedMaxFee: estimatedFee1 } = await account0.estimateInvokeFee({ contractAddress: testAddress, entrypoint: "increase_balance", calldata: ["10", "30"] });
 
     const resu = await myTestContract.invoke("increase_balance", [10, 30]);
     await provider.waitForTransaction(resu.transaction_hash);
-    const bal2 = await myTestContract.call("get_balance");
+    const bal2 = await myTestContract.get_balance();
     console.log("Initial balance =", bal2.res.toString());
     console.log('✅ Test completed.');
 

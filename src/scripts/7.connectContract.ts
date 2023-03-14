@@ -1,5 +1,6 @@
 // connect a contract that is already deployed on devnet.
 // launch with npx ts-node src/scripts/7.connectContract.ts
+// Coded with Starknet.js v5.1.0
 
 import { Provider, Contract, json } from "starknet";
 import fs from "fs";

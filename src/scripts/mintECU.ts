@@ -24,9 +24,8 @@ async function main() {
     console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
     console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
     const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
-    const starkKeyPair0 = ec.getKeyPair(privateKey0);
     const account0Address: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
-    const account0 = new Account(provider, account0Address, starkKeyPair0);
+    const account0 = new Account(provider, account0Address, privateKey0);
     console.log('existing OZ account0 connected.\n');
 
     const addrETH = "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
@@ -45,7 +44,7 @@ async function main() {
 
     // Interactions with the contract with call & invoke
     ERC20Contract.connect(account0);
-    const bal1 = await ERC20Contract.call("balanceOf", [addrDest]);
+    const bal1 = await ERC20Contract.balanceOf(addrDest);
     console.log("Initial balance =", uint256.uint256ToBN(bal1.balance).toString());
 
     // Mint 1000 tokens to account address
@@ -57,7 +56,7 @@ async function main() {
         { maxFee: 900_000_000_000_000 }
     );
     await provider.waitForTransaction(mintTxHash);
-    const bal2 = await ERC20Contract.call("balanceOf", [addrDest]);
+    const bal2 = await ERC20Contract.balanceOf(addrDest);
     console.log("Final balance =", uint256.uint256ToBN(bal2.balance).toString());
     console.log('✅ Mint completed.');
 
