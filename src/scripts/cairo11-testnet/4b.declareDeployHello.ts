@@ -13,7 +13,7 @@ async function main() {
     //initialize Provider 
     const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
 
-    // const privateKey0 = "1202422677688430114213521431078907413426836022101021128058478935525263950730";
+    
     const account0Address: string = "0x065A822fBeE1Ae79e898688b5A4282Dc79E0042cbEd12F6169937FdDb4c26641";
     const account0 = new Account(provider, account0Address, privateKey0);
     console.log('existing AX account2 connected.\n');
