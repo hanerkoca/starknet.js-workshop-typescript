@@ -40,7 +40,7 @@ async function main() {
     myTestContract.connect(account0);
     const bal1 = await myTestContract.get_balance();
     // 🚨 do not work in V5.1.0
-    // const bal1b = await myTestContract.call("get_balance");
+    const bal1b = await myTestContract.call("get_balance");
     console.log("Initial balance =", bal1.res.toString());
     // console.log("Initial balance =", bal1b.res.toString());
     // estimate fee
