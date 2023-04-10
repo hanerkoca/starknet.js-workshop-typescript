@@ -79,6 +79,10 @@ In the folder 'scripts', you can find many pedagogical codes :
     - with a signature : account.execute [workshop](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/starknet_jsExistingAccount.ts#L69)
 
 
+## Cairo 1:
+
+You can find some explanations for the use of Starknet.js with Cairo 1 smart-contracts [here](./Cairo1.md).
+
 ## 🤔 Questions?
 
 Have a look in the starknet.js [documentation](https://www.starknetjs.com/docs/next/guides/intro).
