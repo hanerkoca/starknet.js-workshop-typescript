@@ -60,7 +60,7 @@ const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_G
 ```
 And adapt in consequence the address and the private key to one of your account present in this network.
 
-You can find this contract already seployed in testnet and devnet :
+You can find this contract already deployed in testnet and devnet :
 - Testnet address : 0x697d3bc2e38d57752c28be0432771f4312d070174ae54eef67dd29e4afb174
 - Testnet-2 address : 0x299d68d537a860025749248411d69eff49d7b4b121ef7ec69e7fc470851b4ae
 
