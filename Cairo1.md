@@ -58,13 +58,17 @@ const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_G
 ```typescript
 const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI2 } });
 ```
-And adapt in consequence the address and the private key of one of your account present in this network.
+And adapt in consequence the address and the private key to one of your account present in this network.
+
+You can find this contract already seployed in testnet and devnet :
+- Testnet address : 0x697d3bc2e38d57752c28be0432771f4312d070174ae54eef67dd29e4afb174
+- Testnet-2 address : 0x299d68d537a860025749248411d69eff49d7b4b121ef7ec69e7fc470851b4ae
 
 > Today, do not use declareAndDeploy() with Cairo 1. Perform the deploiement in 2 steps (declare, then deploy). Will be available soon.
 
 ## Interact with your Cairo 1 contract:
 
-You can find a little script to interact with a contract : [here](.src/scripts/cairo11-devnet/11.CallInvokeContract.ts)
+You can find a little script to interact with a contract : [here](./src/scripts/cairo11-devnet/11.CallInvokeContract.ts)
 
 > Use CallData.compile() to prepare the parameters to send to the smart-contract. Mandatory for Cairo 1.
 
@@ -78,7 +82,7 @@ You can find a little script to interact with a contract : [here](.src/scripts/c
 }
 ```
 
-> The answer is in an array of numbers. ex : `result[0]` for the first value.
+> The answer is in an array of Hex numbers. ex : `result[0]` for the first value.
 
 > Debug.print() is not allowed in Starknet network.
 
