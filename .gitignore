@@ -24,6 +24,8 @@ src/scriptsA2/
 src/scriptsA1/
 src/A1priv/
 src/A2priv/
+src/A-MainPriv/
 .env
-src/scripts/A1priv/A1priv.ts
+src/A1priv/A1priv.ts
 src/A2priv/A1priv.ts
+src/A-MainPriv/mainPriv.ts

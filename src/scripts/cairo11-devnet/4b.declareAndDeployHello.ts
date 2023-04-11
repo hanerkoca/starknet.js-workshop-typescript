@@ -2,9 +2,7 @@
 // use of OZ deployer
 // launch with npx ts-node src/scripts/cairo11-devnet/4b.declareDeployHello.ts
 
-// 🚨 Do not work in v5.5.0
-
-import { Provider, Account, Contract, ec, json, stark, uint256, shortString, constants } from "starknet";
+import { Provider, Account, Contract,  json} from "starknet";
 import { privateKey0 } from "../../A1priv/A1priv";
 import fs from "fs";
 import * as dotenv from "dotenv";
@@ -12,17 +10,17 @@ dotenv.config();
 
 
 async function main() {
-    //initialize Provider 
-    const provider = new Provider({ sequencer: { baseUrl: "http://127.0.0.1:5050" } });
-
-    // initialize existing predeployed account 0 of Devnet
-    console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
-    console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
-    const privateKey = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
-    const accountAddress: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
-    const account0 = new Account(provider, accountAddress, privateKey);
-    console.log('✅ OZ predeployed account 0 connected.');
-
+     //initialize Provider 
+     const provider = new Provider({ sequencer: { baseUrl: "http://127.0.0.1:5050" } });
+     console.log('✅ Connected to devnet.');
+ 
+     // initialize existing predeployed account 0 of Devnet
+     const privateKey = "0xe3e70682c2094cac629f6fbed82c07cd";
+     const accountAddress: string = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
+     const account0 = new Account(provider, accountAddress, privateKey);
+     console.log('✅ Predeployed account deployed\nOZ_ACCOUNT_ADDRESS=', account0.address);
+     console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);
+ 
     // Declare & deploy Test contract in devnet
     const compiledHelloSierra = json.parse(fs.readFileSync("./compiledContracts/hello.sierra").toString("ascii"));
     const compiledHelloCasm = json.parse(fs.readFileSync("./compiledContracts/hello.casm").toString("ascii"));
