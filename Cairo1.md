@@ -15,9 +15,9 @@ The Cairo 1 compiler provides an abi in the .sierra file. Today, this abi isn't 
 ## prerequirements:
 
 You need to have :
-- Starknet-devnet ^0.5.0.a1
-- Cairo 1 installed, from Starkware repo, branch `v1.0.0-alpha.6`
-- Starknet.js ^5.5.0
+- Starknet-devnet ^0.5.0.a1 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.0a2).
+- Cairo 1 installed, from Starkware repo, branch `v1.0.0-alpha.6` [here](https://github.com/starkware-libs/cairo/tree/v1.0.0-alpha.6).
+- Starknet.js ^5.5.0 [here](https://github.com/0xs34n/starknet.js/tree/v5.5.0).
 
 ## compilation of Cairo 1:
 We will use a small Cairo 1 smart-contract, available [here](./contracts/Cairo1Test/test_type1.cairo) .
@@ -43,9 +43,11 @@ Launch starknet-devnet with this option :
 ```
 starknet-devnet --seed 0
 ```
-You can find a little script to deploy a contract : [here](./src/scripts/cairo11-devnet/4.declareThenDeployHello.ts)
+You can find 2 little scripts to deploy a contract : 
+- one to declare and deploy in 2 steps [here](./src/scripts/cairo11-devnet/4.declareThenDeployHello.ts).
+- one to declare and deploy in 1 step [here](./src/scripts/cairo11-devnet/4b.declareAndDeployHello.ts).
 
-This script can be launch with :
+This script can be launched with :
 ```bash
 npx ts-node src/scripts/cairo11-devnet/4.declareThenDeployHello.ts
 ```
@@ -60,11 +62,9 @@ const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_G
 ```
 And adapt in consequence the address and the private key to one of your account present in this network.
 
-You can find this contract already seployed in testnet and devnet :
+You can find this contract already deployed in testnet and testnet 2 :
 - Testnet address : 0x697d3bc2e38d57752c28be0432771f4312d070174ae54eef67dd29e4afb174
 - Testnet-2 address : 0x299d68d537a860025749248411d69eff49d7b4b121ef7ec69e7fc470851b4ae
-
-> Today, do not use declareAndDeploy() with Cairo 1. Perform the deploiement in 2 steps (declare, then deploy). Will be available soon.
 
 ## Interact with your Cairo 1 contract:
 
@@ -74,7 +74,7 @@ You can find a little script to interact with a contract : [here](./src/scripts/
 
 > Use only meta-class to interact with your contract (ex : `contract.getBalance()`)  
 
-> With a @view function, do not forget these options for Cairo 1 : 
+> For a @view function, do not forget these options for Cairo 1 : 
 ```typescript
 {
     parseRequest: false,
