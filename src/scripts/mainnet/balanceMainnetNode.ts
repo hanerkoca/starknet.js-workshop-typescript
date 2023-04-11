@@ -25,26 +25,20 @@ async function main() {
     const account4 = new Account(provider, accountMainnet4Address, accountMainnet4AddressprivateKey);
     console.log('existing ArgentX account4 connected. Address =', account4.address, "\n");
 
-    // Connect the deployed Test instance in devnet
+    // Connect the ERC20 ETH instance in Mainnet
     const ethAddress = "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
     const compiledEthContract = json.parse(fs.readFileSync("./compiledContracts/ERC20MintableOZ_0_6_1.json").toString("ascii"));
     const ethContract = new Contract(compiledEthContract.abi, ethAddress, provider);
     ethContract.connect(account4);
     console.log('ETH ERC20 contract connected at =', ethContract.address);
 
-    // Interactions with the contract with call & invoke
+    // Interactions with the contract with call
     const res1 = await ethContract.balanceOf(account4.address);
+    // const bal1b = await ethContract.call("balanceOf",[ethAddress]);
     const balance: number = Number(uint256.uint256ToBN(res1.balance));
-    //const bal1b = await ethContract.call("balanceOf");
+    // const balanceb: number = Number(uint256.uint256ToBN(bal1b.balance));
     console.log("Node report that account 4 owns", balance / 1E18, "ETH");
-    // console.log("Initial balance =", bal1b.res.toString());
-    // estimate fee
-    // const { suggestedMaxFee: estimatedFee1 } = await account0.estimateInvokeFee({ contractAddress: testAddress, entrypoint: "increase_balance", calldata: ["10", "30"] });
 
-    // const resu = await myTestContract.invoke("increase_balance", [10, 30]);
-    // await provider.waitForTransaction(resu.transaction_hash);
-    // const bal2 = await myTestContract.get_balance();
-    // console.log("Initial balance =", bal2.res.toString());
     console.log('✅ Test completed.');
 
 }
