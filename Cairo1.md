@@ -47,7 +47,7 @@ You can find 2 little scripts to deploy a contract :
 - one to declare and deploy in 2 steps [here](./src/scripts/cairo11-devnet/4.declareThenDeployHello.ts).
 - one to declare and deploy in 1 step [here](./src/scripts/cairo11-devnet/4b.declareAndDeployHello.ts).
 
-This script can be launched with :
+The first script can be launched with :
 ```bash
 npx ts-node src/scripts/cairo11-devnet/4.declareThenDeployHello.ts
 ```
@@ -82,7 +82,7 @@ You can find a little script to interact with a contract : [here](./src/scripts/
 }
 ```
 
-> The answer is in an array of Hex numbers. ex : `result[0]` for the first value.
+> The answer is in an array of Hex numbers. ex : `result[0]` for the first value. An array returns the size, then the elements. An Uint256 returns 2 numbers (low,high).
 
 > Debug.print() is not allowed in Starknet network.
 
