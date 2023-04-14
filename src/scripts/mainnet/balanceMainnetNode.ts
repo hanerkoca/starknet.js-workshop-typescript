@@ -8,11 +8,6 @@ import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-
-//          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
-//          Launch also the script for deployement of Test (script5).
-//          👆👆👆
 async function main() {
     //initialize the Provider, with a rpc node located in the local network
     const provider = new RpcProvider({ nodeUrl: 'http://192.168.1.99:9545' });
