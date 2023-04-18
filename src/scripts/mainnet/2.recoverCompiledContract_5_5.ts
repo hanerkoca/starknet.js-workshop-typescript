@@ -1,6 +1,6 @@
 // Recover the compiled contracts of ArgentX 0.2.3.1 in Mainnet
 // using a local pathfinder node.
-// launch with npx ts-node src/scripts/mainnet/2.recoverCompiledContract.ts
+// launch with npx ts-node src/scripts/mainnet/2.recoverCompiledContract_5_5.ts
 // Coded using Starknet.js v5.5.0
 
 import { RpcProvider,Provider, Account, Contract, ec, json, constants, CallData, hash, uint256 } from "starknet";

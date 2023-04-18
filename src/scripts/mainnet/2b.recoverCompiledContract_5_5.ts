@@ -1,6 +1,6 @@
 // Recover the compiled contracts of ArgentX 0.2.3.1 in Mainnet
 // using a local pathfinder node.
-// launch with npx ts-node src/scripts/mainnet/2b.recoverCompiledContract.ts
+// launch with npx ts-node src/scripts/mainnet/2b.recoverCompiledContract_5_5.ts
 // Coded using Starknet.js v5.5.0
 
 import { RpcProvider, Provider, Account, Contract, ec, json, constants, CallData, hash, uint256 } from "starknet";
@@ -57,14 +57,3 @@ main()
         console.error(error);
         process.exit(1);
     });
-
-// // result of getClass
-//     type CONTRACT_CLASS = {
-//         program: string;
-//         entry_points_by_type: {
-//           CONSTRUCTOR: CONTRACT_ENTRY_POINT_LIST;
-//           EXTERNAL: CONTRACT_ENTRY_POINT_LIST;
-//           L1_HANDLER: CONTRACT_ENTRY_POINT_LIST;
-//         };
-//         abi?: CONTRACT_ABI;
-//       };

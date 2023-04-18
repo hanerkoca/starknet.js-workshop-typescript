@@ -1,5 +1,5 @@
 // Read a Swap function in mainnet.
-// Launch with npx ts-node src/scripts/mainnet/3.readSwap.ts
+// Launch with npx ts-node src/scripts/mainnet/3.readSwap_4_22.ts
 // Coded with Starknet.js v4.22.0
 
 import { Provider, Contract, uint256 } from "starknet";
