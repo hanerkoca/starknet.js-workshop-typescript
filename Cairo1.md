@@ -15,7 +15,7 @@ The Cairo 1 compiler provides an abi in the .sierra file. Today, this abi isn't 
 ## prerequirements:
 
 You need to have :
-- Starknet-devnet ^0.5.0.a1 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.0a2).
+- Starknet-devnet ^0.5.0 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.0).
 - Cairo 1 installed, from Starkware repo, branch `v1.0.0-alpha.6` [here](https://github.com/starkware-libs/cairo/tree/v1.0.0-alpha.6).
 - Starknet.js ^5.5.0 [here](https://github.com/0xs34n/starknet.js/tree/v5.5.0).
 
@@ -84,7 +84,7 @@ You can find a little script to interact with a contract : [here](./src/scripts/
 
 > The answer is in an array of Hex numbers. ex : `result[0]` for the first value. An array returns the size, then the elements. An Uint256 returns 2 numbers (low,high).
 
-> Debug.print() is not allowed in Starknet network.
+> Debug.print() is not allowed in Cairo 1 code for Starknet network.
 
 ## Questions?
 
