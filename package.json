@@ -19,6 +19,7 @@
     "@noble/curves": "^0.7.3",
     "@toruslabs/starkware-crypto": "^1.1.0",
     "axios": "^1.3.4",
+    "bn.js": "^5.2.1",
     "fs": "^0.0.1-security",
     "starknet": "^5.5.0"
   },
