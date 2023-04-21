@@ -20,12 +20,13 @@ async function main() {
     const privateKey = "0xe3e70682c2094cac629f6fbed82c07cd";
     const accountAddress: string = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
     const account0 = new Account(provider, accountAddress, privateKey);
-    console.log('✅ Predeployed account deployed\nOZ_ACCOUNT_ADDRESS=', account0.address);
+    console.log('✅ Predeployed account connected\nOZ_ACCOUNT_ADDRESS=', account0.address);
     console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);
 
 
     // Connect the deployed Test instance in devnet
     const testAddress = "0x2e65d4e848e36f3d09cbd02b05b33b30cab6e4ac1e9a6632be0084eafa0add1";
+    // 0x551c602e85dc1c8a8928f0332fd04f10e1a547033ed45e71b5d68011330d9ef in testnet2
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/structs2.sierra").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, testAddress, provider);
     myTestContract.connect(account0);
