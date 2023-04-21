@@ -3,7 +3,7 @@
 // launch with npx ts-node src/scriptsA1/4b.declareDeployHello.ts
 
 import { Provider, Account, Contract, ec, json, stark, uint256, shortString, constants } from "starknet";
-import { privateKey1 } from "../../A2priv/A2priv";
+import { accountTestnet2ArgentX1Address,accountTestnet2ArgentX1privateKey } from "../../A2priv/A2priv";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -14,7 +14,8 @@ async function main() {
     const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI2 } });
 
     // initialize existing Argent X account
-    const account0Address: string = "0x04b497639c3348AbF6E5761094c1C8a28616A273598e38Fd5ab41C3d4277c295";
+    const account0Address: string = accountTestnet2ArgentX1Address;
+    const privateKey1=accountTestnet2ArgentX1privateKey;
     console.log('AX3_ACCOUNT_ADDRESS=', account0Address);
     const account0 = new Account(provider, account0Address, privateKey1);
     console.log('existing AX account3 connected.\n');

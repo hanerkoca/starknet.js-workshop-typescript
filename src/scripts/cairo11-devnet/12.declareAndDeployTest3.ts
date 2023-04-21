@@ -1,6 +1,6 @@
 // declare & deploy a Cairo 1 contract.
-// use Starknet.js v5.6.0, starknet-devnet 0.5.0
-// launch with npx ts-node src/scripts/cairo11-devnet/4.declareThenDeployHello.ts
+// use of OZ deployer
+// launch with npx ts-node src/scripts/cairo11-devnet/4b.declareDeployHello.ts
 
 import { Provider, Account, Contract, json } from "starknet";
 import fs from "fs";
@@ -8,7 +8,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 //          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0 --timeout 500' before using this script.
+// 🚨🚨🚨   Launch 'starknet-devnet --seed 0 --timeout 5000' before using this script.
 //          👆👆👆
 
 
@@ -25,21 +25,19 @@ async function main() {
     console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);
 
     // Declare & deploy Test contract in devnet
-    const compiledHelloSierra = json.parse(fs.readFileSync("./compiledContracts/test_type1.sierra").toString("ascii"));
-    const compiledHelloCasm = json.parse(fs.readFileSync("./compiledContracts/test_type1.casm").toString("ascii"));
-    const deployResponse = await account0.declare({ contract: compiledHelloSierra, casm: compiledHelloCasm });
-    const contractClassHash = deployResponse.class_hash;
+    const compiledHelloSierra = json.parse(fs.readFileSync("./compiledContracts/test_type3.sierra").toString("ascii"));
+    const compiledHelloCasm = json.parse(fs.readFileSync("./compiledContracts/test_type3.casm").toString("ascii"));
+    const deployResponse = await account0.declareAndDeploy({ contract: compiledHelloSierra, casm: compiledHelloCasm, salt: "0" });
+    const contractClassHash = deployResponse.declare.class_hash;
     console.log('✅ Test Contract declared with classHash =', contractClassHash);
-    await provider.waitForTransaction(deployResponse.transaction_hash);
-    const { transaction_hash: th2, address } = await account0.deployContract({ classHash: contractClassHash, salt: "0" });
-    console.log("contract_address =", address);
-    await provider.waitForTransaction(th2);
+
+    console.log("contract_address =", deployResponse.deploy.contract_address);
+    await provider.waitForTransaction(deployResponse.deploy.transaction_hash);
 
     // Connect the new contract instance :
-    if (address) {
-        const myTestContract = new Contract(compiledHelloSierra.abi, address, provider);
-        console.log('✅ Test Contract connected at =', myTestContract.address);
-    }
+    const myTestContract = new Contract(compiledHelloSierra.abi, deployResponse.deploy.contract_address, provider);
+    console.log('✅ Test Contract connected at =', myTestContract.address);
+
 }
 main()
     .then(() => process.exit(0))

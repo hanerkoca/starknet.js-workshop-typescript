@@ -16,8 +16,9 @@ The Cairo 1 compiler provides an abi in the .sierra file. Today, this abi isn't 
 
 You need to have :
 - Starknet-devnet ^0.5.0 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.0).
+- Starknet-devnet ^0.5.0 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.0).
 - Cairo 1 installed, from Starkware repo, branch `v1.0.0-alpha.6` [here](https://github.com/starkware-libs/cairo/tree/v1.0.0-alpha.6).
-- Starknet.js ^5.5.0 [here](https://github.com/0xs34n/starknet.js/tree/v5.5.0).
+- Starknet.js ^5.6.0 [here](https://github.com/0xs34n/starknet.js/tree/v5.6.0).
 
 ## compilation of Cairo 1:
 We will use a small Cairo 1 smart-contract, available [here](./contracts/Cairo1Test/test_type1.cairo) .
@@ -41,7 +42,7 @@ cargo run --bin starknet-sierra-compile -- ../out/test_type1.sierra ../out/test_
 
 Launch starknet-devnet with this option :
 ```
-starknet-devnet --seed 0
+starknet-devnet --seed 0 --timeout 5000
 ```
 You can find 2 little scripts to deploy a contract : 
 - one to declare and deploy in 2 steps [here](./src/scripts/cairo11-devnet/4.declareThenDeployHello.ts).
@@ -64,13 +65,30 @@ And adapt in consequence the address and the private key to one of your account 
 
 You can find this contract already deployed in testnet and testnet 2 :
 - Testnet address : 0x697d3bc2e38d57752c28be0432771f4312d070174ae54eef67dd29e4afb174
-- Testnet-2 address : 0x299d68d537a860025749248411d69eff49d7b4b121ef7ec69e7fc470851b4ae
+- Testnet 2 address : 0x299d68d537a860025749248411d69eff49d7b4b121ef7ec69e7fc470851b4ae
 
 ## Interact with your Cairo 1 contract:
 
-You can find a little script to interact with a contract : [here](./src/scripts/cairo11-devnet/11.CallInvokeContract.ts)
+You can find a little script to interact with a Cairo 1 contract : [here](./src/scripts/cairo11-devnet/11.CallInvokeContract.ts)
 
-> Use CallData.compile() to prepare the parameters to send to the smart-contract. Mandatory for Cairo 1.
+Now, you have 2 ways to exchange data with Starknet :
+
+### For compatible types of data :
+
+u8, u16, u32, usize, u64, u128, ContractAddress are compatible.  
+Tuple, struct and array (made of predefined type) are compatible.  
+In this case, use this code :
+```typescript
+const res = await myTestContract.test1(100) // send a felt252
+    console.log("res1 =", res); // felt252 -> bigint
+```
+
+### For not yet compatible types :
+
+u256, complex objects, some mix of types are not yet compatible.
+In this case, follow these rules (valid for all types, including compatible ones) :
+
+> Use CallData.compile() to prepare the parameters to send to the smart-contract. 
 
 > Use only meta-class to interact with your contract (ex : `contract.getBalance()`)  
 
@@ -83,6 +101,18 @@ You can find a little script to interact with a contract : [here](./src/scripts/
 ```
 
 > The answer is in an array of Hex numbers. ex : `result[0]` for the first value. An array returns the size, then the elements. An Uint256 returns 2 numbers (low,high).
+
+Ex :
+```typescript
+const par1 = CallData.compile({ balance: 100 }) 
+const res1 = await myTestContract.test1(par1, { parseRequest: false, parseResponse: false, });
+const tx = await myTestContract.increase_balance(
+CallData.compile({
+        amount: 100,
+    })
+    );
+console.log("res1 =", res1[0]); // Hex string
+```
 
 > Debug.print() is not allowed in Cairo 1 code for Starknet network.
 
