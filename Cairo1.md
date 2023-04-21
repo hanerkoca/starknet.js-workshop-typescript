@@ -84,7 +84,7 @@ const res = await myTestContract.test1(100) // send a felt252
 
 ### For not yet compatible types :
 
-u256, complex objects, some mix of types are not yet compatible.
+Complex objects, some mix of types are not yet compatible.
 In this case, follow these rules (valid for all types, including compatible ones) :
 
 > Use CallData.compile() to prepare the parameters to send to the smart-contract. 
