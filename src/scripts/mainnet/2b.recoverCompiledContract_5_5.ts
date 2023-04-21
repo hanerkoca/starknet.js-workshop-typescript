@@ -4,7 +4,7 @@
 // Coded using Starknet.js v5.5.0
 
 import { RpcProvider, Provider, Account, Contract, ec, json, constants, CallData, hash, uint256 } from "starknet";
-import { accountTestnet2ArgentX1Address, accountTestnet2ArgentX1privateKey } from "../../A2priv/Testnet2Priv"
+import { accountTestnet2ArgentX1Address, accountTestnet2ArgentX1privateKey } from "../../A2priv/A2priv"
 import fs from "fs";
 import * as dotenv from "dotenv";
 import { error } from "console";

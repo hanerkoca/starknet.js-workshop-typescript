@@ -44,7 +44,7 @@ async function main() {
     console.log('publicKey=', starkKeyPub);
     //declare OZ wallet contract
     const compiledOZAccount = json.parse(
-        fs.readFileSync("./compiledContracts/Account_0_6_11.json").toString("ascii")
+        fs.readFileSync("./compiledContracts/Account_0_6_1.json").toString("ascii")
     );
     const { transaction_hash: declTH, class_hash: decClassHash } = await account0.declare({ contract: compiledOZAccount });
     console.log('OpenZeppelin account class hash =', decClassHash);

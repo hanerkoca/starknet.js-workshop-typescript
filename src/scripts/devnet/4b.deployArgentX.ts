@@ -5,8 +5,8 @@
 
 import { Provider, Account, Contract, ec, json, constants, CallData, hash } from "starknet";
 import fs from "fs";
-import { accountTestnet2Braavos1Address, accountTestnet2Braavos3privateKey, accountTestnet2Braavos1publicKey } from "../../A2priv/Testnet2Priv"
-import { accountTestnet2ArgentX1Address, accountTestnet2ArgentX1privateKey } from "../../A2priv/Testnet2Priv"
+import { accountTestnet2Braavos1Address, accountTestnet2Braavos3privateKey, accountTestnet2Braavos1publicKey } from "../../A2priv/A2priv"
+import { accountTestnet2ArgentX1Address, accountTestnet2ArgentX1privateKey } from "../../A2priv/A2priv"
 
 async function main() {
     //initialize Provider with DEVNET, reading .env file
