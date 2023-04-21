@@ -20,7 +20,7 @@ async function main() {
    const privateKey = "0xe3e70682c2094cac629f6fbed82c07cd";
    const accountAddress: string = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
    const account0 = new Account(provider, accountAddress, privateKey);
-   console.log('✅ Predeployed account deployed\nOZ_ACCOUNT_ADDRESS=', account0.address);
+   console.log('✅ Predeployed account connected\nOZ_ACCOUNT_ADDRESS=', account0.address);
    console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);
 
 
@@ -42,9 +42,9 @@ async function main() {
     const par1 = CallData.compile({
         p1: uint256.bnToUint256(10n),
     })
-    const res2 = await myTestContract.test_u256(par1); // succeed ... but should not !!!
+    //const res2 = await myTestContract.test_u256(par1); // succeed ... but should not !!!
     //const res2 = await myTestContract.test_u256(p1); // fail
-    //const res2 = await myTestContract.test_u256(10n); // fail
+    const res2 = await myTestContract.test_u256(10n); // fail
     console.log("res u256 =", res2);
 
     const res3= await myTestContract.test_u128(100);
@@ -65,8 +65,8 @@ async function main() {
     const res8 = await myTestContract.test_u8(100);
     console.log("res u8 =", res8);
 
-    // const res9 = await myTestContract.test_bool(true);
-    // console.log("res bool =", res9);
+    const res9 = await myTestContract.test_bool(true);
+    console.log("res bool =", res9);
 
     const res10 = await myTestContract.test_address(testAddress);
     console.log("res address =", res10);

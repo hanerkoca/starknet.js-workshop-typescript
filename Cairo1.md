@@ -16,9 +16,8 @@ The Cairo 1 compiler provides an abi in the .sierra file. Today, this abi isn't 
 
 You need to have :
 - Starknet-devnet ^0.5.0 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.0).
-- Starknet-devnet ^0.5.0 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.0).
 - Cairo 1 installed, from Starkware repo, branch `v1.0.0-alpha.6` [here](https://github.com/starkware-libs/cairo/tree/v1.0.0-alpha.6).
-- Starknet.js ^5.6.0 [here](https://github.com/0xs34n/starknet.js/tree/v5.6.0).
+- Starknet.js ^5.6.1 [here](https://github.com/0xs34n/starknet.js/tree/v5.6.1).
 
 ## compilation of Cairo 1:
 We will use a small Cairo 1 smart-contract, available [here](./contracts/Cairo1Test/test_type1.cairo) .
@@ -75,7 +74,7 @@ Now, you have 2 ways to exchange data with Starknet :
 
 ### For compatible types of data :
 
-u8, u16, u32, usize, u64, u128, ContractAddress are compatible.  
+bool, u8, u16, u32, usize, u64, u128, u256, ContractAddress are compatible.  
 Tuple, struct and array (made of predefined types) are compatible.  
 In this case, use this code :
 ```typescript
