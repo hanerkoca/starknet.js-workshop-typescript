@@ -16,6 +16,7 @@ The Cairo 1 compiler provides an abi in the .sierra file. Today, this abi isn't 
 
 You need to have :
 - Starknet-devnet ^0.5.0 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.0).
+- Starknet-devnet ^0.5.0 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.0).
 - Cairo 1 installed, from Starkware repo, branch `v1.0.0-alpha.6` [here](https://github.com/starkware-libs/cairo/tree/v1.0.0-alpha.6).
 - Starknet.js ^5.6.0 [here](https://github.com/0xs34n/starknet.js/tree/v5.6.0).
 
@@ -113,7 +114,7 @@ CallData.compile({
 console.log("res1 =", res1[0]); // Hex string
 ```
 
-> Debug.print() is not allowed in Starknet network.
+> Debug.print() is not allowed in Cairo 1 code for Starknet network.
 
 ## Questions?
 
