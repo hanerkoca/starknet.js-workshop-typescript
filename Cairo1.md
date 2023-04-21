@@ -76,7 +76,7 @@ Now, you have 2 ways to exchange data with Starknet :
 ### For compatible types of data :
 
 u8, u16, u32, usize, u64, u128, ContractAddress are compatible.  
-Tuple, struct and array (made of predefined type) are compatible.  
+Tuple, struct and array (made of predefined types) are compatible.  
 In this case, use this code :
 ```typescript
 const res = await myTestContract.test1(100) // send a felt252
