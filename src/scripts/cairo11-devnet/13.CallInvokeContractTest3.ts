@@ -1,5 +1,5 @@
 // Test Cairo 1 v0.6.0 integrated types.
-// use Starknet.js v5.6.0, starknet-devnet 0.5.0
+// use Starknet.js v5.6.1, starknet-devnet 0.5.0
 // launch with npx ts-node src/scripts/cairo11-devnet/13.CallInvokeContractTest3.ts
 
 import { CallData, Provider, Contract, Account, json, uint256 } from "starknet";

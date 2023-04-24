@@ -1,9 +1,9 @@
 // Deploy and use an ERC20, monetized by an existing account
+// use Starknet.js v5.6.0, starknet-devnet 0.5.0
 // Launch with : npx ts-node src/starknet_jsExistingAccount.ts
-// Coded with Starknet.js v5.1.0
 
 import fs from "fs";
-import { Account, Contract, defaultProvider, json, stark, Provider, shortString, uint256 } from "starknet";
+import { Account, Contract, defaultProvider, json, stark, Provider, shortString, uint256, CallData } from "starknet";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -34,17 +34,19 @@ async function main() {
     console.log("Deployment Tx - ERC20 Contract to StarkNet...");
     const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20MintableOZ_0_6_1.json").toString("ascii"));
     const initialTk: uint256.Uint256 = { low: 100, high: 0 };
-    const ERC20ConstructorCallData = stark.compileCalldata({ 
-        name: shortString.encodeShortString('MyToken'), 
-        symbol: shortString.encodeShortString('MTK'), 
-        decimals: "18", 
-        initial_supply: { type: 'struct', low: initialTk.low, high: initialTk.high }, 
-        recipient: account0.address, 
-        owner: account0.address });
+    const ERC20ConstructorCallData = CallData.compile({
+        name: shortString.encodeShortString('MyToken'),
+        symbol: shortString.encodeShortString('MTK'),
+        decimals: "18",
+        initial_supply: initialTk,
+        recipient: account0.address,
+        owner: account0.address
+    });
     // console.log("constructor=", ERC20ConstructorCallData);
-    const deployERC20Response = await account0.declareAndDeploy({ 
-        contract: compiledErc20mintable, 
-        constructorCalldata: ERC20ConstructorCallData });
+    const deployERC20Response = await account0.declareAndDeploy({
+        contract: compiledErc20mintable,
+        constructorCalldata: ERC20ConstructorCallData
+    });
     console.log("ERC20 deployed at address: ", deployERC20Response.deploy.contract_address);
 
     // Get the erc20 contract address
@@ -73,7 +75,10 @@ async function main() {
     // Execute tx transfer of 10 tokens
     console.log(`Invoke Tx - Transfer 10 tokens back to erc20 contract...`);
     const toTransferTk: uint256.Uint256 = uint256.bnToUint256(10);
-    const transferCallData = stark.compileCalldata({ recipient: erc20Address, initial_supply: { type: 'struct', low: toTransferTk.low, high: toTransferTk.high } });
+    const transferCallData = CallData.compile({
+        recipient: erc20Address,
+        initial_supply: toTransferTk
+    });
     const { transaction_hash: transferTxHash } = await account0.execute({ contractAddress: erc20Address, entrypoint: "transfer", calldata: transferCallData, }, undefined, { maxFee: 900_000_000_000_000 });
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Transfer...`);

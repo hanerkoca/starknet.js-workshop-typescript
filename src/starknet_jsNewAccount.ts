@@ -1,11 +1,11 @@
 // Deploy and use an ERC20, monetized by a new account
+// use Starknet.js v5.6.0, starknet-devnet 0.5.0
 // Launch with : npx ts-node src/starknet_jsNewAccount.ts
-// Coded with Starknet.js v5.1.0
 
 import fs from "fs";
-import { Account, Contract, defaultProvider, ec, json, stark, Provider, shortString, uint256, hash } from "starknet";
-import * as dotenv from "dotenv";
+import { Account, Contract, defaultProvider, ec, json, stark, Provider, shortString, uint256, hash,CallData } from "starknet";
 import axios from "axios";
+import * as dotenv from "dotenv";
 dotenv.config();
 
 //        👇👇👇
@@ -45,7 +45,7 @@ async function main() {
     await provider.waitForTransaction(declTH);
 
     // Calculate future address of the account
-    const OZaccountConstructorCallData = stark.compileCalldata({ publicKey: starkKeyPubOZ });
+    const OZaccountConstructorCallData = CallData.compile({ publicKey: starkKeyPubOZ });
     const OZcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubOZ, decCH, OZaccountConstructorCallData, 0);
     console.log('Precalculated account address=', OZcontractAddress);
     // fund account address before account creation
@@ -62,13 +62,14 @@ async function main() {
     console.log("Deployment Tx - ERC20 Contract to StarkNet...");
     const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20MintableOZ_0_6_1.json").toString("ascii"));
     const initialTk: uint256.Uint256 = { low: 100, high: 0 };
-    const ERC20ConstructorCallData = stark.compileCalldata({ 
+    const ERC20ConstructorCallData = CallData.compile({ 
         name: shortString.encodeShortString('MyToken'), 
         symbol: shortString.encodeShortString('MTK'), 
         decimals: "18", 
-        initial_supply: { type: 'struct', low: initialTk.low, high: initialTk.high }, 
+        initial_supply: initialTk, 
         recipient: accountOZ.address, 
-        owner: accountOZ.address });
+        owner: accountOZ.address 
+    });
     const deployERC20Response = await accountOZ.declareAndDeploy({ 
         contract: compiledErc20mintable, 
         constructorCalldata: ERC20ConstructorCallData});
@@ -100,7 +101,10 @@ async function main() {
     // Execute tx transfer of 10 tokens
     console.log(`Invoke Tx - Transfer 10 tokens back to erc20 contract...`);
     const toTransferTk: uint256.Uint256 = uint256.bnToUint256(10);
-    const transferCallData = stark.compileCalldata({ recipient: erc20Address, initial_supply: { type: 'struct', low: toTransferTk.low, high: toTransferTk.high } });
+    const transferCallData = CallData.compile({ 
+        recipient: erc20Address, 
+        initial_supply: toTransferTk.high 
+    });
     const { transaction_hash: transferTxHash } = await accountOZ.execute({ contractAddress: erc20Address, entrypoint: "transfer", calldata: transferCallData, }, undefined, { maxFee: 900_000_000_000_000 });
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Transfer...`);

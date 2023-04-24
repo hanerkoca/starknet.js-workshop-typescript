@@ -1,6 +1,6 @@
-# Starkware Starknet network ^0.10.3
+# Starkware Starknet network ^0.11.0
 # Cairo Accounts and ERC20 Demo 
-# Typescript code, using Starknet.js v5.1.0 and local Starknet-devnet 
+# Typescript code, using Starknet.js v5.6.1 and local Starknet-devnet 
 
 
 If you want to implement the Starknet network in your DAPP, you can use starknet.js to interact with it.
@@ -20,7 +20,7 @@ If necessary :
 
 - Install latest LTS version of node [here](https://kinsta.com/blog/how-to-install-node-js/#how-to-install-nodejs-on-linux)
 - Install Python 3.9  [here](https://linuxize.com/post/how-to-install-python-3-9-on-ubuntu-20-04/)
-- Create a Starknet environment [here](https://starknet.io/docs/quickstart.html), with cairo 0.10.3 minimum.
+- Create a Starknet environment [here](https://starknet.io/docs/quickstart.html), with cairo 0.11.0 minimum.
 - Install Starknet-devnet  [here](https://shard-labs.github.io/starknet-devnet/docs/intro)
   
 Run `npm install` in this directory.
