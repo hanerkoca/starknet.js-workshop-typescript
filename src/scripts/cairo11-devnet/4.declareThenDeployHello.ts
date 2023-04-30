@@ -1,5 +1,5 @@
 // declare & deploy a Cairo 1 contract.
-// use Starknet.js v5.6.0, starknet-devnet 0.5.0
+// use Starknet.js v5.8.0, starknet-devnet 0.5.1
 // launch with npx ts-node src/scripts/cairo11-devnet/4.declareThenDeployHello.ts
 
 import { Provider, Account, Contract, json } from "starknet";
