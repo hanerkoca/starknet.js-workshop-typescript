@@ -1,4 +1,4 @@
-// Declare a contract contract.
+// Declare a contract.
 // launch with npx ts-node src/scripts/9.declareContract.ts
 // Coded with Starknet.js v5.1.0
 

@@ -1,10 +1,10 @@
 // connect a contract that is already deployed on devnet.
 // launch with npx ts-node src/scripts/11.CallInvokeContract.ts
-// Coded with Starknet.js v5.4.2
+// Coded with Starknet.js v5.8.0
 
 import { CallData, constants, Provider, Contract, Account, json, ec } from "starknet";
 import fs from "fs";
-import { privateKey1 } from "../../A1priv/A1priv";
+import { accountTestnet4Address, accountTestnet4privateKey } from "../../A1priv/A1priv";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -13,9 +13,9 @@ async function main() {
     const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
 
     // initialize existing Argent X account
-    const account0Address: string = "0x00f92678a891046ae0789b9eb8dafde2669a6eb1bca493fb7d9b2bdd54171c18";
+    const account0Address = accountTestnet4Address;
     console.log('Braavos1_ACCOUNT_ADDRESS=', account0Address);
-    const account0 = new Account(provider, account0Address, privateKey1);
+    const account0 = new Account(provider, account0Address, accountTestnet4privateKey);
     console.log('existing Braavos1 connected.\n');
 
 
@@ -30,25 +30,22 @@ async function main() {
     const par1 = CallData.compile({
         balance: 100,
     })
-    const res1 = await myTestContract.test1(par1, { parseRequest: false, parseResponse: false, });
-    const res2 = await myTestContract.test2(par1, { parseRequest: false, parseResponse: false, });
-    const res3 = await myTestContract.test3({ parseRequest: false, parseResponse: false, });
-    const tx = await myTestContract.increase_balance(
-        CallData.compile({
-            amount: 100,
-        })
-    );
-    // 🚨 do not work in V5.1.0
-    //const bal1b = await myTestContract.call("get_balance");
+    console.log("a");
+    const res1 = await myTestContract.test1(100);
+    console.log("b");
+    const res2 = await myTestContract.test2(100);
+    console.log("c");
+    const res3 = await myTestContract.test3();
+    console.log("d");
+    const tx = await myTestContract.increase_balance(10);
     console.log("res1 =", res1);
     console.log("res2 =", res2);
     console.log("res3 =", res3);
     await provider.waitForTransaction(tx.transaction_hash);
 
-    const balance = await myTestContract.get_balance({
-        parseRequest: false,
-        parseResponse: false,
-    });
+    //const balance = await myTestContract.get_balance();
+    const funcName = "get_balance";
+    const balance = await myTestContract[funcName]();
     console.log("res4 =", balance);
     // console.log("Initial balance =", bal1b.res.toString());
     // estimate fee

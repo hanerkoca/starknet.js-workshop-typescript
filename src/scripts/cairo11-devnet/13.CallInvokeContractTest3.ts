@@ -44,7 +44,7 @@ async function main() {
     })
     //const res2 = await myTestContract.test_u256(par1); // succeed ... but should not !!!
     //const res2 = await myTestContract.test_u256(p1); // fail
-    const res2 = await myTestContract.test_u256(10n); // fail
+    const res2 = await myTestContract.test_u256(10n); 
     console.log("res u256 =", res2);
 
     const res3= await myTestContract.test_u128(100);
