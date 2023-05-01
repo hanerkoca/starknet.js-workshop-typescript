@@ -15,9 +15,9 @@ The Cairo 1 compiler provides an abi in the .sierra file. Today, this abi isn't 
 ## prerequirements:
 
 You need to have :
-- Starknet-devnet ^0.5.0 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.0).
+- Starknet-devnet ^0.5.1 [here](https://github.com/Shard-Labs/starknet-devnet/releases/tag/v0.5.1).
 - Cairo 1 installed, from Starkware repo, branch `v1.0.0-alpha.6` [here](https://github.com/starkware-libs/cairo/tree/v1.0.0-alpha.6).
-- Starknet.js ^5.6.1 [here](https://github.com/0xs34n/starknet.js/tree/v5.6.1).
+- Starknet.js ^5.9.0 [here](https://github.com/0xs34n/starknet.js/tree/v5.9.0).
 
 ## compilation of Cairo 1:
 We will use a small Cairo 1 smart-contract, available [here](./contracts/Cairo1Test/test_type1.cairo) .
@@ -41,7 +41,7 @@ cargo run --bin starknet-sierra-compile -- ../out/test_type1.sierra ../out/test_
 
 Launch starknet-devnet with this option :
 ```
-starknet-devnet --seed 0 --timeout 5000
+starknet-devnet --seed 0
 ```
 You can find 2 little scripts to deploy a contract : 
 - one to declare and deploy in 2 steps [here](./src/scripts/cairo11-devnet/4.declareThenDeployHello.ts).

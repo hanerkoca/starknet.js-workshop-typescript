@@ -1,6 +1,6 @@
 # Starkware Starknet network ^0.11.0
 # Cairo Accounts and ERC20 Demo 
-# Typescript code, using Starknet.js v5.6.1 and local Starknet-devnet 
+# Typescript code, using Starknet.js v5.9.0 and local Starknet-devnet 
 
 
 If you want to implement the Starknet network in your DAPP, you can use starknet.js to interact with it.
@@ -29,7 +29,7 @@ The file .env defines the network to use. It's currently configured for the loca
 
 This repo is configured to be able to perform debugging of your typescript code. Just CTRL+SHIFT+D, then click on the green arrow.
 
-This script has been written with cairo v0.10.3, starknet-devnet v0.4.6, starknet.js v5.1.0. Due to fast iterations of Starknet and Cairo, this script will probably be quickly out-of-date.
+This script has been written with cairo v0.11.0, starknet-devnet v0.5.1, starknet.js v5.9.0. Due to fast iterations of Starknet and Cairo, this script will probably be quickly out-of-date.
 
 
 
@@ -47,7 +47,7 @@ Faucet for devnet, if necessary :
 ```bash
 curl -X POST http://127.0.0.1:5050/mint -d '{"address":"0x1234","amount":50000000000000000000,"lite":true}' -H "Content-Type:application/json"
 ```
-or `source ./mintWallet.sh`
+or `source ./src/scripts/mintWallet.sh`
 
 More easy : use `npx ts-node src/starknet_jsExistingAccount.ts`, using preexisting account #0 created automatically during Devnet launch.
 
@@ -64,9 +64,8 @@ In the folder 'scripts', you can find many pedagogical codes :
     - Connect created account [script8](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/8.ConnectWallet.ts)
 ### Contracts :
 - Declare contract [script9](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/9.declareContract.ts)
-- Deploy contract
-    - Deploy with OZ deployer 0.5.0 (UDC) [script4](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/4.deployContractOZ.ts)
-- Declare & deploy contract with OZ deployer 0.5.0 (UDC) [script5](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/5.declareDeployContractOZ.ts)
+- Deploy contract [script4](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/4.deployContractOZ.ts)
+- Declare & deploy  [script5](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/5.declareDeployContractOZ.ts)
 ### Interactions
 - Connect a contract [script7](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/7.connectContract.ts)
 - Call
@@ -77,9 +76,11 @@ In the folder 'scripts', you can find many pedagogical codes :
         - contract.nameFunction [workshop](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/starknet_jsExistingAccount.ts#L56)
         - contract.invoke [script11](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/11.CallInvokeContract.ts)
     - with a signature : account.execute [workshop](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/starknet_jsExistingAccount.ts#L69)
+### Others :
 
+You can find in this repo many other scripts. Dig in and find many usefull exemples of code.
 
-## Cairo 1:
+## Cairo 1 :
 
 You can find some explanations for the use of Starknet.js with Cairo 1 smart-contracts [here](./Cairo1.md).
 

@@ -1,6 +1,6 @@
 // declare & deploy a Cairo 1 contract.
 // use Starknet.js v5.9.0, starknet-devnet 0.5.1
-// launch with npx ts-node src/scripts/cairo11-devnet/12.declareAndDeployTest3.ts
+// launch with npx ts-node src/scripts/cairo11-devnet/13.declareAndDeployTest4.ts
 
 import { Provider, Account, Contract, json } from "starknet";
 import fs from "fs";
@@ -25,8 +25,8 @@ async function main() {
     console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);
 
     // Declare & deploy Test contract in devnet
-    const compiledHelloSierra = json.parse(fs.readFileSync("./compiledContracts/test_type3.sierra").toString("ascii"));
-    const compiledHelloCasm = json.parse(fs.readFileSync("./compiledContracts/test_type3.casm").toString("ascii"));
+    const compiledHelloSierra = json.parse(fs.readFileSync("./compiledContracts/test_type4.sierra").toString("ascii"));
+    const compiledHelloCasm = json.parse(fs.readFileSync("./compiledContracts/test_type4.casm").toString("ascii"));
     const deployResponse = await account0.declareAndDeploy({ contract: compiledHelloSierra, casm: compiledHelloCasm, salt: "0" });
     const contractClassHash = deployResponse.declare.class_hash;
     console.log('✅ Test Contract declared with classHash =', contractClassHash);

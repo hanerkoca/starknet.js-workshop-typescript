@@ -33,32 +33,19 @@ async function main() {
 
     console.log('Test Contract connected at =', myTestContract.address);
 
-    // Interactions with the contract with call & invoke
+    // Interactions with the contract
 
-    // if you are using compatible types :
-    const res = await myTestContract.test1(100) // send a felt252
-    console.log("res1 =", res); // felt252 -> bigint
+    const res1 = await myTestContract.test1(100) // send a felt252
+    console.log("res1 =", res1); // felt252 -> bigint
+    const res2 = await myTestContract.test2(200);
+    console.log("res2 =", res2); // bigint
+    const res3 = await myTestContract.test3();
+    console.log("res3 =", res3); // bigint
 
-    // if you are using (not yet) compatible types :
-    const par1 = CallData.compile({ balance: 100 })
-    const res1 = await myTestContract.test1(par1, { parseRequest: false, parseResponse: false, });
-    const res2 = await myTestContract.test2(par1, { parseRequest: false, parseResponse: false, });
-    const res3 = await myTestContract.test3({ parseRequest: false, parseResponse: false, });
-    const tx = await myTestContract.increase_balance(
-        CallData.compile({
-            amount: 100,
-        })
-    );
-    console.log("res1 =", res1[0]); // Hex string
-    console.log("res2 =", res2[0]);
-    console.log("res3 =", res3[0]);
+    const tx = await myTestContract.increase_balance(100);
     await provider.waitForTransaction(tx.transaction_hash);
-
-    const balance = await myTestContract.get_balance({
-        parseRequest: false,
-        parseResponse: false,
-    });
-    console.log("balance =", balance[0]);
+    const balance = await myTestContract.get_balance();
+    console.log("balance =", balance);
     console.log('✅ Test completed.');
 
 }

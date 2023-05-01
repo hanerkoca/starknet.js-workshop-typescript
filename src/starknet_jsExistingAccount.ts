@@ -71,11 +71,11 @@ async function main() {
     // define the constructor :
 
     // method 1 : lowest raw data : an array of numbers. Only for specific cases (ex : max performance needed) :
-    const ERC20ConstructorCallData1: RawArgsArray = [
+    const ERC20ConstructorCallData1: RawArgsArray = [ // accept only flatten objects
         'niceToken',
         'NIT',
         18,
-        initialTk.low, initialTk.high, // 🚨 Uint256 do not work 
+        initialTk.low,initialTk.high, // 🚨 Uint256 and BigNumberish do not work (not a flatten object of 2 elements)
         account0.address,
         account0.address
     ];
@@ -143,7 +143,7 @@ async function main() {
     const balanceBeforeTransfer = await erc20.balanceOf(account0.address);
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceBeforeTransfer.balance).toString());
 
-    // Execute tx transfer of 10 tokens
+    // Execute tx transfer of 2x10 tokens
     console.log(`Invoke Tx - Transfer 2x10 tokens back to erc20 contract...`);
     const toTransferTk: uint256.Uint256 = uint256.bnToUint256(10);
     const transferCallData : Call = erc20.populate("transfer", [
@@ -155,7 +155,7 @@ async function main() {
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Transfer...`);
     await provider.waitForTransaction(transferTxHash2);
-    // Check balance after transfer - should be 1090
+    // Check balance after transfer - should be 1080
     console.log(`Calling StarkNet for account balance...`);
     const balanceAfterTransfer = await erc20.balanceOf(account0.address);
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceAfterTransfer.balance).toString());
