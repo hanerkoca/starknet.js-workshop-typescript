@@ -36,9 +36,9 @@ async function main() {
     console.log("suggestedMaxFee =", fee1.toString(),"wei");
     const declareResponse = await account0.declare({ contract: compiledTest}, { maxFee: fee1 * 11n / 10n });
 
-    console.log('✅ Test Contract Class Hash =', declareResponse.class_hash);
+    console.log('Test Contract Class Hash =', declareResponse.class_hash);
     await provider.waitForTransaction(declareResponse.transaction_hash);
-
+    console.log('✅ Test completed.');
 }
 main()
     .then(() => process.exit(0))

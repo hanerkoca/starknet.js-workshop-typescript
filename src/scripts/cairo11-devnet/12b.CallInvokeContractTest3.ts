@@ -44,7 +44,7 @@ async function main() {
     const par1: Calldata = CallData.compile({
         p1: param1,
     })
-    const res2 = await myTestContract.test_u256(param1); // 🚨 fail in v5.9.0
+    const res2 = await myTestContract.test_u256(param1); // 🚨 fail in v5.9.0, succeed in 5.9.1
     console.log("res u256 =", res2);
     const res2a = await myTestContract.test_u256(10n); // succeed in v5.9.0
     console.log("res a u256 =", res2a);

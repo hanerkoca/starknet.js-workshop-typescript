@@ -3,7 +3,7 @@
 // Coded with Starknet.js v5.1.0
 
 
-import { Provider, Account, ec, json, stark, hash } from "starknet";
+import { Provider, Account, ec, json, stark, hash, CallData } from "starknet";
 import fs from "fs";
 import axios from "axios";
 import * as dotenv from "dotenv";
@@ -45,15 +45,15 @@ async function main() {
     await provider.waitForTransaction(AXAth);
 
     // Calculate future address of the ArgentX account
-    const privateKeyAX = process.env.AX_NEW_ACCOUNT_PRIVKEY ?? "";
-    console.log('AX_ACCOUNT_PRIVATE_KEY=', privateKeyAX);
+    const privateKeyAX = process.env.AX_ACCOUNT3_DEVNET_PRIVKEY ?? "";
+    console.log('AX_ACCOUNT3_DEVNET_PRIVKEY=', privateKeyAX);
     //const starkKeyPairAX = ec.getKeyPair(privateKeyAX);
     //const starkKeyPairAX = ec.genKeyPair();
     const starkKeyPubAX = ec.starkCurve.getStarkKey(privateKeyAX);
-    const AXproxyConstructorCallData = stark.compileCalldata({ 
+    const AXproxyConstructorCallData = CallData.compile({ 
         implementation: AXAch, 
         selector: hash.getSelectorFromName("initialize"), 
-        calldata: stark.compileCalldata({ signer: starkKeyPubAX, guardian: "0" }), });
+        calldata: CallData.compile({ signer: starkKeyPubAX, guardian: "0" }), });
     const AXcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubAX, AXPch, AXproxyConstructorCallData, 0);
     console.log('Precalculated account address=', AXcontractAddress);
 
