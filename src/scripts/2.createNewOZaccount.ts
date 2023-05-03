@@ -3,7 +3,7 @@
 // Coded with Starknet.js v5.1.0
 
 
-import { Account, ec,encode, json, stark, Provider, hash } from "starknet";
+import { Account, ec,encode, json, stark, Provider, hash, CallData } from "starknet";
 import fs from "fs";
 import BN from "bn.js";
 import axios from "axios";
@@ -51,12 +51,11 @@ async function main() {
     await provider.waitForTransaction(declTH);
 
     // Calculate future address of the account
-    const OZaccountConstructorCallData = stark.compileCalldata({ publicKey: starkKeyPub });
+    const OZaccountConstructorCallData = CallData.compile({ publicKey: starkKeyPub });
     const OZcontractAddress = hash.calculateContractAddressFromHash( starkKeyPub,decClassHash, OZaccountConstructorCallData, 0);
     console.log('Precalculated account address=', OZcontractAddress);
     // fund account address before account creation
-    // 🚨🚨🚨 following line has a bug 🚨🚨🚨
-    
+        
     const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": OZcontractAddress, "amount": 50_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
     console.log('Answer mint =', answer); //50 ETH
     // deploy account
