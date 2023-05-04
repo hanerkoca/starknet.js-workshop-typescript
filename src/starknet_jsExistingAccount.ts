@@ -32,7 +32,7 @@ async function main() {
     // Deploy an ERC20 contract 
     console.log("Deployment Tx - ERC20 Contract to StarkNet...");
 
-    // Constructor of the ERC20 Cairo contract :
+    // Constructor of the ERC20 Cairo 0 contract :
     // {
     //     "inputs": [
     //         {
@@ -85,7 +85,7 @@ async function main() {
         name: 'niceToken',
         symbol: 'NIT',
         decimals: 18,
-        initial_supply: initialTk, // needs a Uint256 type for Cairo 0 (with Cairo 1, '100n' is accepted)
+        initial_supply: initialTk, // needs a Uint256 type. '100n' is not accepted because no abi 
         recipient: account0.address,
         owner: account0.address
     });
@@ -95,7 +95,7 @@ async function main() {
         name: "niceToken",
         symbol: "NIT",
         decimals: 18,
-        initial_supply: initialTk, // needs a Uint256 type for Cairo 0 (with Cairo 1, '100n' is accepted)
+        initial_supply: initialTk, // needs a Uint256 type. '100n' is not accepted because no abi
         recipient: account0.address,
         owner: account0.address,
     }

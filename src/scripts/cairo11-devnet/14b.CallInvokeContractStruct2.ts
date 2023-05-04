@@ -45,9 +45,11 @@ async function main() {
 
     const res2 = await myTestContract.create_order_complex();
     console.log("res of complex struct =", res2, );
-
     
     console.log('✅ Test completed.');
+    // result :
+    // res of struct = { p1: 12n, p2: 23n } object 12n 23n
+    // res of complex struct = { p1: 12n, p2: 3n }
 }
 main()
     .then(() => process.exit(0))

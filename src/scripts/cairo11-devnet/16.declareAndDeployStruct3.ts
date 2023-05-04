@@ -1,6 +1,6 @@
 // declare & deploy a Cairo 1 contract.
-// use Starknet.js v5.9.0, starknet-devnet 0.5.1
-// launch with npx ts-node src/scripts/cairo11-devnet/14.declareAndDeployStruct2.ts
+// use Starknet.js v5.9.1, starknet-devnet 0.5.1
+// launch with npx ts-node src/scripts/cairo11-devnet/16.declareAndDeployStruct3.ts
 
 import { Provider, Account, Contract, json } from "starknet";
 import fs from "fs";
@@ -25,8 +25,8 @@ async function main() {
     console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);
 
     // Declare & deploy Test contract in devnet
-    const compiledHelloSierra = json.parse(fs.readFileSync("./compiledContracts/structs2.sierra").toString("ascii"));
-    const compiledHelloCasm = json.parse(fs.readFileSync("./compiledContracts/structs2.casm").toString("ascii"));
+    const compiledHelloSierra = json.parse(fs.readFileSync("./compiledContracts/structs3.sierra").toString("ascii"));
+    const compiledHelloCasm = json.parse(fs.readFileSync("./compiledContracts/structs3.casm").toString("ascii"));
     const deployResponse = await account0.declareAndDeploy({ contract: compiledHelloSierra, casm: compiledHelloCasm, salt: "0" });
     const contractClassHash = deployResponse.declare.class_hash;
     console.log('✅ Test Contract declared with classHash =', contractClassHash);
@@ -37,6 +37,10 @@ async function main() {
     // Connect the new contract instance :
     const myTestContract = new Contract(compiledHelloSierra.abi, deployResponse.deploy.contract_address, provider);
     console.log('✅ Test Contract connected at =', myTestContract.address);
+
+// in testnet 2 :
+// class hash : 0x52a27c1db53b394d513039c1e0e5f1ea922239a54faa460a1ba8ac815937c85
+// address : 0x40d0427778ee21057e03751a9252a5a86ef25b033d4f639bd457c2fb6460de7
 
 }
 main()
