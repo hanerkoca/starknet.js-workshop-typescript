@@ -1,6 +1,6 @@
 // Deploy a new ArgentX wallet.
 // launch with : npx ts-node src/scripts/3.createNewArgentXaccount.ts
-// Coded with Starknet.js v5.1.0
+// Coded with Starknet.js v5.9.1
 
 
 import { Provider, Account, ec, json, stark, hash, CallData } from "starknet";
@@ -45,7 +45,7 @@ async function main() {
     await provider.waitForTransaction(AXAth);
 
     // Calculate future address of the ArgentX account
-    const privateKeyAX = process.env.AX_ACCOUNT3_DEVNET_PRIVKEY ?? "";
+    const privateKeyAX = process.env.AA_NEW_ACCOUNT_PRIVKEY ?? "";
     console.log('AX_ACCOUNT3_DEVNET_PRIVKEY=', privateKeyAX);
     //const starkKeyPairAX = ec.getKeyPair(privateKeyAX);
     //const starkKeyPairAX = ec.genKeyPair();

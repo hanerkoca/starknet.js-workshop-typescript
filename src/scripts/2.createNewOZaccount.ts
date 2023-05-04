@@ -1,6 +1,6 @@
 // create a new OZ account in devnet
 // launch with npx ts-node src/scripts/2.createNewOZaccount.ts
-// Coded with Starknet.js v5.1.0
+// Coded with Starknet.js v5.9.1
 
 
 import { Account, ec,encode, json, stark, Provider, hash, CallData } from "starknet";
@@ -60,7 +60,8 @@ async function main() {
     console.log('Answer mint =', answer); //50 ETH
     // deploy account
     const OZaccount = new Account(provider, OZcontractAddress, privateKey);
-    const { suggestedMaxFee: estimatedFee1 } = await OZaccount.estimateAccountDeployFee({ classHash: decClassHash, addressSalt: starkKeyPub, constructorCalldata: OZaccountConstructorCallData });const { transaction_hash, contract_address } = await OZaccount.deployAccount({ classHash: decClassHash, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub }, { maxFee: estimatedFee1*11n/10n });
+    const { suggestedMaxFee: estimatedFee1 } = await OZaccount.estimateAccountDeployFee({ classHash: decClassHash, addressSalt: starkKeyPub, constructorCalldata: OZaccountConstructorCallData });
+    const { transaction_hash, contract_address } = await OZaccount.deployAccount({ classHash: decClassHash, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub }, { maxFee: estimatedFee1*11n/10n });
     //const { transaction_hash, contract_address } = await OZaccount.deployAccount({ classHash: OZaccountClashHass, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub });
     console.log('✅ New OpenZeppelin account created.\n   final address =', contract_address);
     await provider.waitForTransaction(transaction_hash);

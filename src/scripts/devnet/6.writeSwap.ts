@@ -1,4 +1,4 @@
-// Read a Swap function in devnet.
+// Read a Swap contract in mainnet and declare it in devnet
 // Launch with npx ts-node src/scripts/devnet/6.writeSwap.ts
 // Coded with Starknet.js v5.9.1, starknet-devnet 0.5.1
 
@@ -35,8 +35,9 @@ async function main() {
 
     // read abi
 
-    const contractAddress = "0x07a6f98c03379b9513ca84cca1373ff452a7462a3b61598f0af5bb27ad7f76d1";
-    const compressedContract = await providerMain.getClassAt(contractAddress);
+    // const contractAddress = "0x07a6f98c03379b9513ca84cca1373ff452a7462a3b61598f0af5bb27ad7f76d1"; //mainnet 10Kswap
+    const classHash="0x0514718bb56ed2a8607554c7d393c2ffd73cbab971c120b00a2ce27cc58dd1c1";
+    const compressedContract = await providerMain.getClassByHash(classHash);
     if (("program" in compressedContract) && compressedContract.abi) { // Cairo 0
         const decompressedProgram = json.parse(decompress(compressedContract.program));
         fs.writeFileSync('./src/scripts/mainnet/swap_program.json', json.stringify(decompressedProgram,undefined,2));
@@ -47,19 +48,15 @@ async function main() {
             program: decompressedProgram
         }
         fs.writeFileSync('./src/scripts/mainnet/swap_contract.json', json.stringify(compiledContract,undefined,2));
-        console.log("declare deploy in progress...");
-
-
-        const compiledTest = json.parse(fs.readFileSync("./src/scripts/mainnet/swap_contract.json").toString("ascii"));
-        //  const declareResponseTest = await account0.declare({ contract: compiledTest});
-    
-        // console.log('Test Contract Class Hash =', declareResponseTest.class_hash);
-    
-
-        const declareResponse = await account0.declare({ contract: compiledTest},  );
-    }else{
+         }else{
         // Cairo 1
     }
+    console.log("declare deploy in progress...");
+    const compiledTest = json.parse(fs.readFileSync("./src/scripts/mainnet/swap_contract.json").toString("ascii"));
+      const declareResponseTest = await account0.declare({ contract: compiledTest});
+
+     console.log('Test Contract Class Hash =', declareResponseTest.class_hash);
+
     //     fs.writeFileSync('./src/scripts/mainnet/swap.json', JSON.stringify(compressedContract,undefined,2));
     //     if (compressedContract.abi === undefined) { throw new Error("No Abi.") }
     //     console.log(JSON.stringify(compressedContract.abi[6],undefined,2));

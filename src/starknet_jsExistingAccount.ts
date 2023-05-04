@@ -1,5 +1,5 @@
 // Deploy and use an ERC20, monetized by an existing account
-// use Starknet.js v5.9.0, starknet-devnet 0.5.1
+// use Starknet.js v5.9.1, starknet-devnet 0.5.1
 // Launch with : npx ts-node src/starknet_jsExistingAccount.ts
 
 import fs from "fs";
@@ -66,7 +66,7 @@ async function main() {
     // },
 
     const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20MintableOZ_0_6_1.json").toString("ascii"));
-    const initialTk: uint256.Uint256 = { low: 100, high: 0 };
+    const initialTk: uint256.Uint256 = uint256.bnToUint256(100);
 
     // define the constructor :
 
@@ -85,7 +85,7 @@ async function main() {
         name: 'niceToken',
         symbol: 'NIT',
         decimals: 18,
-        initial_supply: initialTk, // needs a Uint256 type
+        initial_supply: initialTk, // needs a Uint256 type for Cairo 0 (with Cairo 1, '100n' is accepted)
         recipient: account0.address,
         owner: account0.address
     });
@@ -95,21 +95,21 @@ async function main() {
         name: "niceToken",
         symbol: "NIT",
         decimals: 18,
-        initial_supply: initialTk, // needs a Uint256 type
+        initial_supply: initialTk, // needs a Uint256 type for Cairo 0 (with Cairo 1, '100n' is accepted)
         recipient: account0.address,
         owner: account0.address,
     }
 
-    // method 4: send an array of parameters. With the abi, starknet.js converts automatically the parameters to the types defined in the abi, and checks the conformity to the abi :
+    // method 4: recommended method : send an array of parameters. With the abi, starknet.js converts automatically the parameters to the types defined in the abi, and checks the conformity to the abi :
     const erc20CallData: CallData = new CallData(compiledErc20mintable.abi);
     const ERC20ConstructorCallData4: Calldata = erc20CallData.compile("constructor", [
         "niceToken",
         "NIT",
         18,
-        100n, // needs a Uint256 type
+        initialTk, // needs a Uint256 type for Cairo 0 (with Cairo 1, '100n' is accepted)
         account0.address,
         account0.address
-    ])
+    ]);
 
     const ERC20ConstructorCallData = ERC20ConstructorCallData4;
 
@@ -118,6 +118,7 @@ async function main() {
         contract: compiledErc20mintable,
         constructorCalldata: ERC20ConstructorCallData
     });
+    console.log("ERC20 declared hash: ", deployERC20Response.declare.class_hash);
     console.log("ERC20 deployed at address: ", deployERC20Response.deploy.contract_address);
 
     // Get the erc20 contract address
@@ -134,7 +135,7 @@ async function main() {
     // Mint 1000 tokens to account address
     const amountToMint = uint256.bnToUint256(1000);
     console.log("Invoke Tx - Minting 1000 tokens to account0...");
-    const { transaction_hash: mintTxHash } = await erc20.mint(account0.address, amountToMint, { maxFee: 900_000_000_000_000 });
+    const { transaction_hash: mintTxHash } = await erc20.mint(account0.address, amountToMint, { maxFee: 900_000_000_000_000 }); // with Cairo 1 contract, 'amountToMint' can be replaced by '100n'
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Minting...`);
     await provider.waitForTransaction(mintTxHash);
@@ -143,15 +144,15 @@ async function main() {
     const balanceBeforeTransfer = await erc20.balanceOf(account0.address);
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceBeforeTransfer.balance).toString());
 
-    // Execute tx transfer of 2x10 tokens
+    // Execute tx transfer of 2x10 tokens, showing 2 ways to write data in Starknet
     console.log(`Invoke Tx - Transfer 2x10 tokens back to erc20 contract...`);
     const toTransferTk: uint256.Uint256 = uint256.bnToUint256(10);
     const transferCallData : Call = erc20.populate("transfer", [
         erc20Address,
-        toTransferTk
+        toTransferTk // with Cairo 1 contract, 'toTransferTk' can be replaced by '10n'
     ]);
     const { transaction_hash: transferTxHash } = await account0.execute(transferCallData, undefined, { maxFee: 900_000_000_000_000 });
-    const { transaction_hash: transferTxHash2 } = await erc20.transfer(erc20Address, toTransferTk); // 🚨 10n do not work
+    const { transaction_hash: transferTxHash2 } = await erc20.transfer(erc20Address, toTransferTk); // with Cairo 1 contract, 'toTransferTk' can be replaced by '10n'
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Transfer...`);
     await provider.waitForTransaction(transferTxHash2);
