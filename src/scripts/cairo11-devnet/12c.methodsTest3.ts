@@ -2,7 +2,7 @@
 // use Starknet.js v5.6.1, starknet-devnet 0.5.0
 // launch with npx ts-node src/scripts/cairo11-devnet/13.CallInvokeContractTest3.ts
 
-import { CallData, Provider, Contract, Account, json, uint256, Calldata, num ,cairo} from "starknet";
+import { CallData, Provider, Contract, Account, json, uint256, Calldata, RawArgsArray, RawArgsObject, Call } from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -11,17 +11,6 @@ dotenv.config();
 //          👇👇👇
 // 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
 //          👆👆👆
-
-async function TestContractExists(provider: Provider, address: string): Promise<boolean> {
-    try {
-        provider.getClassHashAt(address, "latest");
-        return true;
-
-    } catch {
-        return false;
-    }
-}
-
 async function main() {
     //initialize Provider 
     const provider = new Provider({ sequencer: { baseUrl: "http://127.0.0.1:5050" } });
@@ -43,33 +32,21 @@ async function main() {
 
     console.log('Test Contract connected at =', myTestContract.address);
 
-    // test if account exists
-
-    let exist: boolean;
-    try { // inside main
-        await provider.getClassHashAt(accountAddress, "latest");
-        exist = true;
-    } catch {
-        exist = false;
-    }
-    console.log("exist =", exist);
-    const exists = await TestContractExists(provider, accountAddress); // with a function
-    console.log("exists =", exists);
-
     // Interactions with the contract with call & invoke
+
 
     const res1 = await myTestContract.test_felt252(100);
     console.log("res felt252 =", res1);
     const res1a = await myTestContract['test_felt252'](100);
     console.log("res a felt252 =", res1a);
 
-    const param1: uint256.Uint256 = cairo.uint256(10n);
+    const myUint256: uint256.Uint256 = uint256.bnToUint256(10257415n);
     const par1: Calldata = CallData.compile({
-        p1: param1,
+        p1: myUint256,
     })
-    const res2 = await myTestContract.test_u256(param1); // 🚨 fail in v5.9.0, succeed in 5.9.1
+    const res2 = await myTestContract.test_u256(myUint256);
     console.log("res u256 =", res2);
-    const res2a = await myTestContract.test_u256(10n); // succeed in v5.9.0
+    const res2a = await myTestContract.test_u256(10n);
     console.log("res a u256 =", res2a);
     const res2b = await myTestContract.test_u256(par1, {
         parseRequest: false,
@@ -85,32 +62,31 @@ async function main() {
     });
     console.log("res d u256 =", res2d);
 
-    const res3 = await myTestContract.test_u128(100);
-    console.log("res u128 =", res3);
+    // tests of preparation of calldata
+    const calldata1: RawArgsArray = [200, 234567897n, "865423"];
+    const calldata3: Calldata = CallData.compile({ p1: 200, p2: myUint256, p3: 464657 });
+    const calldata4: RawArgsObject = { p1: 200, p2: myUint256, p3: 464657 };
+    const contractCallData: CallData = new CallData(compiledTest.abi);
+    const calldata5: Calldata = contractCallData.compile("test_multi1", [
+        200, 234567897n, "865423"]);
+    const calldata6: Call = myTestContract.populate("test_multi1", [200, 234567897n, "865423"]);
+    // fail : const calldata6a: Call = myTestContract.populate("test_multi1",[{ p1: 200, p2: myUint256, p3: 464657 } ]);
 
-    const res4 = await myTestContract.test_u64(100);
-    console.log("res u64 =", res4);
-
-    const res5 = await myTestContract.test_u32(100);
-    console.log("res u32 =", res5);
-
-    const res6 = await myTestContract.test_usize(100);
-    console.log("res usize =", res6);
-
-    const res7 = await myTestContract.test_u16(100);
-    console.log("res u16 =", res7);
-
-    const res8 = await myTestContract.test_u8(100);
-    console.log("res u8 =", res8);
-
-    const res9 = await myTestContract.test_bool(true);
-    console.log("res bool =", res9);
-
-    const res10 = await myTestContract.test_address(testAddress);
-    console.log("res address =", res10);
-
+    // tests of calls
     const res11 = await myTestContract.test_multi1(200, 234567897n, 865423);
     console.log("res multi1 =", res11);
+    const res11a = await myTestContract["test_multi1"](200, 234567897n, 865423);
+    const res11b = await myTestContract.test_multi1(...calldata1);
+    // fail : const res11c = await myTestContract.test_multi1(...calldata3);
+    // fail : const res11d = await myTestContract.test_multi1(calldata4);
+    // fail : const res11e = await myTestContract.test_multi1(...calldata5);
+    // fail : const res11f = await myTestContract.test_multi1(calldata6);
+
+    const res14=await myTestContract.call("test_multi1",calldata1);
+    // fail : const res14a=await myTestContract.call("test_multi1",[calldata4]);
+    // fail : const res14b=await myTestContract.call("test_multi1",calldata5);
+    
+    //    account0.execute()
 
     const res12 = await myTestContract.test_multi2(200, 5678, 865423);
     console.log("res multi2 =", res12);

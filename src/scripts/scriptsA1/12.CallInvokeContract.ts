@@ -2,6 +2,7 @@
 // launch with npx ts-node src/scriptsA1/11.CallInvokeContract.ts
 
 import { Provider, Contract, Account, json, ec } from "starknet";
+import { accountTestnet4Address, accountTestnet4privateKey } from "../../A1priv/A1priv";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -10,9 +11,9 @@ async function main() {
     const provider = new Provider({ sequencer: { network: "goerli-alpha" } });
 
     //const privateKey0 = process.env.OZ_ACCOUNT_PRIVATE_KEY ?? "";
-    const privateKey0 = "1202422677688430114213521431078907413426836022101021128058478935525263950730";
+    const privateKey0 = accountTestnet4privateKey;
     const starkKeyPair0 = ec.getKeyPair(privateKey0);
-    const account0Address = "0x065A822fBeE1Ae79e898688b5A4282Dc79E0042cbEd12F6169937FdDb4c26641";
+    const account0Address = accountTestnet4Address;
     const account0 = new Account(provider, account0Address, starkKeyPair0);
     console.log('existing AX account4 connected.\n');
 

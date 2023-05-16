@@ -3,6 +3,7 @@
 // launch with npx ts-node src/scriptsA2/5.declareDeployContractOZ.ts
 
 import { Provider, Account, Contract, ec, json, stark, shortString, uint256 } from "starknet";
+import { accountTestnet2ArgentX1Address, accountTestnet2ArgentX1privateKey } from "../../A2priv/A2priv";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -18,9 +19,9 @@ async function main() {
     // connect existing predeployed account 0 of Devnet
     // console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT_ADDRESS);
     // console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT_PRIVATE_KEY);
-    const privateKey0 = "0x0217aec50b2c3ef512c0c4b27122d312d8fcf0125701319f360d79c159e05415";
+    const privateKey0 = accountTestnet2ArgentX1privateKey;
     const starkKeyPair0 = ec.getKeyPair(privateKey0);
-    const account0Address: string = "0x3c814156eebd2159107c0b7d9871d2da2ab54b0dab14d4609a6a8514164bc1a";
+    const account0Address: string = accountTestnet2ArgentX1Address;
     const account0 = new Account(provider, account0Address, starkKeyPair0);
     console.log('existing OZ account0 connected.\n');
 

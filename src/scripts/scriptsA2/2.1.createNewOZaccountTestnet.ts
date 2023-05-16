@@ -3,6 +3,7 @@
 
 import { Account, ec, json, stark, Provider, hash, } from "starknet";
 import { StarknetChainId } from "starknet/src/constants"
+import { accountTestnet2ArgentX1Address, accountTestnet2ArgentX1privateKey } from "../../A2priv/A2priv";
 import fs from "fs";
 import readline from "readline";
 import axios from "axios";
@@ -17,9 +18,9 @@ async function main() {
     const provider = new Provider({ sequencer: { network: 'goerli-alpha-2' } }) // or 'goerli-alpha'
     console.log("STARKNET_PROVIDER_BASE_URL=https://alpha4-2.starknet.io");
 
-    const privateKeyAX = "0x072118a1f4859d84c352f58081e038fa57ecbb562078ef03dc9ac8c0402015a8"; //testnet2
+    const privateKeyAX = accountTestnet2ArgentX1privateKey; //testnet2
     const starkKeyPairAX = ec.getKeyPair(privateKeyAX);
-    const accountAXAddress: string = "0x2b564555aa92c9a9bfcfd74f8d9788efd47b4beb41dc96e35f7d1124bfd66e5"; //testnet2
+    const accountAXAddress: string = accountTestnet2ArgentX1Address; //testnet2
 
 
     const account0 = new Account(provider, accountAXAddress, starkKeyPairAX);
