@@ -22492,8 +22492,8 @@
           "type": "core::bool"
         },
         {
-          "name": "coord",
-          "type": "(core::felt252, core::integer::u16)"
+          "name": "tupoftup",
+          "type": "((core::integer::u8, core::integer::u16), core::integer::u256)"
         },
         {
           "name": "longText",
@@ -22517,7 +22517,7 @@
         },
         {
           "name": "tuple1",
-          "type": "(core::integer::u8, core::integer::u16, core::integer::u32, core::integer::u64)"
+          "type": "(core::integer::u256, test_constructor4::test_constructor4::TestConstructor4::Order2, core::array::Array::<core::integer::u128>, core::integer::u64)"
         },
         {
           "name": "array5",

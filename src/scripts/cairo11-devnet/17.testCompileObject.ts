@@ -52,6 +52,9 @@ async function main() {
     const compiledContractSierra5 = json.parse(fs.readFileSync("./compiledContracts/test_constructor4.sierra").toString("ascii"));
     const compiledContractCasm5 = json.parse(fs.readFileSync("./compiledContracts/test_constructor4.casm").toString("ascii"));
 
+       // constructor with nested tuple
+       const compiledContractSierra6 = json.parse(fs.readFileSync("./compiledContracts/test_constructor5tuple.sierra").toString("ascii"));
+ 
     // // test calldata.compile
 
     // // ***************** constructor1, with uint256 & tuple ****************
@@ -197,10 +200,10 @@ async function main() {
 
 
     // const contractCallData2: CallData = new CallData(compiledContractSierra3.abi);
-    // type Order2 = {
-    //     p1: num.BigNumberish,
-    //     p2: num.BigNumberish[]
-    // }
+    type Order2 = {
+        p1: num.BigNumberish,
+        p2: num.BigNumberish[]
+    }
     // const myOrder2: Order2 = {
     //     p1: "17",
     //     p2: [234, 467456745457n, "0x56ec"]
@@ -273,62 +276,90 @@ async function main() {
     // );
     // console.log("with struct disordered (including struct) =", myCalldata6);
 
-    // nested
-    const myFalseUint256 = { high: 1, low: 23456 }; // wrong order
-    const myOrder2bis: Order2 = {// wrong order
-        p2: [234, 467456745457n, "0x56ec"],
-        p1: "17"
-    }
-    const contractCallData4: CallData = new CallData(compiledContractSierra5.abi);
-    const contractConstructor4: RawArgsObject = {//wrong order
-        active: true,
-        symbol: "NIT",
-        initial_supply: myFalseUint256,
-        recipient: account0.address,
-        decimals: 18,
-        coord: cairo.tuple('0x0a', 200),
-        card: myOrder2bis,
-        longText: "Zorg is back, for ever, here and everywhere",
-        array1: [100, 101, 102],
-        array2: [[200, 201], [202, 203], [204, 205]],
-        array3: [myOrder2bis, myOrder2bis],
-        array4: [12n,12345],
-        tuple1: cairo.tuple(400, "0c5aa", 24n, "texte"),
-        name: "niceToken",
-    }
-    const myCalldata7: Calldata = contractCallData4.compile("constructor", contractConstructor4);
-    console.log("with array ordered (including nested) =", myCalldata7);
+    // // nested
+    // const myFalseUint256 = { high: 1, low: 23456 }; // wrong order
+    // const myOrder2bis: Order2 = {// wrong order
+    //     p2: [234, 467456745457n, "0x56ec"],
+    //     p1: "17"
+    // }
+    // const contractCallData4: CallData = new CallData(compiledContractSierra5.abi);
+    // const contractConstructor4: RawArgsObject = {//wrong order
+    //     active: true,
+    //     symbol: "NIT",
+    //     initial_supply: myFalseUint256,
+    //     recipient: account0.address,
+    //     decimals: 18,
+    //     coord: cairo.tuple('0x0a', 200),
+    //     card: myOrder2bis,
+    //     longText: "Zorg is back, for ever, here and everywhere",
+    //     array1: [100, 101, 102],
+    //     array2: [[200, 201], [202, 203], [204, 205]],
+    //     array3: [myOrder2bis, myOrder2bis],
+    //     array4: [myFalseUint256,myFalseUint256],
+    //     tuple1: cairo.tuple(400, "0c5aa", 24n, "texte"),
+    //     name: "niceToken",
+    //     array5: [cairo.tuple(251,40000n),cairo.tuple(252,40001n)],
+    // }
+    // const myCalldata7: Calldata = contractCallData4.compile("constructor", contractConstructor4);
+    // console.log("with object not ordered (including nested) =", myCalldata7);
 
-    const myUint256: uint256.Uint256 = cairo.uint256(50000n);
-    type Order2 = {
-            p1: num.BigNumberish,
-            p2: num.BigNumberish[]
-        }   
-        const myOrder2: Order2 = {
-        p1: "17",
-        p2: [234, 467456745457n, "0x56ec"]
-    }
-    const contractCallData5: CallData = new CallData(compiledContractSierra5.abi);
-    const contractConstructor5: RawArgsArray = [
-        "niceToken",
-        "NIT",
-        18,
-        myUint256,
-        myOrder2,
-        account0.address,
-        true,
-        cairo.tuple('0x0a', 200),
-        "Zorg is back, for ever, here and everywhere",
-        [100, 101, 102],
-        [[200, 201], [202, 203], [204, 205]],
-        [myOrder2, myOrder2],
-        [myUint256,myUint256],
-        cairo.tuple(400, "0c5aa", 24n, "texte"),
-    ]
+//     const myUint256: uint256.Uint256 = cairo.uint256(50000n);
+//     type Order2 = {
+//             p1: num.BigNumberish,
+//             p2: num.BigNumberish[]
+//         }   
+//         const myOrder2: Order2 = {
+//         p1: "17",
+//         p2: [234, 467456745457n, "0x56ec"]
+//     }
+//     const contractCallData5: CallData = new CallData(compiledContractSierra5.abi);
+//     const contractConstructor5: RawArgsArray = [
+//         "niceToken",
+//         "NIT",
+//         18,
+//         myUint256,
+//         myOrder2,
+//         account0.address,
+//         true,
+//         cairo.tuple('0x0a', 200),
+//         "Zorg is back, for ever, here and everywhere",
+//         [100, 101, 102],
+//         [[200, 201], [202, 203], [204, 205]],
+//         [myOrder2, myOrder2],
+//         [myUint256,myUint256],
+//         cairo.tuple(400, "0c5aa", 24n, "texte"),
+//     ]
 
-   const myCalldata8: Calldata = contractCallData5.compile("constructor", contractConstructor5);
-    const myCalldata8b=CallData.compile(contractConstructor5);
-    console.log("with array ordered (including nested) =", myCalldata8b);
+//    const myCalldata8: Calldata = contractCallData5.compile("constructor", contractConstructor5);
+//     const myCalldata8b=CallData.compile(contractConstructor5);
+//     console.log("with array ordered (including nested) =", myCalldata8);
+
+const myFalseUint256 = { high: 1, low: 23456 }; // wrong order
+const myOrder2bis: Order2 = {// wrong order
+    p2: [234, 467456745457n, "0x56ec"],
+    p1: "17"
+}
+const contractCallData9: CallData = new CallData(compiledContractSierra6.abi);
+const contractConstructor9: RawArgsObject = {//wrong order
+    active: true,
+    symbol: "NIT",
+    initial_supply: myFalseUint256,
+    recipient: account0.address,
+    decimals: 18,
+    tupoftup: cairo.tuple(cairo.tuple(34,"0x5e") ,myFalseUint256),
+    card: myOrder2bis,
+    longText: "Zorg is back, for ever, here and everywhere",
+    array1: [100, 101, 102],
+    array2: [[200, 201], [202, 203], [204, 205]],
+    array3: [myOrder2bis, myOrder2bis],
+    array4: [myFalseUint256,myFalseUint256],
+    tuple1: cairo.tuple(40000n, myOrder2bis, [54,55n,"0xae"], "texte"),
+    name: "niceToken",
+    array5: [cairo.tuple(251,40000n),cairo.tuple(252,40001n)],
+}
+const myCalldata9: Calldata = contractCallData9.compile("constructor", contractConstructor9);
+console.log("with object not ordered (including nested) =", myCalldata9);
+
 
 }
 main()
