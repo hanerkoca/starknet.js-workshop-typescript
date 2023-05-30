@@ -1,6 +1,6 @@
-// Deploy a new ArgentX wallet.
+// Deploy a new ArgentX wallet, without declaration (fork of testnet)
+// Coded with Starknet.js v5.11.1
 // launch with : npx ts-node src/scripts/3.createNewArgentXaccount.ts
-// Coded with Starknet.js v5.9.1
 
 
 import { Provider, Account, ec, json, stark, hash, CallData } from "starknet";
@@ -9,10 +9,10 @@ import axios from "axios";
 import * as dotenv from "dotenv";
 dotenv.config();
 
+   //          👇👇👇
+    // 🚨🚨🚨   Launch 'starknet-devnet --seed 0 --fork-network alpha-goerli' before using this script.
+    //          👆👆👆
 
-//          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
-//          👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
     if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
@@ -31,30 +31,26 @@ async function main() {
     console.log('existing OZ account0 connected.\n');
 
     // Declare Proxy and ArgentXaccount classes in devnet :
-    // const argentXproxyClassHash = "0x4a5cae61fa8312b0a3d0c44658b403d3e4197be80027fd5020ffcdf0c803331";
-    // const argentXaccountClassHash = "0x5cd533592dd40ee07a087e120dd30a7bd24efd54471a65755cc1d553094c7d7";
-
-    const ArgentXproxyCompiled = json.parse(fs.readFileSync("./compiledContracts/ArgentProxy_0_2_3.json").toString("ascii"));
-    const ArgentXaccountCompiled = json.parse(fs.readFileSync("./compiledContracts/ArgentAccount_0_2_3.json").toString("ascii"));
-
-    // declare & deploy ArgentX proxy
-    const { transaction_hash: AXPth, class_hash: AXPch } = await account0.declare({ contract: ArgentXproxyCompiled });
-    // declare ArgentXaccount
-    const { transaction_hash: AXAth, class_hash: AXAch } = await account0.declare({ contract: ArgentXaccountCompiled });
-    await provider.waitForTransaction(AXPth);
-    await provider.waitForTransaction(AXAth);
+     const argentXproxyClassHash = "0x025ec026985a3bf9d0cc1fe17326b245dfdc3ff89b8fde106542a3ea56c5a918";
+    const argentXimplementationClassHash = "0x33434ad846cdd5f23eb73ff09fe6fddd568284a0fb7d1be20ee482f044dabe2";
 
     // Calculate future address of the ArgentX account
-    const privateKeyAX = process.env.AA_NEW_ACCOUNT_PRIVKEY ?? "";
-    console.log('AX_ACCOUNT3_DEVNET_PRIVKEY=', privateKeyAX);
+    // const privateKeyAX = process.env.AA_NEW_ACCOUNT_PRIVKEY ?? "";
+    const privateKeyAX=stark.randomAddress();
+    console.log('AX_ACCOUNT_DEVNET_PRIVKEY=', privateKeyAX);
     //const starkKeyPairAX = ec.getKeyPair(privateKeyAX);
     //const starkKeyPairAX = ec.genKeyPair();
     const starkKeyPubAX = ec.starkCurve.getStarkKey(privateKeyAX);
+    const AXimplementationInitializer=CallData.compile({ signer: starkKeyPubAX, guardian: "0" });
     const AXproxyConstructorCallData = CallData.compile({ 
-        implementation: AXAch, 
+        implementation: argentXimplementationClassHash, 
         selector: hash.getSelectorFromName("initialize"), 
-        calldata: CallData.compile({ signer: starkKeyPubAX, guardian: "0" }), });
-    const AXproxyAddress = hash.calculateContractAddressFromHash(starkKeyPubAX, AXPch, AXproxyConstructorCallData, 0);
+        calldata: [...AXimplementationInitializer], });
+    const AXproxyAddress = hash.calculateContractAddressFromHash(
+        starkKeyPubAX, 
+        argentXproxyClassHash, 
+        AXproxyConstructorCallData, 
+        0);
     console.log('Precalculated account address=', AXproxyAddress);
 
     // fund account address before account creation
@@ -64,7 +60,7 @@ async function main() {
     // deploy ArgentX account
     const accountAX = new Account(provider, AXproxyAddress, privateKeyAX);
     const deployAccountPayload = { 
-        classHash: AXPch, 
+        classHash: argentXproxyClassHash, 
         constructorCalldata: AXproxyConstructorCallData, 
         contractAddress: AXproxyAddress, 
         addressSalt: starkKeyPubAX };

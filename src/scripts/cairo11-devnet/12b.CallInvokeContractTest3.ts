@@ -14,7 +14,7 @@ dotenv.config();
 
 async function TestContractExists(provider: Provider, address: string): Promise<boolean> {
     try {
-        provider.getClassHashAt(address, "latest");
+        provider.getClassHashAt(address);
         return true;
 
     } catch {
