@@ -100,37 +100,6 @@ async function main() {
 
     // define the constructor :
 
-    // method 1 : lowest raw data : an array of numbers. Only for specific cases (ex : max performance needed) :
-    const ERC20ConstructorCallData1: RawArgsArray = [ // accept only flatten objects
-        'niceToken',
-        'NIT',
-        18,
-        initialTk.low,initialTk.high, // 🚨 Uint256 and BigNumberish do not work (are not a flatten object of 2 elements)
-        account0.address,
-        account0.address
-    ];
-
-    // method 2 : with CallData.compile (to use in the rare case of no abi available). Each parameter has to be constructed properly, without starknet.js verification of conformity to abi :
-    const ERC20ConstructorCallData2: Calldata = CallData.compile({
-        name: 'niceToken',
-        symbol: 'NIT',
-        decimals: 18,
-        initial_supply: initialTk, // needs a Uint256 type. '100n' is not accepted because no abi 
-        recipient: account0.address,
-        owner: account0.address
-    });
-
-    // method 3 : with RawArgsObject. Close to method 2 :
-    const ERC20ConstructorCallData3: RawArgsObject = {
-        name: "niceToken",
-        symbol: "NIT",
-        decimals: 18,
-        initial_supply: initialTk, // needs a Uint256 type. '100n' is not accepted because no abi
-        recipient: account0.address,
-        owner: account0.address,
-    }
-
-    // method 4: recommended method : send an array of parameters. With the abi, starknet.js converts automatically the parameters to the types defined in the abi, and checks the conformity to the abi :
     const erc20CallData: CallData = new CallData(compiledErc20mintable.abi);
     const ERC20ConstructorCallData4: Calldata = erc20CallData.compile("constructor", [
         "niceToken",
