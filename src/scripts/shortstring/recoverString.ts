@@ -1,8 +1,8 @@
 // recover a long string.
 // launch with npx ts-node src/scripts/recoverString.ts
+// coded with Starknet.js v5.11.1
 
-import { Provider, Contract, json, uint256, shortString, number } from "starknet";
-import BN from "bn.js";
+import { Provider, Contract, json, uint256, shortString, num } from "starknet";
 
 async function main() {
     const provider = new Provider({ sequencer: { baseUrl: "https://alpha4.starknet.io" } });
@@ -12,10 +12,8 @@ async function main() {
     const myContract = new Contract(contractABI, contractAddress, provider);
     //console.log('Test Contract connected at =', myContract.address);
     const id256 = uint256.bnToUint256(35);
-    const result = await myContract.call("tokenURI", [id256]);
-    const stringsCoded: BN[] = result.token_uri;
-    //console.log("Result =", result);
-    const myShortStringsDecoded = stringsCoded.map((shortStr: BN) => { return shortString.decodeShortString(number.toHex(shortStr)) });
+    const stringsCoded : bigint[]= await myContract.tokenURI(id256);
+    const myShortStringsDecoded = stringsCoded.map((shortStr: bigint) => { return shortString.decodeShortString(num.toHex(shortStr)) });
     //console.log("myShortStringsDecoded =", myShortStringsDecoded);
     const finalString = myShortStringsDecoded.join("");
     console.log("finalString =", finalString);

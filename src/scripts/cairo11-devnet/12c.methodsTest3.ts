@@ -1,5 +1,5 @@
 // Test Cairo 1 v0.6.0 integrated types.
-// use Starknet.js v5.6.1, starknet-devnet 0.5.0
+// use Starknet.js v5.11.1, starknet-devnet 0.5.0
 // launch with npx ts-node src/scripts/cairo11-devnet/13.CallInvokeContractTest3.ts
 
 import { CallData, Provider, Contract, Account, json, uint256, Calldata, RawArgsArray, RawArgsObject, Call } from "starknet";
@@ -70,6 +70,10 @@ async function main() {
     const calldata5: Calldata = contractCallData.compile("test_multi1", [
         200, 234567897n, "865423"]);
     const calldata6: Call = myTestContract.populate("test_multi1", [200, 234567897n, "865423"]);
+    const calldata7: Call = myTestContract.populate("test_multi1", {
+        p1: 200, 
+        p2: 234567897n, 
+        p3: "865423"});
     // fail : const calldata6a: Call = myTestContract.populate("test_multi1",[{ p1: 200, p2: myUint256, p3: 464657 } ]);
 
     // tests of calls

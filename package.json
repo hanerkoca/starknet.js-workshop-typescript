@@ -23,7 +23,7 @@
     "fs": "^0.0.1-security",
     "micro-starknet": "^0.2.3",
     "pako": "^2.1.0",
-    "starknet": "^5.11.1"
+    "starknet": "file:/D/starknetFork/starknet.js"
   },
   "devDependencies": {
     "@types/elliptic": "^6.4.14",

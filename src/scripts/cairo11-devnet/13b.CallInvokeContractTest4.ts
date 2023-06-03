@@ -40,7 +40,8 @@ async function main() {
     console.log("keys qty =", Object.keys(res1).length);
     console.log("key 0 =", res1["0"]);
     const values = Object.keys(res1).map(key => res1[key]);
-    console.log("values =", values,"\n");
+    console.log("values =", values);
+    console.log("values =", Object.values(res1),"\n");
 
     
     const res2 = await myTestContract.test_array_out();

@@ -25,7 +25,7 @@ async function main() {
 
 
     // Connect the deployed Test instance in devnet
-    const testAddress = "0x52458c69df2a8a69b22cf33afa55f3ddb7986dbacbbd88d5501b43e86fb589c";
+    const testAddress = "0x33fc8723b42875a5d2ae833136a8725e6da893d9b2f4e62c4f768c947c6f6f4";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/structs3.sierra").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, testAddress, provider);
     myTestContract.connect(account0);

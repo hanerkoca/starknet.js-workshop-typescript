@@ -66,52 +66,18 @@ async function main() {
     // },
 
     const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20MintableOZ_0_6_1.json").toString("ascii"));
-    const initialTk: uint256.Uint256 = uint256.bnToUint256(100);
 
     // define the constructor :
-
-    // method 1 : lowest raw data : an array of numbers. Only for specific cases (ex : max performance needed) :
-    const ERC20ConstructorCallData1: RawArgsArray = [ // accept only flatten objects
-        'niceToken',
-        'NIT',
-        18,
-        initialTk.low,initialTk.high, // 🚨 Uint256 and BigNumberish do not work (are not a flatten object of 2 elements)
-        account0.address,
-        account0.address
-    ];
-
-    // method 2 : with CallData.compile (to use in the rare case of no abi available). Each parameter has to be constructed properly, without starknet.js verification of conformity to abi :
-    const ERC20ConstructorCallData2: Calldata = CallData.compile({
-        name: 'niceToken',
-        symbol: 'NIT',
-        decimals: 18,
-        initial_supply: initialTk, // needs a Uint256 type. '100n' is not accepted because no abi 
-        recipient: account0.address,
-        owner: account0.address
-    });
-
-    // method 3 : with RawArgsObject. Close to method 2 :
-    const ERC20ConstructorCallData3: RawArgsObject = {
+    const initialTk: uint256.Uint256 = uint256.bnToUint256(100);
+    const erc20CallData: CallData = new CallData(compiledErc20mintable.abi);
+    const ERC20ConstructorCallData: Calldata = erc20CallData.compile("constructor", {
         name: "niceToken",
         symbol: "NIT",
         decimals: 18,
-        initial_supply: initialTk, // needs a Uint256 type. '100n' is not accepted because no abi
+        initial_supply: initialTk,
         recipient: account0.address,
-        owner: account0.address,
-    }
-
-    // method 4: recommended method : send an array of parameters. With the abi, starknet.js converts automatically the parameters to the types defined in the abi, and checks the conformity to the abi :
-    const erc20CallData: CallData = new CallData(compiledErc20mintable.abi);
-    const ERC20ConstructorCallData4: Calldata = erc20CallData.compile("constructor", [
-        "niceToken",
-        "NIT",
-        18,
-        initialTk, // needs a Uint256 type for Cairo 0 (with Cairo 1, '100n' is accepted)
-        account0.address,
-        account0.address
-    ]);
-
-    const ERC20ConstructorCallData = ERC20ConstructorCallData4;
+        owner: account0.address
+    });
 
     console.log("constructor=", ERC20ConstructorCallData);
     const deployERC20Response = await account0.declareAndDeploy({
@@ -147,13 +113,13 @@ async function main() {
     // Execute tx transfer of 2x10 tokens, showing 2 ways to write data in Starknet
     console.log(`Invoke Tx - Transfer 2x10 tokens back to erc20 contract...`);
     const toTransferTk: uint256.Uint256 = uint256.bnToUint256(10);
-    const transferCallData : Call = erc20.populate("transfer", [
-        erc20Address,
-        toTransferTk // with Cairo 1 contract, 'toTransferTk' can be replaced by '10n'
-    ]);
+    const transferCallData: Call = erc20.populate("transfer", {
+        recipient: erc20Address,
+        amount: toTransferTk // with Cairo 1 contract, 'toTransferTk' can be replaced by '10n'
+});
     const { transaction_hash: transferTxHash } = await account0.execute(transferCallData, undefined, { maxFee: 900_000_000_000_000 });
-    const { transaction_hash: transferTxHash2 } = await erc20.transfer(erc20Address, toTransferTk); // with Cairo 1 contract, 'toTransferTk' can be replaced by '10n'
-    // Wait for the invoke transaction to be accepted on StarkNet
+    const { transaction_hash: transferTxHash2 } = await erc20.transfer(erc20Address, toTransferTk); 
+    // Wait for the invoke transactions to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Transfer...`);
     await provider.waitForTransaction(transferTxHash2);
     // Check balance after transfer - should be 1080

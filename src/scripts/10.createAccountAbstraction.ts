@@ -1,8 +1,8 @@
 // create a new abstracted account in devnet
 // launch with npx ts-node src/scripts/10.createAccountAbstraction.ts
-// Coded with Starknet.js v5.1.0
+// Coded with Starknet.js v5.11.1
 
-import { Account, ec, json, stark, Provider, hash, number } from "starknet";
+import { Account, ec, json, stark, Provider, hash, CallData } from "starknet";
 import fs from "fs";
 import axios from "axios";
 import * as dotenv from "dotenv";
@@ -50,7 +50,7 @@ async function main() {
     await provider.waitForTransaction(declTH);
 
     // Calculate future address of the account
-    const AAaccountConstructorCallData = stark.compileCalldata({ super_admin_address: account0.address, publicKey: AAstarkKeyPub });
+    const AAaccountConstructorCallData = CallData.compile({ super_admin_address: account0.address, publicKey: AAstarkKeyPub });
     const AAcontractAddress = hash.calculateContractAddressFromHash(AAstarkKeyPub, decCH, AAaccountConstructorCallData, 0);
     console.log('Precalculated account address=', AAcontractAddress);
     // fund account address before account creation
