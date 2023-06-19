@@ -1,8 +1,8 @@
-// Connect a predeployed OZ account in devnet. 
-// address and PrivKey are displayed when lanching starknet-devnet, and have been  stored in .env file.
+// Verify message in an account. 
+// Coded with Starknet.js v5.11.1
 // launch with npx ts-node src/scripts/13.signer.ts
 
-import { Account, ec, hash, Provider, number, json, Contract, encode } from "starknet";
+import { Account, ec, hash, Provider,  json, Contract, encode, num } from "starknet";
 import * as dotenv from "dotenv";
 import fs from "fs";
 import BN from "bn.js";
@@ -24,57 +24,49 @@ async function main() {
     console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
     console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
     const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
-    const starkKeyPair0 = ec.getKeyPair(privateKey0);
     const accountAddress: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
-    const account = new Account(provider, accountAddress, starkKeyPair0);
+    const account = new Account(provider, accountAddress, privateKey0);
     console.log('✅ OZ predeployed account 0 connected.');
 
     // creation of message signature
-    //const privateKey = stark.randomAddress();
     const privateKey = privateKey0;
-    const starkKeyPair = ec.getKeyPair(privateKey);
-    const message: number.BigNumberish[] = [1, 128, 18, 14];
+    const message: num.BigNumberish[] = [1, 128, 18, 14];
     const msgHash = hash.computeHashOnElements(message);
-    const signature = ec.sign(starkKeyPair, msgHash);
-    const starknetPublicKey = ec.getStarkKey(starkKeyPair);
-    const fullPublicKey = encode.addHexPrefix(starkKeyPair.getPublic("hex"));
-    console.log("     publicKey calculated =", starknetPublicKey, typeof (starknetPublicKey));
+    const signature = ec.starkCurve.sign(msgHash,privateKey );
+    const starknetPublicKey = ec.starkCurve.getStarkKey(privateKey);
+    const fullPublicKey = encode.addHexPrefix(encode.buf2hex(ec.starkCurve.getPublicKey(privateKey, false)));
+    console.log("        publicKey calculated =", starknetPublicKey, typeof (starknetPublicKey));
     console.log("full publicKey calculated =", fullPublicKey, typeof (fullPublicKey));
-    // const compiledAccount = json.parse(fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii"));
-    // const contractAccount = new Contract(compiledAccount.abi, accountAddress, provider);
-    // const res2 = await contractAccount.call("getPublicKey");
-    // const accountPublicKey: string = "0x" + res2.publicKey.toString(16);
-    // console.log("pub2 from account =", accountPublicKey);
-
+ 
     // verify message outside of StarkNet
-    console.log("Outside Starknet =");
-    const starkKeyPair1 = ec.getKeyPairFromPublicKey(fullPublicKey);
+    console.log("Outside Starknet :");
     const msgHash1 = hash.computeHashOnElements(message);
-    const result1 = ec.verify(starkKeyPair1, msgHash1, signature);
+    const result1 = ec.starkCurve.verify(signature, msgHash1, fullPublicKey);
     console.log("Result (boolean) =", result1);
 
     // verify message in the network, using the account linked to the privatekey
-    console.log("With Starknet =");
+    console.log("With Starknet :");
     const compiledAccount = json.parse(fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii"));
     const contractAccount = new Contract(compiledAccount.abi, accountAddress, provider);
     const msgHash2 = hash.computeHashOnElements(message);
     // The call of isValidSignature will generate an error if not valid
     let result2: boolean;
     try {
-        await contractAccount.call("isValidSignature", [msgHash2, signature]);
+        await contractAccount.isValidSignature(msgHash2, [signature.r,signature.s]);
         result2 = true;
     } catch {
         result2 = false;
     }
     console.log("Result (boolean) =", result2);
 
-    // check fullPubKey
-    console.log("full pub key check with account =");
-    const pubKey3 = await contractAccount.call("getPublicKey");
+    // check that fullPubKey is linked to this account address
+    // verify that starknet public key stored in account contract is the X part of the full public key.
+    console.log("full pub key check with account :");
+    const publicKey = await contractAccount.getPublicKey() ;
     const isFullPubKeyRelatedToAccount: boolean =
-        BigInt(pubKey3.publicKey.toString()) ==
+    publicKey.publicKey ==
         BigInt(encode.addHexPrefix(fullPublicKey.slice(4, 68)));
-    console.log("Result (boolean)=", isFullPubKeyRelatedToAccount);
+    console.log("Result (boolean) =", isFullPubKeyRelatedToAccount);
 
 }
 main()

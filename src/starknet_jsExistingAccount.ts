@@ -1,9 +1,9 @@
 // Deploy and use an ERC20, monetized by an existing account
-// use Starknet.js v5.9.1, starknet-devnet 0.5.1
 // Launch with : npx ts-node src/starknet_jsExistingAccount.ts
+// Coded with Starknet.js v5.13.1, starknet-devnet 0.5.3
 
 import fs from "fs";
-import { Account, Contract, defaultProvider, json, stark, Provider, shortString, uint256, CallData, RawArgs, Calldata, RawArgsArray, RawArgsObject, Call } from "starknet";
+import { Account, Contract, defaultProvider, json,  Provider,  CallData, RawArgs, Calldata, RawArgsArray, RawArgsObject, Call, cairo, uint256, Uint256 } from "starknet";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -68,7 +68,7 @@ async function main() {
     const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20MintableOZ_0_6_1.json").toString("ascii"));
 
     // define the constructor :
-    const initialTk: uint256.Uint256 = uint256.bnToUint256(100);
+    const initialTk: Uint256 = cairo.uint256(100);
     const erc20CallData: CallData = new CallData(compiledErc20mintable.abi);
     const ERC20ConstructorCallData: Calldata = erc20CallData.compile("constructor", {
         name: "niceToken",
@@ -99,7 +99,7 @@ async function main() {
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceInitial.balance).toString());
 
     // Mint 1000 tokens to account address
-    const amountToMint = uint256.bnToUint256(1000);
+    const amountToMint = cairo.uint256(1000);
     console.log("Invoke Tx - Minting 1000 tokens to account0...");
     const { transaction_hash: mintTxHash } = await erc20.mint(account0.address, amountToMint, { maxFee: 900_000_000_000_000 }); // with Cairo 1 contract, 'amountToMint' can be replaced by '100n'
     // Wait for the invoke transaction to be accepted on StarkNet
@@ -112,7 +112,7 @@ async function main() {
 
     // Execute tx transfer of 2x10 tokens, showing 2 ways to write data in Starknet
     console.log(`Invoke Tx - Transfer 2x10 tokens back to erc20 contract...`);
-    const toTransferTk: uint256.Uint256 = uint256.bnToUint256(10);
+    const toTransferTk: Uint256 = cairo.uint256(10);
     const transferCallData: Call = erc20.populate("transfer", {
         recipient: erc20Address,
         amount: toTransferTk // with Cairo 1 contract, 'toTransferTk' can be replaced by '10n'

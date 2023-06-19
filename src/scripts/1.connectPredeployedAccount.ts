@@ -3,7 +3,7 @@
 // launch with npx ts-node src/scripts/1.connectPredeployedAccount.ts
 // Coded with Starknet.js v5.1.0
 
-import { Account, ec, Provider } from "starknet";
+import { Account, Provider } from "starknet";
 import * as dotenv from "dotenv";
 dotenv.config();
 

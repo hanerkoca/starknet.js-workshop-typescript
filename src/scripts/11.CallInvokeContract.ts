@@ -2,7 +2,7 @@
 // launch with npx ts-node src/scripts/11.CallInvokeContract.ts
 // Coded with Starknet.js v5.1.0
 
-import { Provider, Contract, Account, json, ec } from "starknet";
+import { Provider, Contract, Account, json } from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -39,8 +39,8 @@ async function main() {
     // Interactions with the contract with call & invoke
     myTestContract.connect(account0);
     const bal1 = await myTestContract.get_balance();
-    // 🚨 do not work in V5.1.0
     const bal1b = await myTestContract.call("get_balance");
+    console.log("Initial balance =", bal1);
     console.log("Initial balance =", bal1.res.toString());
     // console.log("Initial balance =", bal1b.res.toString());
     // estimate fee
@@ -49,7 +49,7 @@ async function main() {
     const resu = await myTestContract.invoke("increase_balance", [10, 30]);
     await provider.waitForTransaction(resu.transaction_hash);
     const bal2 = await myTestContract.get_balance();
-    console.log("Initial balance =", bal2.res.toString());
+    console.log("Final balance =", bal2.res.toString());
     console.log('✅ Test completed.');
 
 }

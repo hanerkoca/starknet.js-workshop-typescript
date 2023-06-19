@@ -1,13 +1,13 @@
 // Connect a predeployed OZ account in devnet. 
 // address and PrivKey are displayed when lanching starknet-devnet, and have been  stored in .env file.
+// coded with Starknet.js v5.11.1
 // launch with npx ts-node src/scripts/13.signer.ts
 
-import { Account, ec, hash, Provider, number, json, Contract, encode, Signature, shortString, } from "starknet";
-import * as typedData from "./typedData";
+import { Account, ec, hash, Provider, json, Contract, encode, shortString, typedData } from "starknet";
+
 import * as dotenv from "dotenv";
 import fs from "fs";
-//import { BigNumberish } from "starknet/src/utils/number";
-import BN from "bn.js";
+import { weierstrass } from "./ec";
 dotenv.config();
 
 //    👇👇👇
@@ -32,16 +32,17 @@ async function main() {
     console.log('✅ OZ predeployed account 0 connected.');
 
     // creation of message signature
-    //const privateKey = stark.randomAddress();
+    // const privateKey = stark.randomAddress();
     const privateKey = privateKey0;
-    // const starkKeyPair = ec.getKeyPair(privateKey);
+    const starknetPublicKey = ec.starkCurve.getStarkKey(privateKey);
+    const fullPubKey = encode.buf2hex(ec.starkCurve.getPublicKey(privateKey, false)); // complete public key
+    console.log("publicKey calculated =", starknetPublicKey, typeof (starknetPublicKey));
+    console.log('fullpubKey =', fullPubKey);
+
     const message = [1, 128, 18, 14];
     const msgHash = hash.computeHashOnElements(message);
-    const signature = ec.starkCurve.sign(msgHash,privateKey);
-    const starknetPublicKey = ec.starkCurve.getStarkKey(privateKey);
-    // const fullPublicKey = encode.addHexPrefix(starkKeyPair.getPublic("hex"));
-    console.log("     publicKey calculated =", starknetPublicKey, typeof (starknetPublicKey));
-    // console.log("full publicKey calculated =", fullPublicKey, typeof (fullPublicKey));
+    const signature1: weierstrass.SignatureType = ec.starkCurve.sign(msgHash, privateKey);
+
 
     // EIP712
     const typedDataValidate: typedData.TypedData = {
@@ -97,11 +98,13 @@ async function main() {
             ]
         },
     };
-    const signature4 = await account.signMessage(typedDataValidate);
+    const signature2: weierstrass.SignatureType = await account.signMessage(typedDataValidate) as weierstrass.SignatureType;
+
+
 
     // on receiver side, with account (that needs privKey)
-    const result4 = await account.verifyMessage(typedDataValidate, signature4);
-    console.log("Result4 off-chain (boolean)=", result4);
+    const result = await account.verifyMessage(typedDataValidate, signature2);
+    console.log("Result off-chain (boolean)=", result);
 
     // on receiver side, without account  (so, without privKey)
     const compiledAccount = json.parse(fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii"));
@@ -109,46 +112,14 @@ async function main() {
 
     const msgHash5 = typedData.getMessageHash(typedDataValidate, account.address);
     // The call of isValidSignature will generate an error if not valid
-    let result5: boolean;
+    let result2: boolean;
     try {
-        await contractAccount.call("isValidSignature", [msgHash5, signature4]);
-        result5 = true;
+        await contractAccount.isValidSignature(msgHash5, [signature2.r, signature2.s]);
+        result2 = true;
     } catch {
-        result5 = false;
+        result2 = false;
     }
-    console.log("Result5 in-chain (boolean) =", result5);
-
-
-    // // verify message outside of StarkNet
-    // console.log("Outside Starknet =");
-    // const starkKeyPair1 = ec.getKeyPairFromPublicKey(fullPublicKey);
-    // const msgHash1 = hash.computeHashOnElements(message);
-    // const result1 = ec.verify(starkKeyPair1, msgHash1, signature);
-    // console.log("Result (boolean) =", result1);
-
-    // // verify message in the network, using the account linked to the privatekey
-    // console.log("With Starknet =");
-    // const compiledAccount = json.parse(fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii"));
-    // const contractAccount = new Contract(compiledAccount.abi, accountAddress, provider);
-    // const msgHash2 = hash.computeHashOnElements(message);
-    // // The call of isValidSignature will generate an error if not valid
-    // let result2: boolean;
-    // try {
-    //     await contractAccount.call("isValidSignature", [msgHash2, signature]);
-    //     result2 = true;
-    // } catch {
-    //     result2 = false;
-    // }
-    // console.log("Result (boolean) =", result2);
-
-    // check fullPubKey
-    // console.log("full pub key check with account =");
-    // const pubKey3 = await contractAccount.call("getPublicKey");
-    // const isFullPubKeyRelatedToAccount: boolean =
-    //     BigInt(pubKey3.publicKey.toString()) ==
-    //     BigInt(encode.addHexPrefix(fullPublicKey.slice(4, 68)));
-    // console.log("Result (boolean)=", isFullPubKeyRelatedToAccount);
-
+    console.log("Result in-chain (boolean) =", result2);
 }
 main()
     .then(() => process.exit(0))

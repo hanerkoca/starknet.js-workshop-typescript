@@ -3,9 +3,8 @@
 // Coded with Starknet.js v5.9.1
 
 
-import { Account, ec,encode, json, stark, Provider, hash, CallData } from "starknet";
+import { Account, ec, json, Provider, hash, CallData } from "starknet";
 import fs from "fs";
-import BN from "bn.js";
 import axios from "axios";
 import * as dotenv from "dotenv";
 dotenv.config();

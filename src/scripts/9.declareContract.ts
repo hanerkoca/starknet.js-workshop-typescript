@@ -2,9 +2,8 @@
 // launch with npx ts-node src/scripts/9.declareContract.ts
 // Coded with Starknet.js v5.1.0
 
-import { Provider, Account, Contract, ec, json } from "starknet";
+import { Provider, Account, json } from "starknet";
 import fs from "fs";
-import BN from "bn.js";
 import * as dotenv from "dotenv";
 dotenv.config();
 

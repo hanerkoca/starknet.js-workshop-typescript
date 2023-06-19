@@ -3,7 +3,7 @@
 // launch with npx ts-node src/scripts/5.declareDeployContractOZ.ts
 // Coded with Starknet.js v5.1.0
 
-import { Provider, Account, Contract, ec, json } from "starknet";
+import { Provider, Account, Contract, json } from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();

@@ -92,11 +92,11 @@ async function main() {
 
     // method 5: recommended method : send an array of parameters. With the abi, starknet.js converts automatically the parameters to the types defined in the abi, and checks the conformity to the abi :
     const contractCallData: CallData = new CallData(compiledContractSierra.abi);
-    const contractConstructorCallData5: Calldata = contractCallData.compile("constructor", [
-        "niceToken",
-        "http://addressOfMyERC721pictures/image1.jpg",
-        myArray
-    ]);
+    const contractConstructorCallData5: Calldata = contractCallData.compile("constructor", {
+        text: 'niceToken',
+        longText: "http://addressOfMyERC721pictures/image1.jpg",
+        array1:myArray
+    });
 
     const deployResponse1 = await account0.deployContract({ classHash: contractClassHash, constructorCalldata: contractConstructorCallData1 });
     console.log("contract_address1 =", deployResponse1.contract_address);
