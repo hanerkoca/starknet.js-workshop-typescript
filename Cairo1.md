@@ -117,7 +117,7 @@ console.log("res1 =", res1[0]); // Hex string
 
 Debug.print() is not allowed in Cairo 1 code for Starknet network.
 
-Hereafter is a way to debug your Cairo 1 contract, but a specific configuration is necessary :
+Hereafter is a way to debug anyway your Cairo 1 contract, but a specific configuration is necessary :
 
 ### Compilation 
 
@@ -157,6 +157,7 @@ mod HelloStarknet {
     }
 }
 ```
+> Note the last line, with the `.print()` command.
 
 The compilation of the .cairo file needs some extra options :
 
@@ -177,11 +178,11 @@ Launch Starknet-devnet with these options :
 ```bash
 starknet-devnet --seed 0 --verbose --compiler-args '--allowed-libfuncs-list-file ./pathto/lib_funcs.json --add-pythonic-hints' 2> /dev/null &
 ``` 
-> Note the PID of process, displayed in the first line (ex : `[1] 954825`). It will be necessary at the end of process.
+> Note the PID of process, displayed in the first line (ex : `[1] 954825`). It will be necessary at the end of the process.
 
 ### Interact with the contract :
 
-In the SAME bash window, launch the script that will deploy and interact with the contract (available [here](src/scripts/cairo11-devnet/4c.declareAndDeployHello.ts)) :
+In the SAME bash window, launch the Starknet.js script that will deploy and interact with the contract (available [here](src/scripts/cairo11-devnet/4c.declareAndDeployHello.ts)) :
 ```bash
 npx ts-node src/scripts/cairo11-devnet/4c.declareAndDeployHello.ts
 ```
@@ -193,7 +194,7 @@ const th = await myTestContract.Say_HelloPhil126(200);
 The following answer is printed in the bash window :
 `96231036770510887785732922765483205921`
 
-It can be decoded with 
+It can be decoded with this Starknet.js command :
 ```typescript
 console.log("Decoded message =", shortString.decodeShortString("96231036770510887785732922765483205921"));
 ```
