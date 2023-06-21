@@ -157,7 +157,13 @@ mod HelloStarknet {
     }
 }
 ```
-> Note the last line, with the `.print()` command.
+> Note the last line, with the `.print()` command. The following commands are operational :
+```rust
+'Hello, Philippe!'.print();
+123.print();
+let a:u32 = 200;
+a.print();
+```
 
 The compilation of the .cairo file needs some extra options :
 
