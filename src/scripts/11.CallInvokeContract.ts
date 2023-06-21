@@ -38,10 +38,10 @@ async function main() {
 
     // Interactions with the contract with call & invoke
     myTestContract.connect(account0);
-    const bal1 = await myTestContract.get_balance();
+    const {res} = await myTestContract.get_balance();
     const bal1b = await myTestContract.call("get_balance");
-    console.log("Initial balance =", bal1);
-    console.log("Initial balance =", bal1.res.toString());
+    console.log("Initial balance =", res);
+    console.log("Initial balance =", res.toString());
     // console.log("Initial balance =", bal1b.res.toString());
     // estimate fee
     const { suggestedMaxFee: estimatedFee1 } = await account0.estimateInvokeFee({ contractAddress: testAddress, entrypoint: "increase_balance", calldata: ["10", "30"] });
@@ -51,7 +51,6 @@ async function main() {
     const bal2 = await myTestContract.get_balance();
     console.log("Final balance =", bal2.res.toString());
     console.log('✅ Test completed.');
-
 }
 main()
     .then(() => process.exit(0))

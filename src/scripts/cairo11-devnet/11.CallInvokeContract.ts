@@ -2,7 +2,8 @@
 // use Starknet.js v5.6.0, starknet-devnet 0.5.0
 // launch with npx ts-node src/scripts/cairo11-devnet/11.CallInvokeContract.ts
 
-import { CallData, Provider, Contract, Account, json } from "starknet";
+import { CallData, Provider, Contract, Account, json, cairo } from "starknet";
+
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -34,7 +35,9 @@ async function main() {
     console.log('Test Contract connected at =', myTestContract.address);
 
     // Interactions with the contract
-
+    const isCairo1: boolean = myTestContract.isCairo1();
+    const isAbiCairo1: boolean = cairo.isCairo1abi(myTestContract.abi);
+    console.log("IsCairo1 =",isCairo1,isAbiCairo1)
     const res1 = await myTestContract.test1(100) // send a felt252
     console.log("res1 =", res1); // felt252 -> bigint
     const res2 = await myTestContract.test2(200);
