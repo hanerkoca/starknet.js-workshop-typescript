@@ -1,6 +1,6 @@
-# Starkware Starknet network ^0.11.0
+# Starkware Starknet network ^0.12.0
 # Cairo Accounts and ERC20 Demo 
-# Typescript code, using Starknet.js v5.9.1 and local Starknet-devnet 
+# Typescript code, using Starknet.js v5.6.0 and local Starknet-devnet 
 
 
 If you want to implement the Starknet network in your DAPP, you can use starknet.js to interact with it.
@@ -20,7 +20,7 @@ If necessary :
 
 - Install latest LTS version of node [here](https://kinsta.com/blog/how-to-install-node-js/#how-to-install-nodejs-on-linux)
 - Install Python 3.9  [here](https://linuxize.com/post/how-to-install-python-3-9-on-ubuntu-20-04/)
-- Create a Starknet environment [here](https://starknet.io/docs/quickstart.html), with cairo 0.11.0 minimum.
+- Create a Starknet environment [here](https://starknet.io/docs/quickstart.html), with cairo 0.12.0 minimum.
 - Install Starknet-devnet  [here](https://shard-labs.github.io/starknet-devnet/docs/intro)
   
 Run `npm install` in this directory.
@@ -29,7 +29,7 @@ The file .env defines the network to use. It's currently configured for the loca
 
 This repo is configured to be able to perform debugging of your typescript code. Just CTRL+SHIFT+D, then click on the green arrow.
 
-This script has been written with cairo v0.11.0, starknet-devnet v0.5.1, starknet.js v5.9.1. Due to fast iterations of Starknet and Cairo, this script will probably be quickly out-of-date.
+This script has been written with cairo v0.12.0, starknet-devnet v0.5.5, starknet.js v5.16.0. Due to fast iterations of Starknet and Cairo, this script will probably be quickly out-of-date.
 
 
 
@@ -82,7 +82,7 @@ You can find in this repo many other scripts. Dig in and find many usefull exemp
 
 ## Cairo 1 :
 
-You can find some explanations for the use of Starknet.js with Cairo 1 smart-contracts [here](./Cairo1.md).
+You can find some explanations for the use of Starknet.js with Cairo 1&2 smart-contracts [here](./Cairo1.md).
 
 ## 🤔 Questions?
 

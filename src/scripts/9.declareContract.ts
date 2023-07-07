@@ -1,6 +1,6 @@
 // Declare a contract.
 // launch with npx ts-node src/scripts/9.declareContract.ts
-// Coded with Starknet.js v5.1.0
+// Coded with Starknet.js v5.16.0
 
 import { Provider, Account, json } from "starknet";
 import fs from "fs";

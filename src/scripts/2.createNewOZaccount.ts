@@ -1,6 +1,6 @@
 // create a new OZ account in devnet
 // launch with npx ts-node src/scripts/2.createNewOZaccount.ts
-// Coded with Starknet.js v5.9.1
+// Coded with Starknet.js v5.16.0
 
 
 import { Account, ec, json, Provider, hash, CallData } from "starknet";

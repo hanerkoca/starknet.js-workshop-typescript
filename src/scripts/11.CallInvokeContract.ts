@@ -1,6 +1,6 @@
-// connect a contract that is already deployed on devnet.
+// interact with a contract that is already deployed on devnet.
 // launch with npx ts-node src/scripts/11.CallInvokeContract.ts
-// Coded with Starknet.js v5.1.0
+// Coded with Starknet.js v5.16.0
 
 import { Provider, Contract, Account, json } from "starknet";
 import fs from "fs";

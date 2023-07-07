@@ -27,8 +27,9 @@ async function main() {
 
 
     // Connect the deployed Test instance in devnet
-    const testAddress = "0x2321a88f22375650ebd214283d5f8d0db3494c2d127af9e063204a6c9fc4f9c";
-    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test_type1.sierra").toString("ascii"));
+    //          👇👇👇 adapt here in accordance to deployement address
+    const testAddress = "0x1563091b9bbd94cd96cb03f59205ea279aa6f7026f78152ca50570af168deb3";
+    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo200/PhilTest2.sierra.json").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, testAddress, provider);
     myTestContract.connect(account0);
 
@@ -36,18 +37,14 @@ async function main() {
 
     // Interactions with the contract
     const isCairo1: boolean = myTestContract.isCairo1();
-    const isAbiCairo1: boolean = cairo.isCairo1abi(myTestContract.abi);
-    console.log("IsCairo1 =",isCairo1,isAbiCairo1)
-    const res1 = await myTestContract.test1(100) // send a felt252
-    console.log("res1 =", res1); // felt252 -> bigint
-    const res2 = await myTestContract.test2(200);
-    console.log("res2 =", res2); // bigint
-    const res3 = await myTestContract.test3();
-    console.log("res3 =", res3); // bigint
+    const isAbiCairo1: boolean = cairo.isCairo1Abi(myTestContract.abi);
+    console.log("IsCairo1 =", isCairo1, isAbiCairo1)
+    const res1 = await myTestContract.get_counter()
+    console.log("initial counter =", res1); // u128 -> bigint
 
-    const tx = await myTestContract.increase_balance(100);
+    const tx = await myTestContract.increase_counter(100);
     await provider.waitForTransaction(tx.transaction_hash);
-    const balance = await myTestContract.get_balance();
+    const balance = await myTestContract.get_counter()
     console.log("balance =", balance);
     console.log('✅ Test completed.');
 

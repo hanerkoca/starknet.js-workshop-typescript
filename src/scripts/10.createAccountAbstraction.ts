@@ -1,6 +1,6 @@
 // create a new abstracted account in devnet
 // launch with npx ts-node src/scripts/10.createAccountAbstraction.ts
-// Coded with Starknet.js v5.11.1
+// Coded with Starknet.js v5.16.0
 
 import { Account, ec, json, stark, Provider, hash, CallData } from "starknet";
 import fs from "fs";

@@ -3,7 +3,7 @@
 // Coded with Starknet.js v5.13.1, starknet-devnet 0.5.3
 
 import fs from "fs";
-import { Account, Contract, defaultProvider, json,  Provider,  CallData, RawArgs, Calldata, RawArgsArray, RawArgsObject, Call, cairo, uint256, Uint256 } from "starknet";
+import { Account, Contract, defaultProvider, json, Provider, CallData, RawArgs, Calldata, RawArgsArray, RawArgsObject, Call, cairo, uint256, Uint256 } from "starknet";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -116,13 +116,19 @@ async function main() {
     const transferCallData: Call = erc20.populate("transfer", {
         recipient: erc20Address,
         amount: toTransferTk // with Cairo 1 contract, 'toTransferTk' can be replaced by '10n'
-});
+    });
     const { transaction_hash: transferTxHash } = await account0.execute(transferCallData, undefined, { maxFee: 900_000_000_000_000 });
-    const { transaction_hash: transferTxHash2 } = await erc20.transfer(erc20Address, toTransferTk); 
+    await provider.waitForTransaction(transferTxHash);
+
+    const { transaction_hash: transferTxHash2 } = await erc20.transfer(erc20Address, cairo.uint256(10));
+    await provider.waitForTransaction(transferTxHash2);
+
+    const { transaction_hash: transferTxHash3 } = await erc20.transfer(...transferCallData.calldata as string[], { parseRequest: false });
     // Wait for the invoke transactions to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Transfer...`);
-    await provider.waitForTransaction(transferTxHash2);
-    // Check balance after transfer - should be 1080
+    await provider.waitForTransaction(transferTxHash3);
+
+    // Check balance after transfer - should be 1070
     console.log(`Calling StarkNet for account balance...`);
     const balanceAfterTransfer = await erc20.balanceOf(account0.address);
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceAfterTransfer.balance).toString());

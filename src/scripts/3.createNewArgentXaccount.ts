@@ -1,6 +1,6 @@
 // Deploy a new ArgentX wallet.
 // launch with : npx ts-node src/scripts/3.createNewArgentXaccount.ts
-// Coded with Starknet.js v5.9.1
+// Coded with Starknet.js v5.16.0
 
 
 import { Provider, Account, ec, json, stark, hash, CallData } from "starknet";

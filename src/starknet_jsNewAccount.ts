@@ -151,11 +151,17 @@ async function main() {
         toTransferTk // with Cairo 1 contract, 'toTransferTk' can be replaced by '10n'
     ]);
     const { transaction_hash: transferTxHash } = await account0.execute(transferCallData, undefined, { maxFee: 900_000_000_000_000 });
-    const { transaction_hash: transferTxHash2 } = await erc20.transfer(erc20Address, toTransferTk); // with Cairo 1 contract, 'toTransferTk' can be replaced by '10n'
-    // Wait for the invoke transaction to be accepted on StarkNet
-    console.log(`Waiting for Tx to be Accepted on Starknet - Transfer...`);
+    await provider.waitForTransaction(transferTxHash);
+
+    const { transaction_hash: transferTxHash2 } = await erc20.transfer(erc20Address, cairo.uint256(10));
     await provider.waitForTransaction(transferTxHash2);
-    // Check balance after transfer - should be 1080
+
+    const { transaction_hash: transferTxHash3 } = await erc20.transfer(...transferCallData.calldata as string[], { parseRequest: false });
+    // Wait for the invoke transactions to be accepted on StarkNet
+    console.log(`Waiting for Tx to be Accepted on Starknet - Transfer...`);
+    await provider.waitForTransaction(transferTxHash3);
+
+    // Check balance after transfer - should be 1070
     console.log(`Calling StarkNet for account balance...`);
     const balanceAfterTransfer = await erc20.balanceOf(account0.address);
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceAfterTransfer.balance).toString());

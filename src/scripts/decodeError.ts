@@ -6,6 +6,6 @@ import { shortString } from "starknet";
 
 
 function main() {
-    console.log("Decoded message =", shortString.decodeShortString("96231036770510887785732922765483205921"));
+    console.log("Decoded message =", shortString.decodeShortString("0x496e70757420746f6f206c6f6e6720666f7220617267756d656e7473"));
 }
 main();

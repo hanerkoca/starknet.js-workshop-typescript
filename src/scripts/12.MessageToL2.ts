@@ -1,9 +1,9 @@
 // Connect a predeployed OZ account in devnet. 
 // address and PrivKey are displayed when lanching starknet-devnet, and have been  stored in .env file.
 // launch with npx ts-node src/scripts/12.MessageToL2.ts
-// Coded with Starknet.js v5.1.0
+// Coded with Starknet.js v5.16.0
 
-import { Account, ec, hash, Provider, SequencerProvider } from "starknet";
+import { Account, ec, hash, Provider, SequencerProvider,constants } from "starknet";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -16,7 +16,7 @@ async function main() {
     //     console.log("This script work only on local devnet.");
     //     process.exit(1);
     // }
-    const provider = new SequencerProvider({ baseUrl: "https://alpha4.starknet.io" });
+    const provider = new SequencerProvider({ baseUrl: constants.BaseUrl.SN_GOERLI });
 
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
 
@@ -32,9 +32,9 @@ async function main() {
     console.log("entryP =", entryP);
     const responseEstimateMessageFee = await provider.estimateMessageFee({
         from_address: "0xc662c410C0ECf747543f5bA90660f6ABeBD9C8d", // L1 addr
-        to_address: "0x102b9b464481570f8b3d4df8ea91ee468f8809183b9944ac5c5a2b5488d7595", // L2 addr
-        entry_point_selector: "setPublicKey", // needs to be a Cairo function with decorator @l1_handler
-        payload: ["1234567890123456789"]
+        to_address: "0x033de869eb1905fe503610527c51e245119bd05c231e7165c95d6fb630fe05ff", // L2 addr (PhilTest2.cairo)
+        entry_point_selector: "increase_bal", // needs to be a Cairo function with decorator @l1_handler
+        payload: ["0x033de869eb1905fe503610527c51e245119bd05c231e7165c95d6fb630fe05ff","0x2b34"]
     })
     console.log("Estimated fee =", responseEstimateMessageFee);
     //console.log("Estimated fee =", responseEstimateMessageFee.overall_fee);

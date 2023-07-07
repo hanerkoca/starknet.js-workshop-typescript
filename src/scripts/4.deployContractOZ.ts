@@ -1,7 +1,7 @@
 // Deploy an instance of an already declared contract.
 // use of OZ deployer
 // launch with npx ts-node src/scripts/4.deployContractOZ.ts
-// Coded with Starknet.js v5.1.0
+// Coded with Starknet.js v5.16.0
 
 import { Provider, Account, Contract, json } from "starknet";
 import fs from "fs";

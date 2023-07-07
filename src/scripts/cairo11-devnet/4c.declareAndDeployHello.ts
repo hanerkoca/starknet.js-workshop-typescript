@@ -1,5 +1,5 @@
-// declare & deploy a Cairo 1 contract.
-// use Starknet.js v5.8.0, starknet-devnet 0.5.0
+// declare & deploy a Cairo 2.0.0 contract, with debug feature.
+// use Starknet.js v5.16.0, starknet-devnet 0.5.5
 // launch with npx ts-node src/scripts/cairo11-devnet/4b.declareDeployHello.ts
 
 import { Provider, Account, Contract, json } from "starknet";
@@ -8,7 +8,8 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 //          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0 --timeout 500' before using this script.
+// 🚨🚨🚨   Launch 'starknet-devnet --seed 0 --verbose --compiler-args '--allowed-libfuncs-list-file ./contracts/hello/lib_funcs.json --add-pythonic-hints' 2> /dev/null &
+
 //          👆👆👆
 
 async function main() {
@@ -24,8 +25,8 @@ async function main() {
     console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);
 
     // Declare & deploy Test contract in devnet
-    const compiledHelloSierra = json.parse(fs.readFileSync("./compiledContracts/hello.sierra.json").toString("ascii"));
-    const compiledHelloCasm = json.parse(fs.readFileSync("./compiledContracts/hello.casm.json").toString("ascii"));
+    const compiledHelloSierra = json.parse(fs.readFileSync("./compiledContracts/cairo200/hello.sierra.json").toString("ascii"));
+    const compiledHelloCasm = json.parse(fs.readFileSync("./compiledContracts/cairo200/hello.casm.json").toString("ascii"));
     const deployResponse = await account0.declareAndDeploy({ contract: compiledHelloSierra, casm: compiledHelloCasm, salt: "0" });
 
     const contractClassHash = deployResponse.declare.class_hash;
@@ -39,6 +40,7 @@ async function main() {
     myTestContract.connect(account0);
     const th = await myTestContract.Say_HelloPhil126(200);
     await provider.waitForTransaction(th.transaction_hash);
+    // see debug result text in devnet window
     console.log('✅ Test Contract connected at =', myTestContract.address);
 
 }
