@@ -34,7 +34,7 @@ async function main() {
         from_address: "0xc662c410C0ECf747543f5bA90660f6ABeBD9C8d", // L1 addr
         to_address: "0x033de869eb1905fe503610527c51e245119bd05c231e7165c95d6fb630fe05ff", // L2 addr (PhilTest2.cairo)
         entry_point_selector: "increase_bal", // needs to be a Cairo function with decorator @l1_handler
-        payload: ["0x033de869eb1905fe503610527c51e245119bd05c231e7165c95d6fb630fe05ff","0x2b34"]
+        payload: ["0x2b34"]
     })
     console.log("Estimated fee =", responseEstimateMessageFee);
     //console.log("Estimated fee =", responseEstimateMessageFee.overall_fee);
