@@ -47,8 +47,6 @@ async function main() {
     // Calculate future address of the ArgentX account
     const privateKeyAX = process.env.AA_NEW_ACCOUNT_PRIVKEY ?? "";
     console.log('AX_ACCOUNT3_DEVNET_PRIVKEY=', privateKeyAX);
-    //const starkKeyPairAX = ec.getKeyPair(privateKeyAX);
-    //const starkKeyPairAX = ec.genKeyPair();
     const starkKeyPubAX = ec.starkCurve.getStarkKey(privateKeyAX);
     const AXproxyConstructorCallData = CallData.compile({ 
         implementation: AXAch, 

@@ -1,5 +1,5 @@
 // EstimateMessageFee
-// Launch with npx ts-node src/scripts/mainnet/8.getClassFromDevnet.ts
+// Launch with npx ts-node src/scripts/cairo12-devnet/4.estimateMessageFee.ts
 // Coded with Starknet.js v5.16.0, devnet v0.5.5
 
 import { Provider, RpcProvider, Contract, Account, json, uint256, Abi, constants, shortString, CompiledContract, ContractClass, RPC, SequencerProvider, ContractClassResponse, stark, contractClassResponseToLegacyCompiledContract, LegacyCompiledContract, hash, num } from "starknet";
@@ -43,9 +43,6 @@ async function main() {
 
     const provider = providerDevnetSequencer;
     
-
-    // const gb = await axios.post('http://127.0.0.1:5050/restart', {}, { headers: { "Content-Type": "application/json" } });
-
     // Cairo 0
     const l1l2contract = json.parse(fs.readFileSync("./compiledContracts/l1l2/l1l2_compiled.json").toString("ascii"));
     const deployResponse = await account0.declareAndDeploy({ contract: l1l2contract,  salt: "0" });
@@ -65,7 +62,7 @@ async function main() {
           from_address: L1_ADDRESS,
           to_address: myTestContract.address,
           entry_point_selector: 'deposit',
-          payload: ['556', '123'],
+          payload: ['556', '123'],  // do not include 'from_address'
         },
         'latest'
       );
@@ -92,7 +89,7 @@ async function main() {
     const from_address = "0x6b175474e89094c44da98b954Eedeac495271d0f";
     const to_address = "0x1563091b9bbd94cd96cb03f59205ea279aa6f7026f78152ca50570af168deb3";
     
-    const payload:string[] = [ "200"];
+    const payload:string[] = [ "200"];  // do not include 'from_address'
     
     const estimation2 = await provider.estimateMessageFee({
         from_address: from_address,

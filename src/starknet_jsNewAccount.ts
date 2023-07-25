@@ -6,6 +6,7 @@ import fs from "fs";
 import { Account, Contract, defaultProvider, ec, json, stark, Provider, shortString, uint256, hash, CallData, Call, Calldata, RawArgsObject, RawArgsArray, cairo, Uint256 } from "starknet";
 import axios from "axios";
 import * as dotenv from "dotenv";
+import { resetDevnetNow } from "./scripts/resetDevnetFunc";
 dotenv.config();
 
 //        👇👇👇
@@ -13,6 +14,7 @@ dotenv.config();
 //        👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
+    resetDevnetNow();
     if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
         console.log("This script work only on local devnet.");
         process.exit(1);
@@ -28,36 +30,39 @@ async function main() {
     const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
     // const starkKeyPair0 = ec.getKeyPair(privateKey0);
     const account0Address: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
-    const account0 = new Account(provider, account0Address, privateKey0);
-    console.log('OZ account0 connected.\n');
+    const account0 = new Account(provider, account0Address, privateKey0, "0");
+    console.log('OZ account0 connected, version ', account0.cairoVersion, '\n');
 
-    // creation of new OZaccount in Devnet
-    console.log('OZ_NEW_ACCOUNT_PRIVATE_KEY=', process.env.OZ_NEW_ACCOUNT_PRIVKEY);
-    const privateKeyOZ = process.env.OZ_NEW_ACCOUNT_PRIVKEY ?? "";
-    const starkKeyPubOZ = ec.starkCurve.getStarkKey(privateKeyOZ);
-    console.log('OZ new account publicKey =', starkKeyPubOZ);
-    // declare OZ wallet contract
-    const compiledOZAccount = json.parse(
-        fs.readFileSync("./compiledContracts/Account_0_6_1.json").toString("ascii")
+    // creation of new Cairo 2.0.0 Starkware account in Devnet
+    console.log('C20_NEW_ACCOUNT_PRIVATE_KEY=', process.env.C20_NEW_ACCOUNT_PRIVKEY);
+    const privateKeyC20 = process.env.C20_NEW_ACCOUNT_PRIVKEY ?? "";
+    const starkKeyPubC20 = ec.starkCurve.getStarkKey(privateKeyC20);
+    console.log('C20 new account publicKey =', starkKeyPubC20);
+    // declare  Cairo 2.0.0 account contract
+    const compiledC20SierraAccount = json.parse(
+        fs.readFileSync("./compiledContracts/cairo200/account200.sierra.json").toString("ascii")
     );
-    const { transaction_hash: declTH, class_hash: decCH } = await account0.declare({ contract: compiledOZAccount });
-    console.log('OpenZeppelin account class hash =', decCH);
+    const compiledC20CasmAccount = json.parse(
+        fs.readFileSync("./compiledContracts/cairo200/account200.casm.json").toString("ascii")
+    );
+    const { transaction_hash: declTH, class_hash: decCH } = await account0.declare({ contract: compiledC20SierraAccount, casm: compiledC20CasmAccount });
+    console.log('Cairo 2.0.0 Starkware account class hash =', decCH);
     await provider.waitForTransaction(declTH);
 
     // Calculate future address of the account
-    const accountCallData: CallData = new CallData(compiledOZAccount.abi);
-    const accountConstructorCallData: Calldata = accountCallData.compile("constructor", [starkKeyPubOZ]);
-    const OZcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubOZ, decCH, accountConstructorCallData, 0);
-    console.log('Precalculated account address=', OZcontractAddress);
+    const accountCallData: CallData = new CallData(compiledC20SierraAccount.abi);
+    const accountConstructorCallData: Calldata = accountCallData.compile("constructor", [starkKeyPubC20]);
+    const C20contractAddress = hash.calculateContractAddressFromHash(starkKeyPubC20, decCH, accountConstructorCallData, 0);
+    console.log('Precalculated account address=', C20contractAddress);
     // fund account address before account creation
-    const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": OZcontractAddress, "amount": 50_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
+    const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": C20contractAddress, "amount": 50_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
     console.log('Answer mint =', answer);
     // deploy account
-    const accountOZ = new Account(provider, OZcontractAddress, privateKeyOZ);
-    const { transaction_hash, contract_address } = await accountOZ.deployAccount({ classHash: decCH, constructorCalldata: accountConstructorCallData, addressSalt: starkKeyPubOZ });
-    console.log('New OpenZeppelin account created.\n   final address =', contract_address);
+    const accountC20 = new Account(provider, C20contractAddress, privateKeyC20, "1");
+    const { transaction_hash, contract_address } = await accountC20.deployAccount({ classHash: decCH, constructorCalldata: accountConstructorCallData, addressSalt: starkKeyPubC20 });
+    console.log('New Cairo 2.0.0 Starkware account created.\n   final address =', contract_address ,accountC20.cairoVersion, );
     await provider.waitForTransaction(transaction_hash);
-    console.log('new OZ account connected.\n');
+    console.log('new Cairo 2.0.0 Starkware account connected.\n');
 
     // Deploy an ERC20 contract 
     console.log("Deployment Tx - ERC20 Contract to StarkNet...");
@@ -134,10 +139,10 @@ async function main() {
     // Mint 1000 tokens to account address
     const amountToMint = cairo.uint256(1000);
     console.log("Invoke Tx - Minting 1000 tokens to account0...");
-    const { transaction_hash: mintTxHash } = await erc20.mint(account0.address, amountToMint, { maxFee: 900_000_000_000_000 }); // with Cairo 1 contract, 'amountToMint' can be replaced by '100n'
+    //const { transaction_hash: mintTxHash } = await erc20.mint(account0.address, amountToMint, { maxFee: 900_000_000_000_000 }); // with Cairo 1 contract, 'amountToMint' can be replaced by '1000n'
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Minting...`);
-    await provider.waitForTransaction(mintTxHash);
+    //await provider.waitForTransaction(mintTxHash);
     // Check balance - should be 1100
     console.log(`Calling StarkNet for account balance...`);
     const balanceBeforeTransfer = await erc20.balanceOf(account0.address);

@@ -1,3 +1,5 @@
+//Cairo 2.1.0 
+
 use array::ArrayTrait;
 
 #[starknet::interface]
@@ -9,11 +11,14 @@ trait ITestContract<TContractState> {
     fn test2(self: @TContractState, val1: u16) -> MyEnum;
     fn test3(self: @TContractState, val1: u8) -> Option<u8>;
     fn test4(self: @TContractState, val1: u16) -> Option<Order>;
+    fn test4b(self: @TContractState, val1: u32) -> OrderW;
+    fn test4c(self: @TContractState, val1: u32) -> (MyEnum, Option<u8>);
+    // fn test4d(self: @TContractState) -> Array<Option<u8>>;
     fn test5(self: @TContractState, inp: Option<Order>) -> u16;
-    // fn test6(self: @TContractState, val1: u16) -> Result<u16, u16>;
-    // fn test7(self: @TContractState, val1: u16) -> Result<Order, u16>;
-    // fn test8(self: @TContractState, inp: Result<Order, u16>) -> u16;
-    fn test9(self: @TContractState, val1: u16,amount:u256) -> u256;
+    fn test6(self: @TContractState, val1: u8) -> Result<u8, felt252>;
+    fn test7(self: @TContractState, val1: u16) -> Result<Order, u16>;
+    fn test8(self: @TContractState, inp: Result<Order, u16>) -> u16;
+    fn test9(self: @TContractState, val1: u16, amount: u256) -> u256;
 }
 
 
@@ -24,18 +29,30 @@ struct Order {
     p2: u16,
 }
 
-#[derive(Copy, Drop, Serde)]
+#[derive(Drop, Serde, Append)]
 enum MyEnum {
     Response: Order,
     Warning: felt252,
-    Error: u16,
+    Error: (u16,u16),
+    Critical: Array<u32>,
+}
+
+// struct with enum
+#[derive(Drop, Serde)]
+struct OrderW {
+    p1: felt252,
+    my_enum: MyEnum,
+    adds: Option<u8>,
 }
 
 #[starknet::contract]
 mod MyTestContract {
     use starknet::ContractAddress;
     use starknet::contract_address_const;
-    use super::{Order, MyEnum};
+use array::ArrayTrait;
+use array::SpanTrait;
+
+    use super::{Order, MyEnum, OrderW};
 
     #[storage]
     struct Storage {
@@ -69,7 +86,7 @@ mod MyTestContract {
 
 
     #[constructor]
-    fn constructor(ref self: ContractState,intial_value:u128) {
+    fn constructor(ref self: ContractState, intial_value: u128) {
         self.counter.write(intial_value);
     }
 
@@ -103,10 +120,16 @@ mod MyTestContract {
         }
         fn test2(self: @ContractState, val1: u16) -> MyEnum {
             if val1 < 100 {
-                return MyEnum::Error(3);
+                return MyEnum::Error((3,4));
             }
             if val1 == 100 {
                 return MyEnum::Warning('attention:100');
+            }
+            if val1 < 150 {
+                let mut arr=ArrayTrait::new();
+                arr.append(5);
+                arr.append(6);
+                return MyEnum::Critical(arr);
             }
             MyEnum::Response(Order { p1: 1, p2: val1 })
         }
@@ -124,6 +147,43 @@ mod MyTestContract {
             }
             Option::Some(Order { p1: 18, p2: val1 })
         }
+        // return struct including enum
+        fn test4b(self: @ContractState, val1: u32) -> OrderW {
+            if val1 < 100 {
+                return OrderW {
+                    p1: 1, 
+                    my_enum: MyEnum::Response(Order { p1: 1, p2: 2 }), 
+                    adds: Option::None(())
+                };
+            }
+            if val1 > 200 {
+                return OrderW {
+                    p1: 3, my_enum: MyEnum::Warning('attention:200'), adds: Option::Some(17)
+                };
+            }
+            OrderW { p1: 2, my_enum: MyEnum::Error((255,254)), adds: Option::Some(0x10) }
+        }
+
+        // return tuple including enum
+        fn test4c(self: @ContractState, val1: u32) -> (MyEnum, Option<u8>) {
+            if val1 < 100 {
+                return (MyEnum::Response(Order { p1: 1, p2: 2 }), Option::None(()));
+            };
+
+            (MyEnum::Error((200,201)), Option::Some(0x10))
+        }
+
+
+        // // return array including enum. Do not work in v2.0.0
+        // fn test4d(self: @ContractState) -> Array<Option<u8>> {
+        //     let mut arr:Array<Option<u8>> = ArrayTrait::new();
+        //     let enum1 = Option::Some(0x80);
+        //     let enum2 = Option::None(());
+        //     arr.append(enum1);
+        //     arr.append(enum2);
+        //     arr
+        // }
+
         // use as input Option<Order>
         fn test5(self: @ContractState, inp: Option<Order>) -> u16 {
             match inp {
@@ -135,33 +195,33 @@ mod MyTestContract {
                 }
             }
         }
-        // // return Result<litteral>
-        // fn test6(self: @ContractState, val1: u16) -> Result<u16, u16> {
-        //     if val1 < 100 {
-        //         return Result::Err(14);
-        //     }
-        //     Result::Ok(val1)
-        // }
-        // // return Result<Order>
-        // fn test7(self: @ContractState, val1: u16) -> Result<Order, u16> {
-        //     if val1 < 100 {
-        //         return Result::Err(14);
-        //     }
-        //     Result::Ok(Order { p2: val1, p1: 8 })
-        // }
-        // // use as input Result<Order>
-        // fn test8(self: @ContractState, inp: Result<Order, u16>) -> u16 {
-        //     match inp {
-        //         Result::Ok(x) => {
-        //             return x.p2;
-        //         },
-        //         Result::Err(y) => {
-        //             return y;
-        //         }
-        //     }
-        // }
-        fn test9(self: @ContractState, val1: u16,amount:u256) -> u256 {
-            amount+1
+        // return Result<litteral> . Do not work in v2.0.0
+        fn test6(self: @ContractState, val1: u8) -> Result<u8, felt252> {
+            if val1 >127 {
+                return Result::Err('Too high. 127 maxi.');
+            }
+            Result::Ok(val1 * 2)
+        }
+        // return Result<Order>
+        fn test7(self: @ContractState, val1: u16) -> Result<Order, u16> {
+            if val1 < 100 {
+                return Result::Err(14);
+            }
+            Result::Ok(Order { p2: val1, p1: 8 })
+        }
+        // use as input Result<Order>
+        fn test8(self: @ContractState, inp: Result<Order, u16>) -> u16 {
+            match inp {
+                Result::Ok(x) => {
+                    return x.p2;
+                },
+                Result::Err(y) => {
+                    return y;
+                }
+            }
+        }
+        fn test9(self: @ContractState, val1: u16, amount: u256) -> u256 {
+            amount + 1
         }
     }
 }

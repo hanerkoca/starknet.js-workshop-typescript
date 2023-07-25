@@ -4,11 +4,14 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
+
+
         {
             "type": "node",
             "request": "launch",
             "name": "typescript",
-            "program": "${workspaceFolder}/src/scripts/cairo11-devnet/18.test.ts",
+            "program": "${workspaceFolder}/src/scripts/cairo13-devnet/3a.testSpan.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,
