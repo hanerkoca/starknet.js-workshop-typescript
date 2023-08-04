@@ -13,12 +13,12 @@ The ETH contract with proxy is constituted of :
 - a proxy implementation : owns the storage of the contract ; its deployment address is the address of the ETH contract (deployment address : 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7)
 - an ERC20 class : owns the code of the ERC20 (class hash : 0x000fa904eea70850fdd44e155dcc79a8d96515755ed43990ff4e7e7c096673e7)
 
-Each class has it own ABI. So, you have an ABI for the proxy, and an other for the ETH ERC20. This is generating so much troubles to newbies...
+Each class has it own ABI. So, you have an ABI for the proxy, and an other one for the ETH ERC20. This is generating so much troubles to newbies...
 
 ## How it works :
 
 ![Starknet.js](/src/img/proxy.png)
-Will will follow a balanceOf() request to the ETH contract :
+We will follow a balanceOf() request to the ETH contract :
 1. Starknet.js is calling the function `balanceOf()`, at Proxy contract address, using the ABI of the ERC20 class.
 2. The proxy implementation recognizes that it's not one of its administration functions.
 3. The proxy implementation is just transferring the call to the ERC20 class.
@@ -37,7 +37,7 @@ Starknet.js needs 2 things :
 - The abi of the ERC20 class. This is the tricky part. Either you have already it stored somewhere, or you have to recover it in Starknet.
 
 The procedure for recovery of ERC20 ABI in Starknet :
-- Recover the ABI of the proxy class
+- Recover the ABI of the proxy class.
 - Use this ABI to read the implementation.
 - Generally, the implementation contains the ERC20 class hash. But for the ETH contract, the proxy is storing the address of an ERC20 implementation. Don't ask me why ; I know it's stupid.
 - So we have an additional step specific for ETH, recover the class hash related to this ERC20 implementation address.
