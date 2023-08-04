@@ -9,6 +9,7 @@ trait ITestContract<TContractState> {
     fn get_counter(self: @TContractState) -> u128;
     fn test1(self: @TContractState, val1: u16) -> Order;
     fn test2(self: @TContractState, val1: u16) -> MyEnum;
+    fn test2a(self: @TContractState, customEnum:MyEnum ) -> u16;
     fn test3(self: @TContractState, val1: u8) -> Option<u8>;
     fn test4(self: @TContractState, val1: u16) -> Option<Order>;
     fn test4b(self: @TContractState, val1: u32) -> OrderW;
@@ -35,6 +36,7 @@ enum MyEnum {
     Warning: felt252,
     Error: (u16,u16),
     Critical: Array<u32>,
+    Empty:()
 }
 
 // struct with enum
@@ -118,6 +120,8 @@ use array::SpanTrait;
         fn test1(self: @ContractState, val1: u16) -> Order {
             Order { p1: 10, p2: val1 }
         }
+
+        // return MyEnum
         fn test2(self: @ContractState, val1: u16) -> MyEnum {
             if val1 < 100 {
                 return MyEnum::Error((3,4));
@@ -131,8 +135,23 @@ use array::SpanTrait;
                 arr.append(6);
                 return MyEnum::Critical(arr);
             }
+            if val1<200 {
+                return MyEnum::Empty(());
+            }
             MyEnum::Response(Order { p1: 1, p2: val1 })
         }
+
+        // MyEnum as input
+        fn test2a(self: @ContractState, customEnum:MyEnum ) -> u16{
+            match customEnum{
+                MyEnum::Response(my_order)=>{return my_order.p2;},
+                MyEnum::Warning(val)=>{return 0x13_u16;},
+                MyEnum::Error((a,b))=>{return b;},
+                MyEnum::Critical(myArray)=>{return 0x3c_u16;},
+                MyEnum::Empty(_)=>{return 0xab_u16;}
+            }
+        }
+
         // return Option<litteral>
         fn test3(self: @ContractState, val1: u8) -> Option<u8> {
             if val1 < 100 {
@@ -164,7 +183,7 @@ use array::SpanTrait;
             OrderW { p1: 2, my_enum: MyEnum::Error((255,254)), adds: Option::Some(0x10) }
         }
 
-        // return tuple including enum
+        // return tuple including Option enum
         fn test4c(self: @ContractState, val1: u32) -> (MyEnum, Option<u8>) {
             if val1 < 100 {
                 return (MyEnum::Response(Order { p1: 1, p2: 2 }), Option::None(()));

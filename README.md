@@ -84,6 +84,10 @@ You can find in this repo many other scripts. Dig in and find many usefull exemp
 
 You can find some explanations for the use of Starknet.js with Cairo 1&2 smart-contracts [here](./Cairo1.md).
 
+## Proxy :
+
+Some explanations to interact with a contract behind a proxy [here](proxy.md)
+
 ## 🤔 Questions?
 
 Have a look in the starknet.js [documentation](https://www.starknetjs.com/docs/next/guides/intro).

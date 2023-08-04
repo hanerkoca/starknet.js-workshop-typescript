@@ -6,6 +6,7 @@ import { Provider, Account, Contract, json, Result, BigNumberish, Calldata, Call
 import fs from "fs";
 import * as dotenv from "dotenv";
 import { CairoCustomEnum } from "starknet";
+import { CairoOptionVariant, CairoResultVariant } from "starknet";
 dotenv.config();
 
 //          👇👇👇
@@ -141,7 +142,7 @@ async function main() {
 
     // Connect the  contract instance :
     //          👇👇👇 update address in accordance with result of script 1
-    const address = "0x71c85ce043dec7bc22193225a9177d8632dcffe0206600f988fe3096e45633e";
+    const address = "0x6834da67a0aa8b123a1e071b81084ebe125c4b75b72833a76ae2d197ed3f774";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo210/PhilTest2.sierra.json").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, address, provider);
     myTestContract.connect(account0);
@@ -157,6 +158,8 @@ async function main() {
     console.log("Result3 =", res3, res3.variant.Critical);
     const res3a = await myTestContract.call("test2", [100]) as CairoCustomEnum;
     console.log("Result3a =", res3a);
+    const res3b = await myTestContract.call("test2", [160]) as CairoCustomEnum;;
+    console.log("Result3b =", res3b);
 
 
     // return an option<litteral>
@@ -171,17 +174,22 @@ async function main() {
     const res7a = (await myTestContract.call("test4", [128])) as CairoOption<Order>;
     console.log("Result7a =", res7a);
 
-    // option as input
-    const res8: Result | string[] = await myTestContract.call("test5", [0, 10, 11], { parseRequest: false, parseResponse: false });
+    // option<struct> as input
+    const res8 = await myTestContract.call("test5", [new CairoOption<Order>(CairoOptionVariant.Some, { p1: 20, p2: 40 })]) as bigint;
     console.log("Result8 =", res8);
-    const res9: Result | string[] = await myTestContract.call("test5", [1], { parseRequest: false, parseResponse: false });
+    const comp8a=await CallData.compile([new CairoOption<Order>(CairoOptionVariant.Some, { p1: 20, p2: 40 })]);
+    const res8a = await myTestContract.call("test5", comp8a) as bigint;
+    console.log("Result8a =", res8a);
+    const res9 = await myTestContract.call("test5", [new CairoOption<Order>(CairoOptionVariant.None)]) as bigint;
     console.log("Result9 =", res9);
-
+    const comp9a=await CallData.compile([new CairoOption<Order>(CairoOptionVariant.None)]);
+    const res9a = await myTestContract.call("test5", comp9a) as bigint;
+    console.log("Result9a =", res9a);
 
     // return  a Result<litteral> . do not work on cairo v2.0.0 ; needs v2.1.0
     const res10: CairoResult<BigNumberish, BigNumberish> = await myTestContract.test6(90);
     console.log("Result10 =", res10);
-    const res11: CairoResult<BigNumberish, BigNumberish> = await myTestContract.test6(110);
+    const res11: CairoResult<BigNumberish, BigNumberish> = await myTestContract.test6(150);
     console.log("Result11 =", res11, res11.unwrap(), res11.isOk(), res11.isErr());
 
     // return  a Result<Order>
@@ -190,46 +198,112 @@ async function main() {
     const res13 = await myTestContract.call("test7", [111]) as CairoResult<Order, BigNumberish>;
     console.log("Result13 =", res13);
 
-    // use a Result<Order> as input
-    const orderToSend:Order={p1:8,p2:10};
-    const myCustomEnum=new CairoCustomEnum({
-        Response: orderToSend });
-    console.log("enum for 14 =",myCustomEnum.activeVariant(),myCustomEnum.unwrap());
-    const res14 = await myTestContract.call("test8", [myCustomEnum]) as bigint;
-    const res14a: bigint = await myTestContract.test8(myCustomEnum);
+    // use a custom Enum as input
+    const orderToSend: Order = { p1: 8, p2: 10 };
+    const myCustomEnum = new CairoCustomEnum({
+        Response: orderToSend
+    });
+    console.log("enum for 14 =", myCustomEnum.activeVariant(), myCustomEnum.unwrap());
+    const res14 = await myTestContract.call("test2a", [myCustomEnum]) as bigint;
     console.log("Result14 =", res14);
-    // const res15: Result | string[] = await myTestContract.call("test8", [1, 112], { parseRequest: false, parseResponse: false });
-    // console.log("Result15 =", res15);
+    const res14a: bigint = await myTestContract.test2a(myCustomEnum);
+    console.log("Result14a =", res14a);
+    const custEnum1 = new CairoCustomEnum({ Warning: 100 });
+    const res14b = await myTestContract.call("test2a", [custEnum1]) as bigint;
+    console.log("Result14b =", res14b);
+    const res14c = await myTestContract.call("test2a", [new CairoCustomEnum({ Error: cairo.tuple(100, 110) })]) as bigint;
+    console.log("Result14c =", res14c);
+    const res14d = await myTestContract.call("test2a", [new CairoCustomEnum({ Critical: ["0x10", "0x11"] })]) as bigint;
+    console.log("Result14d =", res14d);
+    const CDcompiled14d2=CallData.compile({p1: new CairoCustomEnum({ 
+        Response: undefined,
+        Warning: undefined,
+        Error: undefined,
+        Critical: ["0x10", "0x11"] 
+    })});
+    console.log("calldata14d2 =",CDcompiled14d2);
+    const res14d2 = await myTestContract.call("test2a", CDcompiled14d2) as bigint;
+    console.log("Result14d2 =", res14d2);
+    const res14d3 = await myTestContract.test2a(new CairoCustomEnum({ Critical: ["0x10", "0x11"] })) as bigint;
+    console.log("Result14d3 =", res14d3);
+    const res14e = await myTestContract.call("test2a", [new CairoCustomEnum({ Empty: {} })]) as bigint;
+    console.log("Result14e =", res14e);
+    const CDcompiled14e2=CallData.compile([new CairoCustomEnum({ 
+        Response: undefined,
+        Warning: undefined,
+        Error: undefined,
+        Critical: undefined,
+        Empty: {}
+    })]);
+    const res14e2 = await myTestContract.test2a(CDcompiled14e2) as bigint;
+    console.log("Result14e2 =", res14e2);
 
-
-
+    // use a Result Enum as input
+    const res15a = await myTestContract.call("test8", [new CairoResult<Order, BigNumberish>(CairoResultVariant.Ok, { p1: 50, p2: 60 })]) as bigint;
+    console.log("Result15a =", res15a);
+    const comp15a2=CallData.compile([new CairoResult<Order, BigNumberish>(CairoResultVariant.Ok, { p1: 50, p2: 60 })]);
+    const res15a2 = await myTestContract.call("test8", comp15a2) as bigint;
+    console.log("Result15a2 =", res15a2);
+    const res15b = await myTestContract.call("test8", [new CairoResult<Order, BigNumberish>(CairoResultVariant.Err, 50)]) as bigint;
+    console.log("Result15b =", res15b);
+    const comp15b2=CallData.compile([new CairoResult<Order, BigNumberish>(CairoResultVariant.Err, 50)]);
+    const res15b2 = await myTestContract.call("test8", comp15b2) as bigint;
+    console.log("Result15b2 =", res15b2);
     // return a u256
     const res16 = await myTestContract.call("test9", [1, 15, 0], { parseRequest: false, parseResponse: false });
     console.log("Result16 =", res16);
 
-    // Do not work on Starknet.js v5.16.0. Waiting PR#685
-    // const functionParameters: RawArgsObject = {
-    //     val1: 1,
-    //     amount: cairo.uint256(15),
-    // }
-    // const myCall0: Call = myTestContract.populate("test9", functionParameters);
-    // if (myCall0.calldata) {
-    //     console.log("calldata =", myCall0.calldata, "__compiled__" in myCall0.calldata);
-    // }
-    // const res17 = await myTestContract.test9(myCall0.calldata);
-    // console.log("Result17 =", res17);
 
-    // const res18 = await myTestContract.test9(1, 15);
-    // console.log("Result18 =", res18);
 
-    // const contractCallData: CallData = new CallData(compiledTest.abi);
-    // const myCalldata: Calldata = contractCallData.compile("test9", functionParameters);
-    // const res19 = await myTestContract.test9(myCalldata);
-    // console.log("Result19 =", res19);
 
-    // const contractCallData2: Calldata = CallData.compile(functionParameters);
-    // const res20 = await myTestContract.test9(contractCallData2);
-    // console.log("Result20 =", res20);
+    // Do not work on Starknet.js v5.16.0. Solved by PR#685
+    // test all possibilities to compile arguments.
+    const functionParameters: RawArgsObject = {
+        val1: 1,
+        amount: cairo.uint256(15),
+    }
+    const myCall0: Call = myTestContract.populate("test9", functionParameters);
+    if (myCall0.calldata) {
+        console.log("calldata =", myCall0.calldata, "__compiled__" in myCall0.calldata);
+    }
+    const res17 = await myTestContract.test9(myCall0.calldata);
+    console.log("Result17 =", res17);
+
+    const res18 = await myTestContract.test9(1, 15);
+    console.log("Result18 =", res18);
+
+    const contractCallData: CallData = new CallData(compiledTest.abi);
+    const myCalldata: Calldata = contractCallData.compile("test9", functionParameters);
+    const res19 = await myTestContract.test9(myCalldata);
+    console.log("Result19 =", res19);
+    // test Enums as input via myCalldata.compile
+    const myCalldata0: Calldata = contractCallData.compile("test8", {
+        inp: new CairoResult<Order, BigNumberish>(CairoResultVariant.Ok, { p1: 50, p2: 60 })
+    });
+    const res19a = await myTestContract.test8(myCalldata0);
+    console.log("Result19a =", res19a);
+    const myCalldata1: Calldata = contractCallData.compile("test8", {
+        inp: new CairoResult<Order, BigNumberish>(CairoResultVariant.Err, 50)
+    });
+    const res19b = await myTestContract.test2a(myCalldata1);
+    console.log("Result19b =", res19b);
+
+    const myCalldata2: Calldata = contractCallData.compile("test2a", {
+        customEnum: new CairoCustomEnum({ Empty: {} })
+    });
+    const res19c = await myTestContract.test2a(myCalldata2);
+    console.log("Result19c =", res19c);
+
+    const myCalldata3: Calldata = contractCallData.compile("test2a", {
+        customEnum: new CairoCustomEnum({ Critical: ["0x10", "0x11"] })
+    });
+    console.log("myCalldata3 =",myCalldata3, "__compiled__" in myCalldata3);
+    const res19d = await myTestContract.test2a(myCalldata3);
+    console.log("Result19d =", res19d);
+
+    const contractCallData2: Calldata = CallData.compile(functionParameters);
+    const res20 = await myTestContract.test9(contractCallData2);
+    console.log("Result20 =", res20);
 
     // // should not work
     // // const res21 = await myTestContract.test9(...contractCallData2);

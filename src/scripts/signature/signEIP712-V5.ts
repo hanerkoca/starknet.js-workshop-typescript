@@ -1,13 +1,12 @@
 // Connect a predeployed OZ account in devnet. 
 // address and PrivKey are displayed when lanching starknet-devnet, and have been  stored in .env file.
 // coded with Starknet.js v5.11.1
-// launch with npx ts-node src/scripts/13.signer.ts
+// launch with npx ts-node src/scripts/signature/signEIP712-V5.ts
 
-import { Account, ec, hash, Provider, json, Contract, encode, shortString, typedData } from "starknet";
+import { Account, ec, hash, Provider, json, Contract, encode, shortString, typedData, WeierstrassSignatureType } from "starknet";
 
 import * as dotenv from "dotenv";
 import fs from "fs";
-import { weierstrass } from "./ec";
 dotenv.config();
 
 //    👇👇👇
@@ -41,7 +40,7 @@ async function main() {
 
     const message = [1, 128, 18, 14];
     const msgHash = hash.computeHashOnElements(message);
-    const signature1: weierstrass.SignatureType = ec.starkCurve.sign(msgHash, privateKey);
+    const signature1: WeierstrassSignatureType = ec.starkCurve.sign(msgHash, privateKey);
 
 
     // EIP712
@@ -98,7 +97,7 @@ async function main() {
             ]
         },
     };
-    const signature2: weierstrass.SignatureType = await account.signMessage(typedDataValidate) as weierstrass.SignatureType;
+    const signature2 = await account.signMessage(typedDataValidate) as WeierstrassSignatureType;
 
 
 

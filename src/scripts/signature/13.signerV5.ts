@@ -2,7 +2,7 @@
 // Coded with Starknet.js v5.11.1
 // launch with npx ts-node src/scripts/13.signer.ts
 
-import { Account, ec, hash, Provider,  json, Contract, encode, num } from "starknet";
+import { Account, ec, hash, Provider,  json, Contract, encode, num, WeierstrassSignatureType } from "starknet";
 import * as dotenv from "dotenv";
 import fs from "fs";
 import BN from "bn.js";
@@ -32,7 +32,7 @@ async function main() {
     const privateKey = privateKey0;
     const message: num.BigNumberish[] = [1, 128, 18, 14];
     const msgHash = hash.computeHashOnElements(message);
-    const signature = ec.starkCurve.sign(msgHash,privateKey );
+    const signature:WeierstrassSignatureType = ec.starkCurve.sign(msgHash,privateKey );
     const starknetPublicKey = ec.starkCurve.getStarkKey(privateKey);
     const fullPublicKey = encode.addHexPrefix(encode.buf2hex(ec.starkCurve.getPublicKey(privateKey, false)));
     console.log("        publicKey calculated =", starknetPublicKey, typeof (starknetPublicKey));

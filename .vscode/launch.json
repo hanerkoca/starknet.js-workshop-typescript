@@ -11,7 +11,7 @@
             "type": "node",
             "request": "launch",
             "name": "typescript",
-            "program": "${workspaceFolder}/src/scripts/cairo13-devnet/3a.testSpan.ts",
+            "program": "${workspaceFolder}/src/scripts/cairo13-devnet/6a.callTestHello.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,

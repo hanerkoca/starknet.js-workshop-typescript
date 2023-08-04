@@ -1,0 +1,220 @@
+{
+  "abi": [
+    {
+      "type": "struct",
+      "name": "test_constructor4::test_constructor4::TestConstructor4::Order2",
+      "members": [
+        {
+          "name": "p21",
+          "type": "core::felt252"
+        },
+        {
+          "name": "p22",
+          "type": "test_constructor4::test_constructor4::TestConstructor4::Order"
+        }
+      ]
+    },
+    {
+      "type": "struct",
+      "name": "test_constructor4::test_constructor4::TestConstructor4::Order3",
+      "members": [
+        {
+          "name": "p31",
+          "type": "core::felt252"
+        },
+        {
+          "name": "p22",
+          "type": "test_constructor4::test_constructor4::TestConstructor4::Order"
+        }
+      ]
+    },
+    {
+      "type": "struct",
+      "name": "test_constructor4::test_constructor4::TestConstructor4::Order",
+      "members": [
+        {
+          "name": "p1",
+          "type": "core::felt252"
+        },
+        {
+          "name": "p2",
+          "type": "core::felt252"
+        }
+      ]
+    },
+    {
+      "type": "enum",
+      "name": "core::option::Option::<core::integer::u8>",
+      "variants": [
+        {
+          "name": "Some",
+          "type": "core::integer::u8"
+        },
+        {
+          "name": "None",
+          "type": "()"
+        }
+      ]
+    },
+    {
+      "type": "enum",
+      "name": "core::option::Option::<test_constructor4::test_constructor4::TestConstructor4::Order2>",
+      "variants": [
+        {
+          "name": "Some",
+          "type": "test_constructor4::test_constructor4::TestConstructor4::Order2"
+        },
+        {
+          "name": "None",
+          "type": "()"
+        }
+      ]
+    },
+    {
+      "type": "enum",
+      "name": "core::result::Result::<core::integer::u8, core::felt252>",
+      "variants": [
+        {
+          "name": "Ok",
+          "type": "core::integer::u8"
+        },
+        {
+          "name": "Err",
+          "type": "core::felt252"
+        }
+      ]
+    },
+    {
+      "type": "enum",
+      "name": "core::result::Result::<PhilTest2::PhilTest2::Order, core::integer::u16>",
+      "variants": [
+        {
+          "name": "Ok",
+          "type": "PhilTest2::PhilTest2::Order"
+        },
+        {
+          "name": "Err",
+          "type": "core::integer::u16"
+        }
+      ]
+    },
+    {
+      "type": "enum",
+      "name": "PhilTest2::PhilTest2::MyEnum",
+      "variants": [
+        {
+          "name": "Response",
+          "type": "PhilTest2::PhilTest2::Order"
+        },
+        {
+          "name": "Warning",
+          "type": "core::felt252"
+        },
+        {
+          "name": "Error",
+          "type": "(core::integer::u16, core::integer::u16)"
+        },
+        {
+          "name": "Critical",
+          "type": "core::array::Array::<core::integer::u32>"
+        },
+        {
+          "name": "Empty",
+          "type": "()"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "constructor",
+      "inputs": [
+        {
+          "name": "array3",
+          "type": "core::array::Array::<test_constructor4::test_constructor4::TestConstructor4::Order2>"
+        }
+      ],
+      "outputs": [],
+      "state_mutability": "external"
+    },
+    {
+      "type": "function",
+      "name": "test1",
+      "inputs": [
+        {
+          "name": "p1",
+          "type": "core::felt252"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "core::felt252"
+        }
+      ],
+      "state_mutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "test2",
+      "inputs": [
+        {
+          "name": "inp",
+          "type": "test_constructor4::test_constructor4::TestConstructor4::Order"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "core::felt252"
+        }
+      ],
+      "state_mutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "test3",
+      "inputs": [
+        {
+          "name": "inp",
+          "type": "test_constructor4::test_constructor4::TestConstructor4::Order2"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "core::felt252"
+        }
+      ],
+      "state_mutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "test5",
+      "inputs": [
+        {
+          "name": "inp",
+          "type": "core::option::Option::<test_constructor4::test_constructor4::TestConstructor4::Order2>"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "core::integer::u16"
+        }
+      ],
+      "state_mutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "arr_longtext",
+      "inputs": [
+        {
+          "name": "inp",
+          "type": "core::array::Array::<core::felt252>"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "core::integer::u16"
+        }
+      ],
+      "state_mutability": "view"
+    }
+  ]
+}
