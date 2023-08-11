@@ -13,7 +13,7 @@ The ETH contract with proxy is constituted of :
 - a proxy implementation : owns the storage of the contract ; its deployment address is the address of the ETH contract (deployment address : 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7)
 - an ERC20 class : owns the code of the ERC20 (class hash : 0x000fa904eea70850fdd44e155dcc79a8d96515755ed43990ff4e7e7c096673e7)
 
-Each class has it own ABI. So, you have an ABI for the proxy, and an other one for the ETH ERC20. This is generating so much troubles to newbies...
+Each class has its own ABI. So, you have an ABI for the proxy, and an other one for the ETH ERC20. This is generating so much troubles to newbies...
 
 ## How it works :
 
