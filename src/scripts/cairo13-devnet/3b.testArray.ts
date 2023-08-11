@@ -66,6 +66,7 @@ async function main() {
         relayerRouterAddress: 456789,
     });
     console.log("compiled Obj =", compiledObj);
+    console.log('✅ Test completed.');
 
 }
 

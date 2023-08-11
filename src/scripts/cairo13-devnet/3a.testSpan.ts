@@ -36,7 +36,7 @@ async function main() {
 
     // Connect the  contract instance :
     //          👇👇👇 update address in accordance with result of script 3
-    const address = "0x105cab76df5b255a1e52961a011ab8bb27f24af62df43d0f969345098579065";
+    const address = "0x101b7d8a240899db3dc20f6d07f7efbd3eac48ec15cfe5c0e19feac3611758d";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo210/test_span.sierra.json").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, address, provider);
     myTestContract.connect(account0);
@@ -179,6 +179,7 @@ const compiledObj=CallData.compile( {
     await myTestContract.call("iReceive", manualCompiled, { parseRequest: false, parseResponse: false });
     // console.log("Result8 =", res8);
     
+    console.log('✅ Test completed.');
 
 }
 

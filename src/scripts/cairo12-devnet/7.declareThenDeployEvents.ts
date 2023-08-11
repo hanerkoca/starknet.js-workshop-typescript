@@ -22,10 +22,10 @@ async function main() {
     // Devnet sequencer :
     const providerDevnetSequencer = new SequencerProvider({ baseUrl: "http://127.0.0.1:5050" });
     // Devnet rpc :
-    const providerDevnetRpc = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" });
-    const provider = providerDevnetRpc;
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" });
+    //const provider = providerDevnetSequencer;
     console.log('✅ Connected to devnet.');
-    // const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
+    //const provider = new Provider({ sequencer: { baseUrl: "http://127.0.0.1:5050" } });
 
     resetDevnetNow();
     // initialize existing predeployed account 0 of Devnet
@@ -38,8 +38,8 @@ async function main() {
     //console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);
 
     // Declare & deploy Test contract in devnet
-    const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo200/event.sierra.json").toString("ascii"));
-    const compiledCasm = json.parse(fs.readFileSync("./compiledContracts/cairo200/event.casm.json").toString("ascii"));
+    const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_events.sierra.json").toString("ascii"));
+    const compiledCasm = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_events.casm.json").toString("ascii"));
 
     const declareResponse = await account0.declare({ contract: compiledSierra, casm: compiledCasm });
     const contractClassHash = declareResponse.class_hash;

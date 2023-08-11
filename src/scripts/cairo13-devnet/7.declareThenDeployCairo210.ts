@@ -1,7 +1,6 @@
 // declare & deploy a Cairov2.1.0 contract.
-// use Starknet.js v5.16+branch Calldata-result-in-populate, starknet-devnet 0.5.5
-// launch with npx ts-node src/scripts/cairo13-devnet/1.declareThenDeployTest.ts
-
+// use Starknet.js v5.17, starknet-devnet 0.5.5
+// launch with npx ts-node
 import { Provider, Account, Contract, json ,constants, GetTransactionReceiptResponse, InvokeFunctionResponse} from "starknet";
 import fs from "fs";
 import {accountTestnet4privateKey, accountTestnet4Address} from "../../A1priv/A1priv"
@@ -10,7 +9,7 @@ import { resetDevnetNow } from "../resetDevnetFunc";
 dotenv.config();
 
 //          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0 --cairo-compiler-manifest /D/Cairo1-dev/cairo/Cargo.toml' before using this script. cairo directory fetched to v2.1.0 rc0, then cargo build --release.
+// 🚨🚨🚨   Launch 'starknet-devnet --seed 0 --cairo-compiler-manifest /D/Cairo1-dev/cairo/Cargo.toml' before using this script. cairo directory fetched to v2.1.0, then cargo build --release.
 //          👆👆👆
 
 
@@ -31,8 +30,8 @@ async function main() {
     //console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);
 
     // Declare & deploy Test contract in devnet
-    const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/PhilTest2.sierra.json").toString("ascii"));
-    const compiledCasm = json.parse(fs.readFileSync("./compiledContracts/cairo210/PhilTest2.casm.json").toString("ascii"));
+    const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/cairo210.sierra.json").toString("ascii"));
+    const compiledCasm = json.parse(fs.readFileSync("./compiledContracts/cairo210/cairo210.casm.json").toString("ascii"));
     
     const declareResponse = await account0.declare({ contract: compiledSierra, casm: compiledCasm });
     const contractClassHash = declareResponse.class_hash;
@@ -40,7 +39,7 @@ async function main() {
 
     await provider.waitForTransaction(declareResponse.transaction_hash);
     
-    const { transaction_hash: th2, address } = await account0.deployContract({ classHash: contractClassHash ,constructorCalldata:[100]});
+    const { transaction_hash: th2, address } = await account0.deployContract({ classHash: contractClassHash });
     console.log("contract_address =", address);
     await provider.waitForTransaction(th2);
 
@@ -49,13 +48,7 @@ async function main() {
         const myTestContract = new Contract(compiledSierra.abi, address, provider);
         myTestContract.connect(account0);
         console.log('✅ Test Contract connected at =', myTestContract.address);
-        // testnet address = 
-        const amount0=await myTestContract.get_counter();
-        console.log("counter init =",amount0);
-        const {transaction_hash:txh}=await myTestContract.increase_counter(10);
-        await provider.waitForTransaction(txh);
-        const amount1=await myTestContract.get_counter();
-        console.log("counter final =",amount1);
+        
     
 }
 main()
