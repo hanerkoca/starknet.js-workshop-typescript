@@ -13,7 +13,7 @@ The ETH contract with proxy is constituted of :
 - a proxy implementation : owns the storage of the contract ; its deployment address is the address of the ETH contract (deployment address : 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7)
 - an ERC20 class : owns the code of the ERC20 (class hash : 0x000fa904eea70850fdd44e155dcc79a8d96515755ed43990ff4e7e7c096673e7)
 
-Each class has it own ABI. So, you have an ABI for the proxy, and an other one for the ETH ERC20. This is generating so much troubles to newbies...
+Each class has its own ABI. So, you have an ABI for the proxy, and an other one for the ETH ERC20. This is generating so much troubles to newbies...
 
 ## How it works :
 
@@ -22,7 +22,7 @@ We will follow a balanceOf() request to the ETH contract :
 1. Starknet.js is calling the function `balanceOf()`, at Proxy contract address, using the ABI of the ERC20 class.
 2. The proxy implementation recognizes that it's not one of its administration functions.
 3. The proxy implementation is just transferring the call to the ERC20 class.
-4. The ERC20 call is processing in the ERC20 class, using the storage of the proxy implementation.
+4. The ERC20 call is processed in the ERC20 class, using the storage of the proxy implementation.
 5. The ERC20 class is answering to the proxy implementation.
 6. The proxy implementation is just receiving the answer.
 7. The proxy implementation is transferring the answer to Starknet.js
