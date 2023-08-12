@@ -18,12 +18,20 @@ async function main() {
     const account0 = new Account(provider, account0Address, accountTestnet4privateKey);
     console.log('existing account connected.\n');
 
-    const myContractAddress = "0x03e3Bf30531414D3e9184fEB78fa003f2bA9594702ECE22475908fDBE22e68ae";
-    const { abi: contractAbi } = await provider.getClassAt(myContractAddress);
-    const myContract = new Contract(contractAbi, myContractAddress, provider);
-    const len = await myContract.getUserTradeListLength();
-    console.log("len", len);
+    const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_events.sierra.json").toString("ascii"));
+    const compiledCasm = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_events.casm.json").toString("ascii"));
 
+    const declareResponse = await account0.declare({ contract: compiledSierra, casm: compiledCasm });
+    const contractClassHash = declareResponse.class_hash;
+    console.log('✅ Test Contract declared with classHash =', contractClassHash);
+
+    await provider.waitForTransaction(declareResponse.transaction_hash);
+    
+    const { transaction_hash: th2, address } = await account0.deployContract({ classHash: contractClassHash});
+    console.log("contract_address =", address);
+    await provider.waitForTransaction(th2);
+
+    console.log("✅ Test completed.");
 
     console.log('✅ Test completed.');
 

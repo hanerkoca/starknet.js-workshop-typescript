@@ -1,6 +1,6 @@
 // EstimateMessageFee
 // Launch with npx ts-node src/scripts/cairo12-devnet/4.estimateMessageFee.ts
-// Coded with Starknet.js v5.16.0, devnet v0.5.5
+// Coded with Starknet.js v5.19.0, devnet v0.6.0
 
 import { Provider, RpcProvider, Contract, Account, json, uint256, Abi, constants, shortString, CompiledContract, ContractClass, RPC, SequencerProvider, ContractClassResponse, stark, contractClassResponseToLegacyCompiledContract, LegacyCompiledContract, hash, num } from "starknet";
 import { alchemyKey, infuraKey } from "../../A-MainPriv/mainPriv";
@@ -16,19 +16,34 @@ dotenv.config();
 
 
 async function main() {
-    //initialize the Provider, with a mainnet rpc node Alchemy 
-    //const providerAlchemyMainnet = new RpcProvider({ nodeUrl: 'https://starknet-mainnet.g.alchemy.com/v2/' + alchemyKey });
-    //initialize the Provider, with a tesnet2 rpc node Alchemy 
-    // const providerInfuraTesnet2 = new RpcProvider({ nodeUrl: 'https://starknet-goerli2.infura.io/v3/' + infuraKey });
-    // with rpc in local network : 
-    //const providerMainnetRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.99:9545' });
-    // on the same computer : 
-    // const providerMainnetRpcLocComputer = new RpcProvider({ nodeUrl: 'http://127.0.0.1:9545' });
+    // initialize the Provider, with a mainnet rpc node Alchemy 
+    // const providerAlchemyMainnet = new RpcProvider({ nodeUrl: 'https://starknet-mainnet.g.alchemy.com/v2/' + alchemyKey });
+    //initialize the Provider, with a mainnet rpc node Infura 
+    // const providerInfuraMainnet = new RpcProvider({ nodeUrl: 'https://starknet-mainnet.infura.io/v3/' + infuraKey });
+    // mainnnet with rpc in local network : 
+    //const providerMainnetRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.99:9545/rpc/v0.4' });
+    // mainnet with rpc on the same computer : 
+    // const providerMainnetRpcLocComputer = new RpcProvider({ nodeUrl: 'http://127.0.0.1:9545/rpc/v0.4' });
     // mainnet sequencer :
     //const providerMainnetSequencer = new SequencerProvider({ network: constants.NetworkName.SN_MAIN });
+    
     // Testnet 1 sequencer :
      //const providerTestnetSequencer = new SequencerProvider({ network: constants.NetworkName.SN_GOERLI });
-    // Devnet sequencer :
+     // Testnet1 RPC Alchemy
+     // const providerAlchemyTestnet = new RpcProvider({ nodeUrl: "https://starknet-goerli.g.alchemy.com/v2/"+alchemyTestnetKey });
+     //initialize the Provider, with a tesnet1 rpc node Infura 
+    // const providerInfuraTesnet = new RpcProvider({ nodeUrl: 'https://starknet-goerli.infura.io/v3/' + infuraKey });
+// testnet with rpc in local network : 
+    //const providerTestnetRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.99:9545/rpc/v0.4' });
+    // testnet with rpc on the same computer : 
+    // const providerTestnetRpcLocComputer = new RpcProvider({ nodeUrl: 'http://127.0.0.1:9545/rpc/v0.4' });
+
+    // Testnet 2 sequencer
+    //const providerTestnet2Sequencer = new SequencerProvider({ network: constants.NetworkName.SN_GOERLI2 });
+    //initialize the Provider, with a tesnet2 rpc node Infura 
+    // const providerInfuraTesnet2 = new RpcProvider({ nodeUrl: 'https://starknet-goerli2.infura.io/v3/' + infuraKey });
+
+     // Devnet sequencer :
     const providerDevnetSequencer = new SequencerProvider({ baseUrl: "http://127.0.0.1:5050" });
     // Devnet rpc :
     //const providerDevnetRpc = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" });

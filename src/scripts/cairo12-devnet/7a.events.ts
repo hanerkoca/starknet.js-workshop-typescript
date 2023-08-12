@@ -4,7 +4,9 @@
 
 import { Provider, Account, Contract, json, constants, GetTransactionReceiptResponse, InvokeFunctionResponse, cairo, CallData, RpcProvider, SequencerProvider, hash, ec, Calldata, Call,num } from "starknet";
 import fs from "fs";
-import { accountTestnet4privateKey, accountTestnet4Address } from "../../A1priv/A1priv"
+import { accountTestnet4privateKey, accountTestnet4Address } from "../../A1priv/A1priv";
+import { accountTestnet2ArgentX1Address, accountTestnet2ArgentX1privateKey, TonyNode } from "../../A2priv/A2priv";
+
 import * as dotenv from "dotenv";
 import { resetDevnetNow } from "../resetDevnetFunc";
 dotenv.config();
@@ -38,7 +40,7 @@ async function main() {
     // Connect the  contract  :
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_events.sierra.json").toString("ascii"));
     //          👇👇👇 update address in accordance with result of script 7
-    const address = "0x5beee10b1f4fe4dba79a11afaea452170c2c2a6e1e660f4edeb0fd3068e8a7c"
+    const address = "0x47cb13bf174043adde61f7bea49ab2d9ebc575b0431f85bcbfa113a6f93fc4"
     const myTestContract = new Contract(compiledTest.abi, address, provider);
     myTestContract.connect(account0);
     console.log('✅ Test Contract connected at =', myTestContract.address);
@@ -96,7 +98,7 @@ async function main() {
             block_number: block.block_number
         },
         address: address,
-        keys: keyFilter,
+        keys: [keyFilter],
         chunk_size: 400
     });
     // keys:[['0x3ba972537cb2f8e811809bba7623a2119f4f1133ac9e955a53d5a605af72bf2','0x8']]
