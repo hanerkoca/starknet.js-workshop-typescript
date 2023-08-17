@@ -44,7 +44,7 @@ async function main() {
   myTestContract.connect(account0);
   
   //method 2
-  const myContract=await myTestContract.typed(mAbi);
+  const myContract= myTestContract.typed(mAbi);
   
   //method 1
   let cairo1Contract: TypedContract<typeof mAbi>;
