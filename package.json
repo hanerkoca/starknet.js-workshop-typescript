@@ -28,7 +28,7 @@
     "micro-starknet": "^0.2.3",
     "pako": "^2.1.0",
     "rsv-signature": "^1.1.0",
-    "starknet": "^5.19.0",
+    "starknet": "0xs34n/starknet.js#53cce20161443d2b1c2b845ac5fce2235ec767d5",
     "web3-utils": "^4.0.2"
   },
   "devDependencies": {

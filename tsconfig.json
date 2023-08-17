@@ -16,6 +16,7 @@
     "strict": true,
     "esModuleInterop": true,
     "sourceMap": true,
+    "isolatedModules": true,
   },
   "include": [
     "src/**/*"

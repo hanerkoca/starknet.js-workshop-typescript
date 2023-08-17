@@ -31,8 +31,8 @@ async function main() {
     //console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);
 
     // Declare & deploy Test contract in devnet
-    const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/test_span.sierra.json").toString("ascii"));
-    const compiledCasm = json.parse(fs.readFileSync("./compiledContracts/cairo210/test_span.casm.json").toString("ascii"));
+    const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_res_events_newTypes.sierra.json").toString("ascii"));
+    const compiledCasm = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_res_events_newTypes.casm.json").toString("ascii"));
 
     const declareResponse = await account0.declare({ contract: compiledSierra, casm: compiledCasm });
     const contractClassHash = declareResponse.class_hash;
@@ -41,7 +41,7 @@ async function main() {
 
     await provider.waitForTransaction(declareResponse.transaction_hash);
 
-    const { transaction_hash: th2, address } = await account0.deployContract({ classHash: contractClassHash, constructorCalldata: [100] });
+    const { transaction_hash: th2, address } = await account0.deployContract({ classHash: contractClassHash, constructorCalldata: [] });
     console.log("contract_address =", address);
     await provider.waitForTransaction(th2);
 

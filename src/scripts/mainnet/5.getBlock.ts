@@ -9,7 +9,7 @@ async function main() {
 
 
     //let old_block: GetBlockResponse;
-    const providerRPC = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545" });
+    const providerRPC = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.4" });
 
     function getBlock(){
         providerRPC.getBlock('latest')

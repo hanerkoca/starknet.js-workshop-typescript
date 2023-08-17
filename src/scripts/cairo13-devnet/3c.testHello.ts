@@ -3,14 +3,16 @@
 // use Starknet.js v5.17.0, starknet-devnet 0.5.5
 // launch with npx ts-node src/scripts/cairo13-devnet/3a.testSpan.ts
 
-import { Provider, Account, Contract, json, Result, BigNumberish, Calldata, CallData, constants, Call, RawArgsObject, cairo, CairoEnum, CairoOption, CairoResult, Uint256, uint256 } from "starknet";
+import { Provider, Account, Contract, json, Result, BigNumberish, Calldata, CallData, constants, Call, RawArgsObject, cairo, CairoEnum, CairoOption, CairoResult, Uint256, uint256, TypedContract } from "starknet";
 import fs from "fs";
-import * as dotenv from "dotenv";
 import { CairoCustomEnum } from "starknet";
+import {myAbi} from "../../contracts/abis/hello_res_events_newTypes.abi";
+import {mAbi} from "../../contracts/abis/merkle-abi";
+import * as dotenv from "dotenv";
 dotenv.config();
 
 //          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0 --cairo-compiler-manifest /D/Cairo1-dev/cairo/Cargo.toml' before using this script.
+// 🚨🚨🚨   Launch 'starknet-devnet --seed 0
 // launch script 3 before this script.
 //          👆👆👆
 
@@ -36,13 +38,21 @@ async function main() {
 
   // Connect the  contract instance :
   //          👇👇👇 update address in accordance with result of script 3
-  const address = "0x7cae45077678665b2b6bd7188fcd975c28689d94f31abf2fadafcf6b93e87fe";
+  const address = "0x3caac619d1b29b40b19035e6fb5dee942ccce1a3b21f75351f05ca780c89c08";
   const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_res_events_newTypes.sierra.json").toString("ascii"));
   const myTestContract = new Contract(compiledTest.abi, address, provider);
   myTestContract.connect(account0);
+  
+  //method 2
+  const myContract=await myTestContract.typed(mAbi);
+  
+  //method 1
+  let cairo1Contract: TypedContract<typeof mAbi>;
+
+  // await cairo1Contract.get_root();
   console.log('✅ Test Contract connected at =', myTestContract.address);
 
-  const resSpan = await myTestContract.new_span([1, 2, 3]);
+  const resSpan = await myContract.new_span([1, 2, 3]);
   console.log("resSpan =", resSpan);
   const resTypes = await myTestContract.new_types(100, 200, 300);
   console.log("resTypes =", resTypes);
