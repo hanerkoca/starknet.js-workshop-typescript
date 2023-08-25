@@ -6,8 +6,11 @@
 import { Provider, Account, Contract, json, Result, BigNumberish, Calldata, CallData, constants, Call, RawArgsObject, cairo, CairoEnum, CairoOption, CairoResult, Uint256, uint256, TypedContract } from "starknet";
 import fs from "fs";
 import { CairoCustomEnum } from "starknet";
-import {myAbi} from "../../contracts/abis/hello_res_events_newTypes.abi";
-import {mAbi} from "../../contracts/abis/merkle-abi";
+import {abi210} from "../../contracts/abis/hello-cairo210.abi";
+import {abi200} from "../../contracts/abis/hello-cairo200.abi";
+import {abi110} from "../../contracts/abis/hello-cairo110.abi";
+import {abi100} from "../../contracts/abis/test_type1-cairo100.abi";
+import {abi060} from "../../contracts/abis/merkle-cairo060.abi";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -44,15 +47,23 @@ async function main() {
   myTestContract.connect(account0);
   
   //method 2
-  const myContract= myTestContract.typed(mAbi);
+  // const myContract060= myTestContract.typed(abi060);
+  const myContract100= myTestContract.typed(abi100);
+  const myContract110= myTestContract.typed(abi110);
+  // const myContract200= myTestContract.typed(abi200);
+  // const myContract210= myTestContract.typed(abi210);
   
   //method 1
-  let cairo1Contract: TypedContract<typeof mAbi>;
+  // let cairoContract060: TypedContract<typeof abi060>;
+  let cairoContract100: TypedContract<typeof abi100>;
+  let cairoContract110: TypedContract<typeof abi110>;
+  // let cairoContract200: TypedContract<typeof abi200>;
+  // let cairoContract210: TypedContract<typeof abi210>;
 
   // await cairo1Contract.get_root();
   console.log('✅ Test Contract connected at =', myTestContract.address);
 
-  const resSpan = await myContract.new_span([1, 2, 3]);
+  const resSpan = await myContract110.echo_un_tuple([100,28]);
   console.log("resSpan =", resSpan);
   const resTypes = await myTestContract.new_types(100, 200, 300);
   console.log("resTypes =", resTypes);

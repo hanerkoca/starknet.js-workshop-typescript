@@ -1,6 +1,6 @@
-// import { Abi } from "starknet";
+import { Abi } from "starknet";
 
-export const myAbi = [
+export const abi210 = [
     {
         "type": "impl",
         "name": "IHelloStarknetImpl",

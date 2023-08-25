@@ -3,7 +3,7 @@
 // launch with npx ts-node src/scripts/devnet-forked/1.interact-forked.ts
 
 import { CallData, Provider, Contract, Account, json, uint256, Calldata, num, cairo, Abi } from "starknet";
-import { test1Abi } from "../../contracts/abis/test1";
+import { test1Abi } from "../../contracts/abis/test_type1-cairo100.abi";
 
 import fs from "fs";
 import * as dotenv from "dotenv";

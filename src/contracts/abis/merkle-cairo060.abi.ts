@@ -1,6 +1,6 @@
 import { Abi } from "starknet";
 
-export const mAbi=[
+export const abi060=[
     {
         "inputs": [
             {

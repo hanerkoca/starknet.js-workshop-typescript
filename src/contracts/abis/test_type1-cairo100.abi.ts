@@ -1,4 +1,4 @@
-export const test1Abi= [
+export const abi100= [
   {
     "type": "function",
     "name": "test1",
@@ -65,4 +65,4 @@ export const test1Abi= [
     ],
     "state_mutability": "view"
   }
-]
+] as const;

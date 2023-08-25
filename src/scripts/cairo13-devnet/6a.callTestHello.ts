@@ -33,8 +33,8 @@ async function main() {
 
     // Connect the  contract instance :
     //          👇👇👇 update address in accordance with result of script 6
-    const address = "0x38683f78b9ed9bae7233a289b7c39b6c3ce6d2a9d292e869c097a8f16e37b17";
-    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo200/hello.sierra.json").toString("ascii"));
+    const address = "0x55b8090c68d428862f04a9a99c373f7e40b287110ecf9b9c8a7152aea4b675a";
+    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_res_events_newTypes.sierra.json").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, address, provider);
     myTestContract.connect(account0);
 
@@ -121,6 +121,9 @@ async function main() {
     cairo.tuple(["0x1234567890", "0xe3456"], ["0x1234567891", "0xe3457"], ["0x1234567892", "0xe3458"])] );
     const res16 = await myTestContract.call("array_new_types", comp10);
     console.log("Array Contractaddress myCalldata object =", res16);
+
+    const res17 = await myTestContract.call("array_contract_addr", [["0x1234567892", "0xe3458"]]);
+    console.log("Array Contractaddress call =", res17);
 
     console.log('✅ Test completed.');
 
