@@ -103,13 +103,17 @@ async function main() {
 
     // on receiver side, with account (that needs privKey)
     const result = await account.verifyMessage(typedDataValidate, signature2);
-    console.log("Result off-chain (boolean)=", result);
+    console.log("Result off-chain by account (boolean)=", result);
 
     // on receiver side, without account  (so, without privKey)
-    const compiledAccount = json.parse(fs.readFileSync("./compiledContracts/Account_0_5_1.json").toString("ascii"));
+    const msgHash5 = typedData.getMessageHash(typedDataValidate, account.address);
+    const isVerified=ec.starkCurve.verify(signature2, msgHash5, fullPubKey);
+    console.log("verified by Noble (boolean) =",isVerified);
+
+    // on receiver side, verify on chain, without account (so, without privKey)
+    const compiledAccount = json.parse(fs.readFileSync("./compiledContracts/cairo060/Account_0_5_1.json").toString("ascii"));
     const contractAccount = new Contract(compiledAccount.abi, accountAddress, provider);
 
-    const msgHash5 = typedData.getMessageHash(typedDataValidate, account.address);
     // The call of isValidSignature will generate an error if not valid
     let result2: boolean;
     try {
@@ -118,7 +122,10 @@ async function main() {
     } catch {
         result2 = false;
     }
-    console.log("Result in-chain (boolean) =", result2);
+    console.log("Result on-chain (boolean) =", result2);
+
+    console.log('✅ Test completed.');
+
 }
 main()
     .then(() => process.exit(0))
@@ -126,3 +133,4 @@ main()
         console.error(error);
         process.exit(1);
     });
+

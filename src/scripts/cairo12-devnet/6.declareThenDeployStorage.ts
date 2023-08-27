@@ -4,7 +4,6 @@
 
 import { Provider, Account, Contract, json, constants, GetTransactionReceiptResponse, InvokeFunctionResponse, cairo, CallData, RpcProvider, SequencerProvider, hash, BigNumberish } from "starknet";
 import fs from "fs";
-import { accountTestnet4privateKey, accountTestnet4Address } from "../../A1priv/A1priv"
 import * as dotenv from "dotenv";
 import { resetDevnetNow } from "../resetDevnetFunc";
 dotenv.config();

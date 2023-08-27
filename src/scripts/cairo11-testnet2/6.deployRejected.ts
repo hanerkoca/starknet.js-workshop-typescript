@@ -33,7 +33,7 @@ async function main() {
     console.log("contract_address =", address);
     await provider.waitForTransaction(th2);
 
-    // address = "0x2b8a9002121875e6ce75f3ea30b8df471c93e8466983226473b3b63a355628a"
+    // address Testnet2 = "0x2b8a9002121875e6ce75f3ea30b8df471c93e8466983226473b3b63a355628a"
 
     console.log("✅ Test completed.");
 

@@ -2,10 +2,12 @@
 // use Starknet.js v5.17.0, starknet-devnet 0.5.5
 // launch with npx ts-node src/scripts/signature/3a.verifCairo.ts
 
-import { Account, BigNumberish, CallData, Calldata, Contract, Provider, WeierstrassSignatureType, cairo, json, hash, ec, types, encode } from "starknet";
+import { Account, BigNumberish, CallData, Calldata, Contract, Provider, WeierstrassSignatureType, cairo, json, hash, ec, types, encode, num } from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
 import * as weierstrass from '@noble/curves/abstract/weierstrass';
+import { Signature } from "micro-starknet";
+import { ProjPointType } from "@noble/curves/abstract/weierstrass";
 dotenv.config();
 
 //          👇👇👇
@@ -33,28 +35,37 @@ async function main() {
 
     // Connect the  contract instance :
     //          👇👇👇 update address in accordance with result of script 3
-    const address = "0x43e0e72bc2f90fd9086f7157638f6b217302f7e322524ebc330504aa1066cbd";
+    const address = "0x44b13e0072501aec2e4b5b9476f5fc1980cc4f17c466f85876cf71427d18c0";
     const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo210/test_signature.sierra.json").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, address, provider);
     myTestContract.connect(account0);
 
     const message: BigNumberish[] = [50, 100, 150, 200];
     const fullPubKey = encode.addHexPrefix(encode.buf2hex(ec.starkCurve.getPublicKey(privateKey, false))); // complete
+    console.log("Calculated public key =", fullPubKey);
     const starknetPubKey = ec.starkCurve.getStarkKey(privateKey); // only X part
+    console.log("Calculated Starknet public key =", starknetPubKey);
 
     const msgHash = hash.computeHashOnElements(message);
     const signature: WeierstrassSignatureType = ec.starkCurve.sign(msgHash, privateKey);
-
+    if (signature.recovery === undefined) { throw Error("No 'recovery' key in signature.") }
+    console.log("signature  =", signature);
 
 
     // local
+    const fullPublicKeyRecoveredPoint: ProjPointType<bigint> = signature.recoverPublicKey(encode.removeHexPrefix(encode.sanitizeHex(msgHash)));
+    console.log("Recovered full public key = \n.x=", num.toHex(fullPublicKeyRecoveredPoint.x), "\n.y=", num.toHex(fullPublicKeyRecoveredPoint.y));
+    const recoveredFullPublicKey:string =
+        encode.sanitizeHex((3 + signature.recovery).toString(16)) +
+        encode.removeHexPrefix(encode.sanitizeHex(num.toHex(fullPublicKeyRecoveredPoint.x))) +
+        encode.removeHexPrefix(encode.sanitizeHex(num.toHex(fullPublicKeyRecoveredPoint.y)));
+    console.log("recoveredFullPublicKey =", recoveredFullPublicKey);
     const verifStarknet = ec.starkCurve.verify(signature, msgHash, fullPubKey);
     console.log('Is Signature verified in local =', verifStarknet);
-    const sig:BigNumberish[]=[signature.r,signature.s];
-console.log("signature =",sig);
+    const compiledSignature: BigNumberish[] = [signature.r, signature.s];
     // in Cairo v2
-    const res=await myTestContract.verify_signature(msgHash,starknetPubKey,sig);
-    console.log("Is signature verified in Cairo v2 =",res);
+    const res = await myTestContract.verify_signature(msgHash, starknetPubKey, compiledSignature);
+    console.log("Is signature verified in Cairo v2 =", res);
 
     console.log('✅ Test completed.');
 

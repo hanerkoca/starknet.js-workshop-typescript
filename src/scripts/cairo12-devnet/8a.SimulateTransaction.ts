@@ -16,7 +16,7 @@ function wait(delay: number) {
 
 async function main() {
     // initialize Provider 
-    // const provider = new RpcProvider({ nodeUrl: TonyNode });;
+    // const provider = new RpcProvider({ nodeUrl: TonyNode }); // Testnet2
     // const provider = new Provider({ sequencer: { baseUrl: "http://127.0.0.1:5050" } });
     const provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.4" });
     const bl = await provider.getBlock('latest');

@@ -11,7 +11,7 @@ import { infuraKey, account4MainnetAddress, account4MainnetPrivateKey } from "..
 
 async function main() {
     // initialize Provider 
-    // const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc/" });
+    // const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" });
     // const provider = new Provider({ sequencer: { baseUrl: "http://127.0.0.1:5050" } });
     const provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.4" });
 

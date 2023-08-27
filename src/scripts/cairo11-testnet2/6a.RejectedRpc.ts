@@ -34,7 +34,7 @@ async function main() {
     const count1 = await myTestContract.get_counter();
     console.log("counter =", count1);
 
-    const { transaction_hash: txH2 } = await myTestContract.invoke("test_fail", [100], { maxFee: 1000000000000000 });
+    const { transaction_hash: txH2 } = await myTestContract.invoke("test_fail", [100], { maxFee: 1000000000000000 }); // maxFee is necessary to avoid error during estimateFeee
     console.log("txH2 =", txH2);
     for (let i = 0; i < 15; i++) {
         let txR: any;
