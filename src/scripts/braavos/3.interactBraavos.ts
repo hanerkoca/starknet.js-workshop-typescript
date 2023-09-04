@@ -3,8 +3,7 @@
 // launch with npx ts-node src/scripts/braavos/3.interactBraavos.ts
 
 import { Provider, Account, Contract, json, num } from "starknet";
-import { calculateAddressBraavos, deployBraavosAccount, estimateBraavosAccountDeployFee } from "./deployBraavos";
-import { accountBraavosDevnet6Address, accountBraavosDevnet6privateKey } from "../../A1priv/A1priv";
+import {  account3BraavosTestnetAddress, account3BraavosTestnetPrivateKey } from "../../A1priv/A1priv";
 
 import fs from "fs";
 import axios from "axios";
@@ -28,13 +27,13 @@ async function main() {
     console.log('predeployed devnet account0 connected.\n');
 
     // initialize contract
-    const testAddress = "0x5f7cd1fd465baff2ba9d2d1501ad0a2eb5337d9a885be319366b5205a414fdd";
-    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
+    const testAddress = "0x5f7cd1fd465baff2ba9d2d1501ad0a2eb5337d9a885be319366b5205a414fdd"; // already deployed in Testnet
+    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo060/test.json").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, testAddress, providerDevnet);
     console.log('Test Contract connected at =', myTestContract.address);
 
     // initialize account
-    const accountBraavos = new Account(providerDevnet, accountBraavosDevnet6Address, accountBraavosDevnet6privateKey);
+    const accountBraavos = new Account(providerDevnet, account3BraavosTestnetAddress, account3BraavosTestnetPrivateKey);
 
     // interact
     myTestContract.connect(accountBraavos);

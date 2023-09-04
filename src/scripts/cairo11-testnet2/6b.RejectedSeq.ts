@@ -4,7 +4,7 @@
 
 import { constants, Provider, Contract, Account, json, shortString, RpcProvider } from "starknet";
 import fs from "fs";
-import { accountTestnet2ArgentX1Address, accountTestnet2ArgentX1privateKey, TonyNode } from "../../A2priv/A2priv";
+import { account1Testnet2ArgentXAddress, account1Testnet2ArgentXprivateKey, TonyNode } from "../../A2priv/A2priv";
 import { infuraKey } from "../../A-MainPriv/mainPriv";
 
 function wait(delay: number) {
@@ -18,9 +18,9 @@ async function main() {
     const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI2 } });
 
     // initialize existing Argent X account
-    const account0Address = accountTestnet2ArgentX1Address;
+    const account0Address = account1Testnet2ArgentXAddress;
     console.log('existing_ACCOUNT_ADDRESS=', account0Address);
-    const account0 = new Account(provider, account0Address, accountTestnet2ArgentX1privateKey);
+    const account0 = new Account(provider, account0Address, account1Testnet2ArgentXprivateKey);
     console.log('existing account connected.\n');
 
     const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/reject.sierra.json").toString("ascii"));

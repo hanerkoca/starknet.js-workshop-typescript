@@ -3,8 +3,8 @@
 // launch with npx ts-node src/scripts/braavos/2.createNewBraavosAccount.ts
 
 import { Provider, Account, num } from "starknet";
-import { calculateAddressBraavos, deployBraavosAccount, estimateBraavosAccountDeployFee } from "./deployBraavos";
-import { accountBraavosDevnet6Address, accountBraavosDevnet6privateKey } from "../../A1priv/A1priv";
+import { calculateAddressBraavos, deployBraavosAccount, estimateBraavosAccountDeployFee } from "./3a.deployBraavos";
+import { account3BraavosTestnetAddress, account3BraavosTestnetPrivateKey } from "../../A1priv/A1priv";
 import axios from "axios";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -24,14 +24,14 @@ async function main() {
     console.log('predeployed devnet account0 connected.\n');
 
     // Calculate future address of the Braavos account
-    const privateKeyBraavos = accountBraavosDevnet6privateKey;
+    const privateKeyBraavos = account3BraavosTestnetPrivateKey;
     console.log('Braavos_ACCOUNT_PRIVATE_KEY=', privateKeyBraavos);
     const BraavosProxyAddress = calculateAddressBraavos(privateKeyBraavos);
 
     console.log('Precalculated account address=', BraavosProxyAddress);
-    console.log('Stored account address       =', num.cleanHex(accountBraavosDevnet6Address));
+    console.log('Stored account address       =', num.cleanHex(account3BraavosTestnetAddress));
 
-    if (num.cleanHex(accountBraavosDevnet6Address) !== BraavosProxyAddress) {
+    if (num.cleanHex(account3BraavosTestnetAddress) !== BraavosProxyAddress) {
         throw Error("Wrong address!");
     }
     // estimate fees

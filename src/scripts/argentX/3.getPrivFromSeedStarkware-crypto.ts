@@ -4,8 +4,8 @@
 
 import { ArgentXMnemonic } from "../../A-MainPriv/mainPriv";
 
-import { getKeyPairFromPath, grindKey } from "./keyDerivation";
-import { getStarkKey } from "./crypto";
+import { getKeyPairFromPath, grindKey } from "./inputs/keyDerivation";
+import { getStarkKey } from "./inputs/crypto";
 
 async function main() {
     // with starkware-crypto (for v4)

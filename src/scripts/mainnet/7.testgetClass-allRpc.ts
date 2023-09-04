@@ -3,7 +3,7 @@
 // Coded with Starknet.js v5.14.1
 
 import { Provider, RpcProvider, Contract, Account, json, uint256, Abi, constants, shortString, CompiledContract, ContractClass, RPC, SequencerProvider, ContractClassResponse, stark, contractClassResponseToLegacyCompiledContract, LegacyCompiledContract, hash ,num} from "starknet";
-import { alchemyKey,infuraKey  } from "../../A-MainPriv/mainPriv";
+import { alchemyKey,infuraKey ,blastKey } from "../../A-MainPriv/mainPriv";
 import { account4MainnetAddress, account4MainnetPrivateKey } from "../../A-MainPriv/mainPriv";
 import { resetDevnetNow } from "../resetDevnetFunc";
 import fs from "fs";
@@ -16,7 +16,8 @@ async function main() {
     const providerAlchemyMainnet = new RpcProvider({ nodeUrl: 'https://starknet-mainnet.g.alchemy.com/v2/' + alchemyKey });
     // Mainnet RPC infura node
     const providerInfuraMainnet = new RpcProvider({ nodeUrl: 'https://starknet-mainnet.infura.io/v3/' + infuraKey });
-    
+    // Blast node rpc for Testnet2 :
+    const providerBlastMainnet = new RpcProvider({ nodeUrl: 'https://starknet-mainnet.blastapi.io/' + blastKey });
     // with your own node in your local network : 
     const providerMainnetRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.99:9545' });
     // with your own node in the same computer : 
@@ -24,16 +25,22 @@ async function main() {
     // mainnet sequencer :
     const providerMainnetSequencer = new SequencerProvider({ network: constants.NetworkName.SN_MAIN });
     const providerMainnetSequencer2 = new Provider({ sequencer: { network: constants.NetworkName.SN_MAIN }});
+
     // Testnet 1 sequencer :
     const providerTestnet = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
     // Alchemy node rpc for Testnet :
-    const providerAlchemyTestnet = new RpcProvider({ nodeUrl: 'https://starknet-testnet.g.alchemy.com/v2/' + alchemyKey });
+    const providerAlchemyTestnet = new RpcProvider({ nodeUrl: 'https://starknet-goerli.g.alchemy.com/v2/' + alchemyKey });
     // Infura node rpc for Testnet :
     const providerInfuraTestnet = new RpcProvider({ nodeUrl: 'https://starknet-goerli.infura.io/v3/' + infuraKey });
+    // Blast node rpc for Testnet2 :
+    const providerBlastTestnet = new RpcProvider({ nodeUrl: 'https://starknet-testnet.blastapi.io/' + blastKey });
+
     // Testnet 2 sequencer :
     const providerTestnet2 = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI2 } });
     // Infura node rpc for Testnet2 :
     const providerInfuraTestnet2 = new RpcProvider({ nodeUrl: 'https://starknet-goerli2.infura.io/v3/' + infuraKey });
+    // Blast node rpc for Testnet2 :
+    const providerBlastTestnet2 = new RpcProvider({ nodeUrl: 'https://starknet-testnet-2.blastapi.io/' + blastKey });
     // Starknet-devnet sequencer (same for Katana devnet, but needs maxFee parameter) :
     const providerDevnetSequencer = new SequencerProvider({ baseUrl: "http://127.0.0.1:5050" });
     // Devnet rpc :

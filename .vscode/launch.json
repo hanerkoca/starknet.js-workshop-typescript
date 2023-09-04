@@ -11,7 +11,7 @@
             "type": "node",
             "request": "launch",
             "name": "typescript",
-            "program": "${workspaceFolder}/src/scripts/cairo12-devnet/11a.deployOZ070erc20.ts",
+            "program": "${workspaceFolder}/src/scripts/devnet-forked/2.signerAbstractionBraavos.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,

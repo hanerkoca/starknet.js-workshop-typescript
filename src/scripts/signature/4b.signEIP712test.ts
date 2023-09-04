@@ -37,66 +37,6 @@ async function main() {
     console.log("publicKey calculated =", starknetPublicKey, typeof (starknetPublicKey));
     console.log('fullpubKey =', fullPubKey);
 
-    // const message = [1, 128, 18, 14];
-    // const msgHash = hash.computeHashOnElements(message);
-    // const signature1: WeierstrassSignatureType = ec.starkCurve.sign(msgHash, privateKey);
-
-
-    // EIP712
-    // const typedDataValidate: typedData.TypedData = {
-    //     types: {
-    //         StarkNetDomain: [
-    //             { name: "name", type: "string" },
-    //             { name: "version", type: "felt" },
-    //             { name: "chainId", type: "felt" },
-    //         ],
-    //         Airdrop: [
-    //             { name: "address", type: "felt" },
-    //             { name: "amount", type: "felt" }
-    //         ],
-    //         Validate: [
-    //             { name: "id", type: "felt" },
-    //             { name: "from", type: "felt" },
-    //             { name: "amount", type: "felt" },
-    //             { name: "nameGamer", type: "string" },
-    //             { name: "endDate", type: "felt" },
-    //             { name: "itemsAuthorized", type: "felt*" }, // array of felt
-    //             { name: "chkFunction", type: "selector" }, // name of function
-    //             { name: "rootList", type: "merkletree", contains: "Airdrop" } // root of a merkle tree
-    //         ]
-    //     },
-    //     primaryType: "Validate",
-    //     domain: {
-    //         name: "myDapp", // put the name of your dapp to ensure that the signatures will not be used by other DAPP
-    //         version: "1",
-    //         chainId: shortString.encodeShortString("SN_GOERLI"), // shortString of 'SN_GOERLI' (or 'SN_MAIN' or 'SN_GOERLI2'), to be sure that signature can't be used by other network.
-    //     },
-    //     message: {
-    //         id: "0x0000004f000f",
-    //         from: "0x2c94f628d125cd0e86eaefea735ba24c262b9a441728f63e5776661829a4066",
-    //         amount: "400",
-    //         nameGamer: "Hector26",
-    //         endDate: "0x27d32a3033df4277caa9e9396100b7ca8c66a4ef8ea5f6765b91a7c17f0109c",
-    //         itemsAuthorized: ["0x01", "0x03", "0x0a", "0x0e"],
-    //         chkFunction: "check_authorization",
-    //         rootList: [
-    //             {
-    //                 address: "0x69b49c2cc8b16e80e86bfc5b0614a59aa8c9b601569c7b80dde04d3f3151b79",
-    //                 amount: "1554785",
-    //             }, {
-    //                 address: "0x7447084f620ba316a42c72ca5b8eefb3fe9a05ca5fe6430c65a69ecc4349b3b",
-    //                 amount: "2578248",
-    //             }, {
-    //                 address: "0x3cad9a072d3cf29729ab2fad2e08972b8cfde01d4979083fb6d15e8e66f8ab1",
-    //                 amount: "4732581",
-    //             }, {
-    //                 address: "0x7f14339f5d364946ae5e27eccbf60757a5c496bf45baf35ddf2ad30b583541a",
-    //                 amount: "913548",
-    //             },
-    //         ]
-    //     },
-    // };
-
     const typedDataValidate: typedData.TypedData = {
         domain: {
             chainId: "Starknet Mainnet",
@@ -105,55 +45,107 @@ async function main() {
         },
         message: {
             MessageId: 345,
-            From_Name: "Edmund",
-            From_address: "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a",
-            To_Name: "Alice",
-            To_address: "0x69b49c2cc8b16e80e86bfc5b0614a59aa8c9b601569c7b80dde04d3f3151b79",
-            Message_content1: "Hello beautiful Alice,",
-            Message_content2: "Could you please verify the",
-            Message_content3: "validity of this message?",
-            Message_content4: "",
-
+            From: {
+                name: "Edmund",
+                Address: "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a",
+            },
+            To: {
+                name: "Alice",
+                Address: "0x69b49c2cc8b16e80e86bfc5b0614a59aa8c9b601569c7b80dde04d3f3151b79",
+            },
+            Nft_to_transfer: {
+                Collection: "Stupid monkeys",
+                Address: "0x69b49c2cc8b16e80e86bfc5b0614a59aa8c9b601569c7b80dde04d3f3151b79",
+                Nft_id: 112,
+                Negociated_for: {
+                    Qty: "18.4569325643",
+                    Unit: "ETH",
+                    Token_address: "0x69b49c2cc8b16e80e86bfc5b0614a59aa8c9b601569c7b80dde04d3f3151b79",
+                    Amount: 18456932564300000000n,
+                }
+            },
+            Comment1: "Monkey with banana, sunglasses,",
+            Comment2: "and red hat.",
+            Comment3: "",
         },
-        primaryType: "Message1",
+        primaryType: "TransferERC721",
         types: {
-            Message1: [
+            Account1: [
+                {
+                    name: "Name",
+                    type: "string",
+                },
+                {
+                    name: "Address",
+                    type: "felt",
+                },
+            ],
+            Nft: [
+                {
+                    name: "Collection",
+                    type: "string",
+                },
+                {
+                    name: "Address",
+                    type: "felt",
+                },
+                {
+                    name: "Nft_id",
+                    type: "felt",
+                },
+                {
+                    name: "Negociated_for",
+                    type: "Transaction",
+                },
+            ],
+            Transaction: [
+                {
+                    name: "Qty",
+                    type: "string",
+                },
+                {
+                    name: "Unit",
+                    type: "string",
+                },
+                {
+                    name: "Token_address",
+                    type: "felt",
+                },
+                {
+                    name: "Amount",
+                    type: "felt",
+                },
+            ],
+            TransferERC721: [
                 {
                     name: "MessageId",
                     type: "felt",
                 },
                 {
-                    name: "From_Name",
+                    name: "From",
+                    type: "Account1",
+                },
+                {
+                    name: "To",
+                    type: "Account1",
+                },
+                {
+                    name: "Nft_to_transfer",
+                    type: "Nft",
+                },
+                {
+                    name: "Comment1",
                     type: "string",
                 },
                 {
-                    name: "From_address",
-                    type: "felt",
-                },
-                {
-                    name: "To_Name",
+                    name: "Comment2",
                     type: "string",
                 },
                 {
-                    name: "To_address",
-                    type: "felt",
-                },
-                {
-                    name: "Message_content1",
+                    name: "Comment3",
                     type: "string",
                 },
-                {
-                    name: "Message_content2",
-                    type: "string",
-                },
-                {
-                    name: "Message_content3",
-                    type: "string",
-                },
-                {
-                    name: "Message_content4",
-                    type: "string",
-                },
+
             ],
             StarkNetDomain: [
                 {
