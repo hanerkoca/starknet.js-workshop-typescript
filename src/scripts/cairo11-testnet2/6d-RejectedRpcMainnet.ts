@@ -64,6 +64,8 @@ async function main() {
     const count1 = await myTestContract.get_counter();
     console.log("counter =", count1, "\nBlock# =", blockNum.block_number);
 
+    // use 100 to have a success.
+    // use any other u8 to have a reverted tx.
     const { transaction_hash: txH2 } = await myTestContract.invoke("test_fail", [100], { maxFee: 1_000_000_000_000_001 }); // maxFee is necessary to avoid error during estimateFeee
     console.log("txH2 =", txH2);
     for (let i = 0; i < 20; i++) {
