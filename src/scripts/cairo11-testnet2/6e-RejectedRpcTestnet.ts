@@ -21,27 +21,27 @@ async function main() {
     // const provider = new RpcProvider({ nodeUrl: TonyNode });;
     // const provider = new RpcProvider({ nodeUrl: 'https://starknet-goerli2.infura.io/v3/' + infuraKey });
     // const provider = new RpcProvider({ nodeUrl: 'https://starknet-testnet-2.blastapi.io/' + blastKey });
-    const provider = new RpcProvider({ nodeUrl: junoNMtestnet2 });
+    // const provider = new RpcProvider({ nodeUrl: junoNMtestnet2 });
 
 
     //  *** Testnet 1 ***
-    // const provider = new RpcProvider({ nodeUrl: 'https://starknet-goerli.infura.io/v3/' + infuraKey });
+    //const provider = new RpcProvider({ nodeUrl: 'https://starknet-goerli.infura.io/v3/' + infuraKey });
     // const provider = new RpcProvider({ nodeUrl: "https://starknet-goerli.g.alchemy.com/v2/" + alchemyKey });
     // const provider = new RpcProvider({ nodeUrl: "https://starknet-testnet.blastapi.io/"" + blastKey +"/rpc/v0.4"});
-    // const provider = new RpcProvider({ nodeUrl: junoNMtestnet });
+    const provider = new RpcProvider({ nodeUrl: junoNMtestnet });
 
     // *** Mainnet ***
-    //const provider = new RpcProvider({ nodeUrl: "https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/+lavaMainnetKey"});
+    // const provider = new RpcProvider({ nodeUrl: "https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/"+lavaMainnetKey});
     // const provider = new RpcProvider({ nodeUrl: junoNMmainnet });
 
 
     // initialize existing Argent X account
-    const account0Address = account1Testnet2ArgentXAddress;
-    const account0PrivKey = account1Testnet2ArgentXprivateKey;
-    //const account0Address = account2TestnetAddress;
-    //const account0PrivKey = account2TestnetPrivateKey;
-    // const account0Address = account4MainnetAddress;
-    // const account0PrivKey = account4MainnetPrivateKey;
+    //const account0Address = account1Testnet2ArgentXAddress;
+    //const account0PrivKey = account1Testnet2ArgentXprivateKey;
+    const account0Address = account2TestnetAddress;
+    const account0PrivKey = account2TestnetPrivateKey;
+    //const account0Address = account4MainnetAddress;
+    //const account0PrivKey = account4MainnetPrivateKey;
 
     console.log('existing_ACCOUNT_ADDRESS=', account0Address);
     const account0 = new Account(provider, account0Address, account0PrivKey);
@@ -49,8 +49,8 @@ async function main() {
 
     const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/reject.sierra.json").toString("ascii"));
 
-    const contractAddress = "0x2b8a9002121875e6ce75f3ea30b8df471c93e8466983226473b3b63a355628a"; // Testnet 2
-    // const contractAddress = "0x1073c451258ff87d4e280fb00bc556767cdd464d14823f84fcbb8ba44895a34"; // Testnet 1
+    //const contractAddress = "0x2b8a9002121875e6ce75f3ea30b8df471c93e8466983226473b3b63a355628a"; // Testnet 2
+    const contractAddress = "0x1073c451258ff87d4e280fb00bc556767cdd464d14823f84fcbb8ba44895a34"; // Testnet 1
     // const contractAddress="0x02bd907b978f58cedf616cff5cda213d63daa3ad28dd3c1ea17ca6cf5e1d395f" // Mainnet 
 
 
@@ -75,8 +75,8 @@ async function main() {
             : console.log("txR:", txR)
         await wait(1000);
     }
-    const txR2 = await provider.getTransactionReceipt(txH2);
-    //const txR2 = await provider.waitForTransaction(txH2);
+    // const txR2 = await provider.getTransactionReceipt(txH2);
+    const txR2 = await provider.waitForTransaction(txH2);
     console.log("txR2 =", txR2);
 
     const count2 = await myTestContract.get_counter();

@@ -2,7 +2,7 @@
 // Coded with Starknet.js v5.19.5 (+commit), starknet-devnet 0.6.2
 
 
-import { Calldata, num, Signature, ec, hash, CallData, BigNumberish, DeployAccountSignerDetails, AbstractionSigns } from "starknet";
+import { Calldata, num, Signature, ec, hash, CallData, BigNumberish, DeployAccountSignerDetails, AbstractionFunctions } from "starknet";
 
 export const BraavosInitialClassHash = "0x5aa23d5bb71ddaa783da7ea79d405315bafa7cf0387a74f4593578c3e9e6570";
 export const BraavosProxyClassHash = "0x03131fa018d520a037686ce3efddeab8f28895662f019ca3ca18a626650f7d1e";
@@ -60,6 +60,6 @@ export function signDeployAccountBraavos(standardInputData: DeployAccountSignerD
     return signature
 }
 
-export const abstractionFnsBraavos: AbstractionSigns = {
+export const abstractionFnsBraavos: AbstractionFunctions = {
     abstractedDeployAccountSign: signDeployAccountBraavos
 }

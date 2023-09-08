@@ -1,9 +1,9 @@
 // Connect a predeployed OZ account in devnet. 
 // address and PrivKey are displayed when lanching starknet-devnet, and have been  stored in .env file.
-// coded with Starknet.js v5.11.1
+// coded with Starknet.js v5.19.5+commit
 // launch with npx ts-node src/scripts/signature/signEIP712-V5.ts
 
-import { Account, ec, hash, Provider, json, Contract, encode, shortString, typedData, WeierstrassSignatureType } from "starknet";
+import { Account, ec, hash, Provider, json, Contract, encode, shortString, typedData, WeierstrassSignatureType, ArraySignatureType } from "starknet";
 
 import * as dotenv from "dotenv";
 import fs from "fs";
@@ -97,8 +97,9 @@ async function main() {
             ]
         },
     };
-    const signature2 = await account.signMessage(typedDataValidate) as WeierstrassSignatureType;
-
+    const {signature: signature2 } = await account.signMessage(typedDataValidate);
+    const sig2arr=signature2 as ArraySignatureType;
+    const sig2rs=signature2 as WeierstrassSignatureType;
 
 
     // on receiver side, with account (that needs privKey)
@@ -107,7 +108,7 @@ async function main() {
 
     // on receiver side, without account  (so, without privKey)
     const msgHash5 = typedData.getMessageHash(typedDataValidate, account.address);
-    const isVerified=ec.starkCurve.verify(signature2, msgHash5, fullPubKey);
+    const isVerified=ec.starkCurve.verify(sig2rs, msgHash5, fullPubKey);
     console.log("verified by Noble (boolean) =",isVerified);
 
     // on receiver side, verify on chain, without account (so, without privKey)
@@ -117,7 +118,7 @@ async function main() {
     // The call of isValidSignature will generate an error if not valid
     let result2: boolean;
     try {
-        await contractAccount.isValidSignature(msgHash5, [signature2.r, signature2.s]);
+        await contractAccount.isValidSignature(msgHash5, sig2arr);
         result2 = true;
     } catch {
         result2 = false;

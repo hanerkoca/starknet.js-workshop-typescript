@@ -2,7 +2,7 @@
 // launch with npx ts-node src/scripts/cairo11-testnet2/6a.Rejected.ts
 // Coded with Starknet.js v5.19.0
 
-import { constants, Provider, Contract, Account, json, shortString, RpcProvider, encode } from "starknet";
+import { constants, Provider, Contract, Account, json, shortString, RpcProvider, encode, BlockTag } from "starknet";
 import fs from "fs";
 // import { account1Testnet2ArgentXAddress, account1Testnet2ArgentXprivateKey, TonyNode } from "../../A2priv/A2priv";
 import { account2TestnetAddress, account2TestnetPrivateKey } from "../../A1priv/A1priv";
@@ -12,10 +12,11 @@ async function main() {
 
     // *** Mainnet ***
     const provider = new RpcProvider({ nodeUrl: "https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/"+lavaMainnetKey});
+    // const provider = new RpcProvider({ nodeUrl: 'https://starknet-mainnet.g.alchemy.com/v2/' + alchemyKey });
 
     const id=await provider.getChainId();
-    const blockNum = await provider.getBlock();
-    //console.log("chain =",id,"\nBlock# =", blockNum.block_number);
+    const blockNum = await provider.getBlock(BlockTag.latest);
+    console.log("chain =",id,"\nBlock# =", blockNum.block_number);
     console.log("chain =",shortString.decodeShortString(id));
     const txR=await provider.getTransactionReceipt("0x7aa061a3babade36d9bc24ddd31083866c995feade1f1bf435ac536598374a7");
     console.log(txR);

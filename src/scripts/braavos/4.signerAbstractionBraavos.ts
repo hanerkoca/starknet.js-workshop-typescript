@@ -2,13 +2,10 @@
 // use Starknet.js v5.19.5 (+ commit), starknet-devnet 0.6.2
 // launch with npx ts-node src/scripts/braavos/4.signerAbstractionBraavos.ts
 
-import { Provider,  Account,  Calldata, Signer, BigNumberish, ec } from "starknet";
-import { account3BraavosTestnetAddress, account3BraavosTestnetPrivateKey } from "../../A1priv/A1priv";
+import { Provider, Account, Calldata, Signer, BigNumberish, ec } from "starknet";
+import { account3BraavosTestnetPrivateKey } from "../../A1priv/A1priv";
 import { calculateAddressBraavos, abstractionFnsBraavos, proxyConstructorBraavos, BraavosProxyClassHash } from "./4a.abstractionBraavos";
-import fs from "fs";
-import * as dotenv from "dotenv";
 import axios from "axios";
-dotenv.config();
 
 
 //          👇👇👇
@@ -33,11 +30,11 @@ async function main() {
     const signerBraavos = new Signer(privateKeyBraavos, abstractionFnsBraavos);
     const starkKeyPubBraavos = ec.starkCurve.getStarkKey(privateKeyBraavos);
     const proxyAddressBraavos = calculateAddressBraavos(privateKeyBraavos);
-    const accountBraavos = new Account(provider, proxyAddressBraavos, signerBraavos);
     const accountClassHashBraavos = "0x0105c0cf7aadb6605c9538199797920884694b5ce84fc68f92c832b0c9f57ad9"; // 27/aug/2023, will probably change over time
+    const accountBraavos = new Account(provider, proxyAddressBraavos, signerBraavos);
 
     // fund account address before account creation       
-    const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": proxyAddressBraavos, "amount": 10_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
+    const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": accountBraavos.address, "amount": 10_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
     console.log('Answer mint =', answer); // 10 ETH
 
     // deploy Braavos account
@@ -45,13 +42,23 @@ async function main() {
     const signatureAddsDeployAccountBraavos: BigNumberish[] = [
         accountClassHashBraavos,
         0, 0, 0, 0, 0, 0, 0]; // if no hardware signer, put 7x zero.
+
+    const estimatedFeeDeployBraavos = await accountBraavos.estimateAccountDeployFee({
+        classHash: BraavosProxyClassHash,
+        constructorCalldata: proxyConstructor,
+        contractAddress: proxyAddressBraavos,
+        addressSalt: starkKeyPubBraavos
+    }, undefined,
+        ...signatureAddsDeployAccountBraavos);
+    console.log("Estimated fee =", estimatedFeeDeployBraavos.suggestedMaxFee);
+
     const { transaction_hash, contract_address } = await accountBraavos.deployAccount({
         classHash: BraavosProxyClassHash,
         constructorCalldata: proxyConstructor,
         contractAddress: proxyAddressBraavos,
         addressSalt: starkKeyPubBraavos
-    },
-        { maxFee: 2_755_450_000_000 },
+    }, undefined,
+
         ...signatureAddsDeployAccountBraavos
     );
     console.log("Braavos account deployed at :", contract_address);

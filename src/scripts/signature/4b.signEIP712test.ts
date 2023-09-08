@@ -163,7 +163,7 @@ async function main() {
             ],
         },
     };
-    const signature = await account0.signMessage(typedDataValidate) as WeierstrassSignatureType;
+    const { msgHash, signature } = await account0.signMessage(typedDataValidate);
     const res = await account0.verifyMessage(typedDataValidate, signature);
     console.log(" :>> ", res);
     console.log("Signature:", signature);
