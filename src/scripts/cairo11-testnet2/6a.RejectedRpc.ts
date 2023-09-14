@@ -5,8 +5,8 @@
 import { constants, Provider, Contract, Account, json, shortString, RpcProvider } from "starknet";
 import fs from "fs";
 import { account1Testnet2ArgentXAddress, account1Testnet2ArgentXprivateKey, TonyNode } from "../../A2priv/A2priv";
-import { account2TestnetAddress, account2TestnetPrivateKey,junoNMtestnet } from "../../A1priv/A1priv";
-import {account4MainnetAddress, account4MainnetPrivateKey, infuraKey, alchemyKey, blastKey,lavaMainnetKey, junoNMmainnet } from "../../A-MainPriv/mainPriv";
+import { account2TestnetAddress, account2TestnetPrivateKey, junoNMtestnet } from "../../A1priv/A1priv";
+import { account4MainnetAddress, account4MainnetPrivateKey, infuraKey, alchemyKey, blastKey, lavaMainnetKey, junoNMmainnet } from "../../A-MainPriv/mainPriv";
 import { junoNMtestnet2 } from "../../A2priv/A2priv";
 
 function wait(delay: number) {
@@ -63,13 +63,14 @@ async function main() {
     wait(800);
     const count1 = await myTestContract.get_counter();
     console.log("counter =", count1, "\nBlock# =", blockNum.block_number);
-
+    // use 100 to have a success.
+    // use any other u8 to have a reverted tx.
     const { transaction_hash: txH2 } = await myTestContract.invoke("test_fail", [100], { maxFee: 1_000_000_000_000_001 }); // maxFee is necessary to avoid error during estimateFeee
     console.log("txH2 =", txH2);
     for (let i = 0; i < 20; i++) {
         let txR: any;
         try { txR = await provider.getTransactionReceipt(txH2) }
-        catch { txR = i.toString()+". TxH not yet in memPool." };
+        catch { txR = i.toString() + ". TxH not yet in memPool." };
         txR.execution_status ?
             console.log("txR: execution =", txR.execution_status, ",", txR.finality_status)
             : console.log("txR:", txR)

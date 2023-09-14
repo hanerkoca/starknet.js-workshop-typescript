@@ -16,6 +16,16 @@ export function signDeployAccount(standardInputData: DeployAccountSignerDetails,
     }
     const signer2FA = additionalParams;
 
+    console.log("First hash =",hash.calculateDeployAccountTransactionHash(
+        standardInputData.contractAddress,
+        standardInputData.classHash,
+        CallData.compile(standardInputData.constructorCalldata),
+        standardInputData.addressSalt,
+        standardInputData.version,
+        standardInputData.maxFee,
+        standardInputData.chainId,
+        standardInputData.nonce
+    ));
     const txnHash = hash.computeHashOnElements([hash.calculateDeployAccountTransactionHash(
         standardInputData.contractAddress,
         standardInputData.classHash,
@@ -34,6 +44,7 @@ export function signDeployAccount(standardInputData: DeployAccountSignerDetails,
         privateKey,
     );
     const signature = [r.toString(), s.toString(), ...signer2FA];
+    console.log("deploy account Hash =", txnHash,"\nSignature :",num.toHex(r),num.toHex(s));
     return signature
 }
 

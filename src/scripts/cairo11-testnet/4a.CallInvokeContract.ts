@@ -4,7 +4,7 @@
 
 import { CallData, constants, Provider, Contract, Account, json, ec } from "starknet";
 import fs from "fs";
-import { accountTestnet4Address, accountTestnet4privateKey } from "../../A1priv/A1priv";
+import { account4TestnetAddress, account4TestnetPrivateKey } from "../../A1priv/A1priv";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -13,15 +13,15 @@ async function main() {
     const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
 
     // initialize existing Argent X account
-    const account0Address = accountTestnet4Address;
+    const account0Address = account4TestnetAddress;
     console.log('Braavos1_ACCOUNT_ADDRESS=', account0Address);
-    const account0 = new Account(provider, account0Address, accountTestnet4privateKey);
+    const account0 = new Account(provider, account0Address, account4TestnetPrivateKey,"1");
     console.log('existing Braavos1 connected.\n');
 
 
-    // Connect the deployed Test instance in devnet
+    // Connect the deployed Test instance in Testnet
     const testAddress = "0x697d3bc2e38d57752c28be0432771f4312d070174ae54eef67dd29e4afb174"; // modify in accordance with result of script 4
-    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test_type1.sierra").toString("ascii"));
+    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo100/test_type1.sierra").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, testAddress, provider);
     console.log('Test Contract connected at =', myTestContract.address);
 

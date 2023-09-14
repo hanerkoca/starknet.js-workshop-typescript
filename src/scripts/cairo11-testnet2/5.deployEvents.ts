@@ -24,16 +24,16 @@ async function main() {
     const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_events.sierra.json").toString("ascii"));
     const compiledCasm = json.parse(fs.readFileSync("./compiledContracts/cairo210/hello_events.casm.json").toString("ascii"));
 
-    const bl=provider.getBlock("latest");
-    console.log("Bloc =",(await bl).block_number);
+    const bl = provider.getBlock("latest");
+    console.log("Bloc =", (await bl).block_number);
     // const declareResponse = await account0.declare({ contract: compiledSierra, casm: compiledCasm });
     // const contractClassHash = declareResponse.class_hash;
-     const contractClassHash = "0x493436d1242637e694edd5d1e3c0f56d43e7213d3a1369087d02f2aca6858ee";
+    const contractClassHash = "0x493436d1242637e694edd5d1e3c0f56d43e7213d3a1369087d02f2aca6858ee";
     console.log('✅ Test Contract declared with classHash =', contractClassHash);
 
     //await provider.waitForTransaction(declareResponse.transaction_hash);
     console.log("transaction ended")
-    const { transaction_hash: th2, address } = await account0.deployContract({ classHash: contractClassHash});
+    const { transaction_hash: th2, address } = await account0.deployContract({ classHash: contractClassHash });
     console.log("contract_address =", address);
     await provider.waitForTransaction(th2);
 
