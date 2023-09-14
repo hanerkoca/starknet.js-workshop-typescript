@@ -1,9 +1,6 @@
 // Deploy a new ArgentX wallet (Cairo1 0.3.0).
-// launch with : npx ts-node src/scripts/.ts
+// launch with : npx ts-node ssrc/scripts/3.createNewArgentXaccount.ts
 // Coded with Starknet.js v5.19.5
-
-// unfortunately, do not work in devnet forket network!
-// contract code : https://github.com/argentlabs/argent-contracts-starknet/tree/account-0.3.0/tests/fixtures
 
 import { Provider, RpcProvider, Account, ec, json, stark, hash, CallData, Contract } from "starknet";
 import { infuraKey } from "../A-MainPriv/mainPriv";
