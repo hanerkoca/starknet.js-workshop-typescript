@@ -65,7 +65,7 @@ async function main() {
     //     "type": "constructor"
     // },
 
-    const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/ERC20MintableOZ_0_6_1.json").toString("ascii"));
+    const compiledErc20mintable = json.parse(fs.readFileSync("./compiledContracts/cairo060/ERC20MintableOZ_0_6_1.json").toString("ascii"));
 
     // define the constructor :
     const initialTk: Uint256 = cairo.uint256(100);

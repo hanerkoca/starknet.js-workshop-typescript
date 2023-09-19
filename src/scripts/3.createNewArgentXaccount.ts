@@ -41,8 +41,8 @@ async function main() {
     
     // declare
     const respDecl=await account0.declare({contract:accountAXsierra,casm:accountAXcasm});
-    //const contractAXclassHash = "0x1a736d6ed154502257f02b1ccdf4d9d1089f80811cd6acad48e6b6a9d1f2003";
-    const contractAXclassHash=respDecl.class_hash;
+    const contractAXclassHash = "0x1a736d6ed154502257f02b1ccdf4d9d1089f80811cd6acad48e6b6a9d1f2003";
+    //const contractAXclassHash=respDecl.class_hash;
     await provider.waitForTransaction(respDecl.transaction_hash);
     console.log("ArgentX Cairo 1 contract declared")
 

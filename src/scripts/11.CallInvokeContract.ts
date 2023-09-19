@@ -32,7 +32,7 @@ async function main() {
 
     // Connect the deployed Test instance in devnet
     const testAddress = "0x1e90aef7a2d5489f2f3707aae854c77e27f16dee6d34339eb93d18451c317c6"; // modify in accordance with result of script 5
-    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
+    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo060/test.json").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, testAddress, provider);
     console.log('Test Contract connected at =', myTestContract.address);
 

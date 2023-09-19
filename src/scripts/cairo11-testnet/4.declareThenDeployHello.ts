@@ -3,7 +3,7 @@
 // launch with npx ts-node src/scriptsA1/4b.declareDeployHello.ts
 
 import { Provider, Account, Contract, ec, json, stark, uint256, shortString, constants } from "starknet";
-import { privateKey0 } from "../../A1priv/A1priv";
+import { account5TestnetAddress, account5TestnetPrivateKey } from "../../A1priv/A1priv";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -14,8 +14,8 @@ async function main() {
     const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
 
 
-    const account0Address: string = "0x065A822fBeE1Ae79e898688b5A4282Dc79E0042cbEd12F6169937FdDb4c26641";
-    const account0 = new Account(provider, account0Address, privateKey0);
+    const account0Address = account5TestnetAddress;
+    const account0 = new Account(provider, account0Address, account5TestnetPrivateKey);
     console.log('existing AX account2 connected.\n');
 
     // Declare & deploy Test contract in devnet

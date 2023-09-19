@@ -2,7 +2,7 @@
 // use Starknet.js v5.16.0, starknet-devnet 0.5.5
 // launch with npx ts-node src/scripts/argentX/2.getPrivFromSeed-Ethers.ts
 import { BigNumber, BigNumberish, utils, Wallet } from "ethers" //v5.5.0
-import { ec, } from "starknet"
+import { ec, encode, } from "starknet"
 import * as mStark from 'micro-starknet';
 import { bytesToHex } from '@noble/curves/abstract/utils';
 import { ArgentXMnemonic } from "../../A-MainPriv/mainPriv";
@@ -13,7 +13,10 @@ async function main() {
     // with ethers & micro-starknet
     const mnemonic: string = ArgentXMnemonic;
     const seed: Uint8Array = bip39.mnemonicToSeedSync(mnemonic);
+    const secret = encode.buf2hex(seed);
+    console.log("secret =",secret);
     const masterNode = utils.HDNode.fromSeed(seed);
+    console.log("masterNode",masterNode);
     const pathBase = "m/44'/9004'/0'/0/";
     for (let i = 0; i < 10; i++) {
         const path = pathBase + String(i);

@@ -10,8 +10,21 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "typescript",
-            "program": "${workspaceFolder}/src/scripts/cairo12-devnet/14.deployAccountAbstraction.ts",
+            "name": "typescript2a",
+            "program": "${workspaceFolder}/src/scripts/argentX/2a.getPrivFromSeed-Ethers2.ts",
+            "preLaunchTask": "npm: build",
+            "sourceMaps": true,
+            "smartStep": true,
+            "internalConsoleOptions": "openOnSessionStart",
+            "outFiles": [
+                "${workspaceFolder}/out/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "typescript4",
+            "program": "${workspaceFolder}/src/scripts/argentX/4.getPrivFromSeed-micro-starknet2.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,

@@ -32,7 +32,7 @@ async function main() {
     console.log('existing OZ account0 connected.\n');
 
     // Declare & deploy Test contract in devnet
-    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
+    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo060/test.json").toString("ascii"));
     const deployResponse = await account0.declareAndDeploy({ contract: compiledTest, salt: "0" });
     // In case of constructor, add for example : ,constructorCalldata: [encodeShortString('Token'),encodeShortString('ERC20'),account.address,],
 
