@@ -18,7 +18,6 @@ async function main() {
         process.exit(1);
     }
     const provider = new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });
-
     console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
 
     // connect existing predeployed account 0 of Devnet
@@ -30,7 +29,7 @@ async function main() {
     console.log('existing OZ account0 connected.\n');
 
     // Declare Test contract in devnet
-    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
+    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo060/test.json").toString("ascii"));
     const { suggestedMaxFee: fee1 } = await account0.estimateDeclareFee({ contract: compiledTest });
     console.log("suggestedMaxFee =", fee1.toString(),"wei");
     const declareResponse = await account0.declare({ contract: compiledTest}, { maxFee: fee1 * 11n / 10n });

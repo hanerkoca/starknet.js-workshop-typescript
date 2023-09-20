@@ -33,7 +33,7 @@ async function main() {
 
     // Deploy Test instance in devnet
     const testClassHash = "0xff0378becffa6ad51c67ac968948dbbd110b8a8550397cf17866afebc6c17d";
-    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/test.json").toString("ascii"));
+    const compiledTest = json.parse(fs.readFileSync("./compiledContracts/cairo060/test.json").toString("ascii"));
     //estimate fee
     const { suggestedMaxFee: estimatedFee1 } = await account0.estimateDeployFee({ classHash: testClassHash });
     const deployResponse = await account0.deployContract({ classHash: testClassHash }, { maxFee: estimatedFee1*11n/10n });

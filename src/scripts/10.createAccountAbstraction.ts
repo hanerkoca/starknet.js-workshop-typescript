@@ -42,7 +42,7 @@ async function main() {
     console.log('publicKey=', AAstarkKeyPub);
     //declare my wallet contract
     const compiledAAaccount = json.parse(
-        fs.readFileSync("./compiledContracts/myAccountAbstraction.json").toString("ascii")
+        fs.readFileSync("./compiledContracts/cairo060/myAccountAbstraction.json").toString("ascii")
     );
 //    const AAaccountClashHass = "0x1d926edb81b7ef0efcb67dd4558a6dffc2bf31a8bc9c3fe7832a5ec3d1b70da";
     const { transaction_hash: declTH, class_hash: decCH } = await account0.declare({ contract: compiledAAaccount });

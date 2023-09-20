@@ -32,10 +32,10 @@ async function main() {
     console.log('OZ account0 connected.\n');
 
 
-    // new Open Zeppelin account v0.6.1 :
+    // new Open Zeppelin account v0.7.0 (Cairo 1) :
 
     // Generate public and private key pair.
-    const privateKey = process.env.OZ_NEW_ACCOUNT_PRIVKEY ?? "";
+    const privateKey = process.env.C20_NEW_ACCOUNT_PRIVKEY!;
     // or for random private key :
     //const privateKey = stark.randomAddress();
     console.log('New account :\nprivateKey=', privateKey);
@@ -43,9 +43,12 @@ async function main() {
     console.log('publicKey=', starkKeyPub);
     //declare OZ wallet contract
     const compiledOZAccount = json.parse(
-        fs.readFileSync("./compiledContracts/Account_0_6_1.json").toString("ascii")
+        fs.readFileSync("./compiledContracts/cairo210/openzeppelin070Account.sierra.json").toString("ascii")
     );
-    const { transaction_hash: declTH, class_hash: decClassHash } = await account0.declare({ contract: compiledOZAccount });
+    const casmOZAccount = json.parse(
+        fs.readFileSync("./compiledContracts/cairo210/openzeppelin070Account.casm.json").toString("ascii")
+    );
+    const { transaction_hash: declTH, class_hash: decClassHash } = await account0.declare({ contract: compiledOZAccount, casm: casmOZAccount });
     console.log('OpenZeppelin account class hash =', decClassHash);
     await provider.waitForTransaction(declTH);
 
@@ -53,12 +56,13 @@ async function main() {
     const OZaccountConstructorCallData = CallData.compile({ publicKey: starkKeyPub });
     const OZcontractAddress = hash.calculateContractAddressFromHash( starkKeyPub,decClassHash, OZaccountConstructorCallData, 0);
     console.log('Precalculated account address=', OZcontractAddress);
+    
     // fund account address before account creation
-        
-    const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": OZcontractAddress, "amount": 50_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
-    console.log('Answer mint =', answer); //50 ETH
+    const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": OZcontractAddress, "amount": 10_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
+    console.log('Answer mint =', answer); // 10 ETH
+    
     // deploy account
-    const OZaccount = new Account(provider, OZcontractAddress, privateKey);
+    const OZaccount = new Account(provider, OZcontractAddress, privateKey,"1");
     const { suggestedMaxFee: estimatedFee1 } = await OZaccount.estimateAccountDeployFee({ 
         classHash: decClassHash, 
         addressSalt: starkKeyPub, 
@@ -68,7 +72,7 @@ async function main() {
         constructorCalldata: OZaccountConstructorCallData, 
         addressSalt: starkKeyPub 
     }, { maxFee: estimatedFee1*11n/10n });
-    //const { transaction_hash, contract_address } = await OZaccount.deployAccount({ classHash: OZaccountClashHass, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub });
+    //const { transaction_hash, contract_address } = await OZaccount.deployAccount({ classHash: OZaccountClashHass, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub }); // without estimateFee
     console.log('✅ New OpenZeppelin account created.\n   final address =', contract_address);
     await provider.waitForTransaction(transaction_hash);
 

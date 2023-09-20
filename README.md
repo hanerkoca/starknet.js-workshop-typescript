@@ -20,7 +20,7 @@ If necessary :
 
 - Install latest LTS version of node [here](https://kinsta.com/blog/how-to-install-node-js/#how-to-install-nodejs-on-linux)
 - Install Python 3.9  [here](https://linuxize.com/post/how-to-install-python-3-9-on-ubuntu-20-04/)
-- Create a Starknet environment [here](https://starknet.io/docs/quickstart.html), with cairo 0.12.0 minimum.
+- Create a Starknet environment [here](https://starknet.io/docs/quickstart.html), with cairo 0.12.1 minimum.
 - Install Starknet-devnet  [here](https://shard-labs.github.io/starknet-devnet/docs/intro)
   
 Run `npm install` in this directory.
@@ -29,11 +29,11 @@ The file .env defines the network to use. It's currently configured for the loca
 
 This repo is configured to be able to perform debugging of your typescript code. Just CTRL+SHIFT+D, then click on the green arrow.
 
-This script has been written with cairo v0.12.0, starknet-devnet v0.5.5, starknet.js v5.16.0. Due to fast iterations of Starknet and Cairo, this script will probably be quickly out-of-date.
+This script has been written with cairo v0.12.1, starknet-devnet v0.6.2, starknet.js v5.19.6. Due to fast iterations of Starknet and Cairo, this script will probably be quickly out-of-date.
 
 
 
-The Account contract used in this workshop is made by [OpenZeppelin](https://github.com/OpenZeppelin/cairo-contracts), contract version 0.6.1.
+The Account contract used in this workshop is made by [OpenZeppelin](https://github.com/OpenZeppelin/cairo-contracts), contract version 0.7.0.
 
 ##  🚀 Start the demo 🚀  🎆 ↘️  💩
 
@@ -61,7 +61,7 @@ In the folder 'scripts', you can find many pedagogical codes :
     - Create your abstracted account [script10](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/10.createAccountAbstraction.ts)
 - Connect account
     - Connect predeployed account (only on devnet) [script1](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/1.openPredeployedAccount.ts)
-    - Connect created account [script8](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/8.ConnectWallet.ts)
+    - Connect created account [script8](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/8.ConnectAccount.ts)
 ### Contracts :
 - Declare contract [script9](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/9.declareContract.ts)
 - Deploy contract [script4](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/scripts/4.deployContractOZ.ts)

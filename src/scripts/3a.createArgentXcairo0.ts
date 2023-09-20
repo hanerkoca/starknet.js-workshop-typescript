@@ -1,5 +1,5 @@
 // Deploy a new ArgentX wallet.
-// launch with : npx ts-node src/scripts/3.createNewArgentXaccount.ts
+// launch with : npx ts-node src/scripts/3a.createArgentXcairo0.ts
 // Coded with Starknet.js v5.16.0
 
 
@@ -34,8 +34,8 @@ async function main() {
     // const argentXproxyClassHash = "0x4a5cae61fa8312b0a3d0c44658b403d3e4197be80027fd5020ffcdf0c803331";
     // const argentXaccountClassHash = "0x5cd533592dd40ee07a087e120dd30a7bd24efd54471a65755cc1d553094c7d7";
 
-    const ArgentXproxyCompiled = json.parse(fs.readFileSync("./compiledContracts/ArgentProxy_0_2_3.json").toString("ascii"));
-    const ArgentXaccountCompiled = json.parse(fs.readFileSync("./compiledContracts/ArgentAccount_0_2_3.json").toString("ascii"));
+    const ArgentXproxyCompiled = json.parse(fs.readFileSync("./compiledContracts/cairo060/ArgentProxy_0_2_3.json").toString("ascii"));
+    const ArgentXaccountCompiled = json.parse(fs.readFileSync("./compiledContracts/cairo060/ArgentAccount_0_2_3.json").toString("ascii"));
 
     // declare & deploy ArgentX proxy
     const { transaction_hash: AXPth, class_hash: AXPch } = await account0.declare({ contract: ArgentXproxyCompiled });
