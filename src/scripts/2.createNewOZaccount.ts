@@ -1,6 +1,6 @@
 // create a new OZ account in devnet
 // launch with npx ts-node src/scripts/2.createNewOZaccount.ts
-// Coded with Starknet.js v5.16.0
+// Coded with Starknet.js v5.21.0, Starknet-devnet v0.6.3
 
 
 import { Account, ec, json, Provider, hash, CallData } from "starknet";
@@ -62,7 +62,7 @@ async function main() {
     console.log('Answer mint =', answer); // 10 ETH
     
     // deploy account
-    const OZaccount = new Account(provider, OZcontractAddress, privateKey,"1");
+    const OZaccount = new Account(provider, OZcontractAddress, privateKey);
     const { suggestedMaxFee: estimatedFee1 } = await OZaccount.estimateAccountDeployFee({ 
         classHash: decClassHash, 
         addressSalt: starkKeyPub, 

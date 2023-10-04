@@ -59,7 +59,7 @@ async function main() {
     console.log('Answer mint =', answer); // 10 ETH
 
     // deploy ArgentX account
-    const accountAX = new Account(provider, accountAXAddress, privateKeyAX, "1"); // do not forget the "1" at the end
+    const accountAX = new Account(provider, accountAXAddress, privateKeyAX); 
     const deployAccountPayload = {
         classHash: contractAXclassHash,
         constructorCalldata: ConstructorAXCallData,
