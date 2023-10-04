@@ -28,7 +28,7 @@ async function main() {
     const account = new Account(provider, accountAddress, privateKey);
     console.log('✅ OZ predeployed account 0 connected.');
 
-    const compiledDeployment = json.parse(fs.readFileSync("compiledContracts/merkle-verify.json").toString("ascii"));
+    const compiledDeployment = json.parse(fs.readFileSync("compiledContracts/cairo060/merkle-verify.json").toString("ascii"));
     const root ="0x1497b72c82b80429799fe65afa3edc5492ee848deba69418c474504792756a0"
     const deployResponse = await account.declareAndDeploy({ contract: compiledDeployment,
         constructorCalldata: [root]});

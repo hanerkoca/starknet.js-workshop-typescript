@@ -2,7 +2,7 @@
 // use Starknet.js v5.19.5 (+ commit), starknet-devnet 0.6.2
 // launch with npx ts-node src/scripts/braavos/4.signerAbstractionBraavos.ts
 
-import { Provider, Account, Calldata, Signer, BigNumberish, ec } from "starknet";
+import { Provider, Account, Calldata, AbstractedSigner, BigNumberish, ec } from "starknet";
 import { account3BraavosTestnetPrivateKey } from "../../A1priv/A1priv";
 import { calculateAddressBraavos, abstractionFnsBraavos, proxyConstructorBraavos, BraavosProxyClassHash } from "./4a.abstractionBraavos";
 import axios from "axios";
@@ -27,7 +27,7 @@ async function main() {
 
     // ********* deploy Braavos 
     const privateKeyBraavos = account3BraavosTestnetPrivateKey;
-    const signerBraavos = new Signer(privateKeyBraavos, abstractionFnsBraavos);
+    const signerBraavos = new AbstractedSigner(privateKeyBraavos, abstractionFnsBraavos);
     const starkKeyPubBraavos = ec.starkCurve.getStarkKey(privateKeyBraavos);
     const proxyAddressBraavos = calculateAddressBraavos(privateKeyBraavos);
     const accountClassHashBraavos = "0x0105c0cf7aadb6605c9538199797920884694b5ce84fc68f92c832b0c9f57ad9"; // 27/aug/2023, will probably change over time

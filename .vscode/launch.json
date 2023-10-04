@@ -10,8 +10,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "typescript2a",
-            "program": "${workspaceFolder}/src/scripts/argentX/2a.getPrivFromSeed-Ethers2.ts",
+            "name": "typescript1",
+            "program": "${workspaceFolder}/src/starknet_jsExistingAccount.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,
@@ -23,7 +23,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "typescript4",
+            "name": "typescript2",
             "program": "${workspaceFolder}/src/scripts/argentX/4.getPrivFromSeed-micro-starknet2.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,

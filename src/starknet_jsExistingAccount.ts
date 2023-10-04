@@ -1,6 +1,6 @@
 // Deploy and use an ERC20, monetized by an existing account
 // Launch with : npx ts-node src/starknet_jsExistingAccount.ts
-// Coded with Starknet.js v5.13.1, starknet-devnet 0.5.3
+// Coded with Starknet.js v5.19.5, starknet-devnet 0.5.3
 
 import fs from "fs";
 import { Account, Contract, defaultProvider, json, Provider, CallData, RawArgs, Calldata, RawArgsArray, RawArgsObject, Call, cairo, uint256, Uint256 } from "starknet";
@@ -10,6 +10,14 @@ dotenv.config();
 //        👇👇👇
 // 🚨🚨🚨 launch 'starknet-devnet --seed 0' before using this script
 //        👆👆👆
+
+function formatBalance(qty: bigint, decimals: number): string {
+    const balance = String("0").repeat(decimals) + qty.toString();
+    const rightCleaned = balance.slice(-decimals).replace(/(\d)0+$/gm, '$1');
+    const leftCleaned = BigInt(balance.slice(0, balance.length - decimals)).toString();
+    return leftCleaned + "." + rightCleaned;
+}
+
 async function main() {
     //initialize Provider with DEVNET, reading .env file
     if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
@@ -66,6 +74,7 @@ async function main() {
     // },
 
     const compiledErc20mintable = json.parse(fs.readFileSync("./compiledContracts/cairo060/ERC20MintableOZ_0_6_1.json").toString("ascii"));
+    const DECIMALS=18;
 
     // define the constructor :
     const initialTk: Uint256 = cairo.uint256(100);
@@ -73,7 +82,7 @@ async function main() {
     const ERC20ConstructorCallData: Calldata = erc20CallData.compile("constructor", {
         name: "niceToken",
         symbol: "NIT",
-        decimals: 18,
+        decimals: DECIMALS,
         initial_supply: initialTk,
         recipient: account0.address,
         owner: account0.address
@@ -96,7 +105,7 @@ async function main() {
     // Check balance - should be 100
     console.log(`Calling StarkNet for account balance...`);
     const balanceInitial = await erc20.balanceOf(account0.address);
-    console.log("account0 has a balance of :", uint256.uint256ToBN(balanceInitial.balance).toString());
+    console.log("account0 has a balance of :", formatBalance(uint256.uint256ToBN(balanceInitial.balance),DECIMALS));
 
     // Mint 1000 tokens to account address
     const amountToMint = cairo.uint256(1000);
@@ -108,7 +117,7 @@ async function main() {
     // Check balance - should be 1100
     console.log(`Calling StarkNet for account balance...`);
     const balanceBeforeTransfer = await erc20.balanceOf(account0.address);
-    console.log("account0 has a balance of :", uint256.uint256ToBN(balanceBeforeTransfer.balance).toString());
+    console.log("account0 has a balance of :", formatBalance(uint256.uint256ToBN(balanceBeforeTransfer.balance),DECIMALS));
 
     // Execute tx transfer of 2x10 tokens, showing 2 ways to write data in Starknet
     console.log(`Invoke Tx - Transfer 2x10 tokens back to erc20 contract...`);
@@ -131,7 +140,7 @@ async function main() {
     // Check balance after transfer - should be 1070
     console.log(`Calling StarkNet for account balance...`);
     const balanceAfterTransfer = await erc20.balanceOf(account0.address);
-    console.log("account0 has a balance of :", uint256.uint256ToBN(balanceAfterTransfer.balance).toString());
+    console.log("account0 has a balance of :", formatBalance(uint256.uint256ToBN(balanceAfterTransfer.balance),DECIMALS));
     console.log("✅ Test completed.");
 }
 main()

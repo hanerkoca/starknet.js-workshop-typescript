@@ -26,10 +26,12 @@ async function main() {
     //const provider = new RpcProvider({ nodeUrl: "https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/"+lavaMainnetKey});
     // Nethermind Juno node rpc for Mainnet (only whitelisted access) :
     //const provider = new RpcProvider({ nodeUrl: junoNMmainnet });
+    // alchemy
+    const provider = new RpcProvider({ nodeUrl: 'https://starknet-mainnet.g.alchemy.com/v2/' + alchemyKey });
     // mainnet sequencer (soon deprecated) :
     //const provider = new SequencerProvider({ network: constants.NetworkName.SN_MAIN });
     // my personal local Pathfinder node
-    const provider = new RpcProvider({ nodeUrl: 'http://192.168.1.99:9545/rpc/v0.4' });
+    //const provider = new RpcProvider({ nodeUrl: 'http://192.168.1.99:9545/rpc/v0.4' });
 
 
     // initialize existing Argent X account

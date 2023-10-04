@@ -1,6 +1,6 @@
 // Deploy and use an ERC20, monetized by a new account
 // Launch with : npx ts-node src/starknet_jsNewAccount.ts
-// Coded with Starknet.js v5.13.1, starknet-devnet 0.5.3
+// Coded with Starknet.js v5.21.0, starknet-devnet 0.6.3
 
 import fs from "fs";
 import { Account, Contract, defaultProvider, ec, json, stark, Provider, shortString, uint256, hash, CallData, Call, Calldata, RawArgsObject, RawArgsArray, cairo, Uint256 } from "starknet";
@@ -12,6 +12,14 @@ dotenv.config();
 //        👇👇👇
 // 🚨🚨🚨 launch 'starknet-devnet --seed 0' before using this script
 //        👆👆👆
+
+function formatBalance(qty: bigint, decimals: number): string {
+    const balance = String("0").repeat(decimals) + qty.toString();
+    const rightCleaned = balance.slice(-decimals).replace(/(\d)0+$/gm, '$1');
+    const leftCleaned = BigInt(balance.slice(0, balance.length - decimals)).toString();
+    return leftCleaned + "." + rightCleaned;
+}
+
 async function main() {
     //initialize Provider with DEVNET, reading .env file
     resetDevnetNow();
@@ -58,7 +66,7 @@ async function main() {
     const { data: answer } = await axios.post('http://127.0.0.1:5050/mint', { "address": C20contractAddress, "amount": 50_000_000_000_000_000_000, "lite": true }, { headers: { "Content-Type": "application/json" } });
     console.log('Answer mint =', answer);
     // deploy account
-    const accountC20 = new Account(provider, C20contractAddress, privateKeyC20, "1");
+    const accountC20 = new Account(provider, C20contractAddress, privateKeyC20); // with Starknet.js v5.21.0, automatic recognize of the Cairo version of the account
     const { transaction_hash, contract_address } = await accountC20.deployAccount({ classHash: decCH, constructorCalldata: accountConstructorCallData, addressSalt: starkKeyPubC20 });
     console.log('New Cairo 2.0.0 Starkware account created.\n   final address =', contract_address ,accountC20.cairoVersion, );
     await provider.waitForTransaction(transaction_hash);
@@ -101,6 +109,7 @@ async function main() {
     // },
 
     const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/cairo060/ERC20MintableOZ_0_6_1.json").toString("ascii"));
+    const DECIMALS=18;
     const initialTk: Uint256 = cairo.uint256(100);
 
     // define the constructor :
@@ -109,7 +118,7 @@ async function main() {
     const ERC20ConstructorCallData4: Calldata = erc20CallData.compile("constructor", [
         "niceToken",
         "NIT",
-        18,
+        DECIMALS,
         initialTk, // needs a Uint256 type for Cairo 0 (with Cairo 1, '100n' is accepted)
         account0.address,
         account0.address

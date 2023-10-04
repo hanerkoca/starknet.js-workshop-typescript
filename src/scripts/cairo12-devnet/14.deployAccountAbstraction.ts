@@ -39,7 +39,7 @@ async function main() {
     // console.log("Class =",contract.entry_points_by_type);
     // ********* deploy Abstraction 
     const privateKeyAbstraction = "0x7aadb6605c9538199797920884694b5ce84fc68f92c832b0";
-    const signerAbstraction = new Signer(privateKeyAbstraction, abstractionFns);
+    const signerAbstraction = new AbstractedSigner(privateKeyAbstraction, abstractionFns);
     const starkKeyPubAbstraction = ec.starkCurve.getStarkKey(privateKeyAbstraction);
     console.log("account pubKey =", starkKeyPubAbstraction);
     const addressAbstraction = hash.calculateContractAddressFromHash(

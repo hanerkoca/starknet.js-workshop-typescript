@@ -2,7 +2,7 @@
 // use Starknet.js v5.19.5 (+ commit), starknet-devnet 0.6.2
 // launch with npx ts-node src/scripts/cairo12-devnet/14a.testAccountAbstraction.ts
 
-import { Provider, Account, Calldata, Signer, BigNumberish, ec, hash, json, CallData, Contract, cairo, TypedData, WeierstrassSignatureType, Signature, ArraySignatureType, encode } from "starknet";
+import { Provider, Account, Calldata, AbstractedSigner, BigNumberish, ec, hash, json, CallData, Contract, cairo, TypedData, WeierstrassSignatureType, Signature, ArraySignatureType, encode } from "starknet";
 import { abstractionFns } from "./14b.myAccountAbstractionMod";
 import fs from "fs";
 import axios from "axios";
@@ -33,7 +33,7 @@ async function main() {
     // ********* Abstracted transactions 
     const privateKeyAbstraction = "0x7aadb6605c9538199797920884694b5ce84fc68f92c832b0";
     const addressAbstraction = "0x02f5f0607b5059cc907375bd936d40faf9695a58dd5f73b413922a80bf279428";
-    const signerAbstraction = new Signer(privateKeyAbstraction, abstractionFns);
+    const signerAbstraction = new AbstractedSigner(privateKeyAbstraction, abstractionFns);
     const starkKeyPubAbstraction = ec.starkCurve.getStarkKey(privateKeyAbstraction);
     const fullPublicKey = encode.addHexPrefix(encode.buf2hex(ec.starkCurve.getPublicKey(privateKeyAbstraction, false)));
     const accountAbstraction = new Account(provider, addressAbstraction, signerAbstraction, "1");

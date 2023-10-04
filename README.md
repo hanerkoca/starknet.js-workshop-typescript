@@ -78,7 +78,8 @@ In the folder 'scripts', you can find many pedagogical codes :
     - with a signature : account.execute [workshop](https://github.com/PhilippeR26/starknet.js-workshop-typescript/blob/main/src/starknet_jsExistingAccount.ts#L69)
 ### Others :
 
-You can find in this repo many other scripts. Dig in and find many usefull exemples of code.
+You can find in this repo many other scripts. Dig in and find many usefull exemples of code.  
+To simplify the test of these scripts, take advantage to install the extension `code runner`. In the code window, right click, then `run code`.
 
 ## Cairo 1 :
 

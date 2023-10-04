@@ -19,7 +19,7 @@ async function main() {
 
     // // ******* TESTNET ************
     // // Alchemy node rpc for Testnet (do not work today) :
-    // const providerAlchemyTestnet = new RpcProvider({ nodeUrl: 'https://starknet-goerli.g.alchemy.com/v2/' + alchemyKey });
+    const providerAlchemyTestnet = new RpcProvider({ nodeUrl: 'https://starknet-goerli.g.alchemy.com/v3/' + alchemyKey });
     // // Infura node rpc for Testnet :
     //const providerTestnetInfura = new RpcProvider({ nodeUrl: 'https://starknet-goerli.infura.io/v3/' + infuraKey });
     // // Blast node rpc for Testnet :
@@ -27,11 +27,11 @@ async function main() {
     // // Nethermind Juno node rpc for Testnet (only whitelisted access) :
     // const providerNethermindTestnet = new RpcProvider({ nodeUrl: junoNMtestnet });
     // // Lava node rpc for Testnet : 
-    const providerLavaTestnetPublic = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" });
+    // const providerLavaTestnetPublic = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" });
     // // Testnet 1 sequencer (soon deprecated):
     // const providerTestnet = new SequencerProvider({ network: constants.NetworkName.SN_GOERLI });
 
-    const provider = providerLavaTestnetPublic;
+    const provider = providerAlchemyTestnet;
     // initialize existing Argent X account
     
     const account0Address = account2TestnetAddress;
