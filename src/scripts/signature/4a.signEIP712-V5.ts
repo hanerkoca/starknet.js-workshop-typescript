@@ -97,7 +97,7 @@ async function main() {
             ]
         },
     };
-    const {signature: signature2 } = await account.signMessage(typedDataValidate);
+    const signature2  = await account.signMessage(typedDataValidate);
     const sig2arr=signature2 as ArraySignatureType;
     const sig2rs=signature2 as WeierstrassSignatureType;
 

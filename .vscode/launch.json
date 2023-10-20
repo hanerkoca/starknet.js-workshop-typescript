@@ -11,7 +11,7 @@
             "type": "node",
             "request": "launch",
             "name": "typescript1",
-            "program": "${workspaceFolder}/src/starknet_jsExistingAccount.ts",
+            "program": "${workspaceFolder}/src/scripts/cairo12-devnet/16.deploySmall.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,

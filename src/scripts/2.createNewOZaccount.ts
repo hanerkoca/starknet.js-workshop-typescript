@@ -3,7 +3,7 @@
 // Coded with Starknet.js v5.21.0, Starknet-devnet v0.6.3
 
 
-import { Account, ec, json, Provider, hash, CallData } from "starknet";
+import { Account, ec, json, Provider, hash, CallData, RpcProvider } from "starknet";
 import fs from "fs";
 import axios from "axios";
 import * as dotenv from "dotenv";
@@ -14,20 +14,12 @@ dotenv.config();
 // 🚨🚨🚨 launch 'starknet-devnet --seed 0' before using this script
 //        👆👆👆
 async function main() {
-    //initialize Provider with DEVNET, reading .env file
-    if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
-        console.log("This script work only on local devnet.");
-        process.exit(1);
-    }
-    const provider = new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });
-
-    console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" } ); // only starknet-devnet-rs
+    console.log("Provider connected.");
 
     // Connect existing predeployed account 0 of Devnet
-    console.log('OZ_ACCOUNT_DEVNET_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
-    console.log('OZ_ACCOUNT_DEVNET_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
-    const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
-    const account0Address: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
+    const privateKey0 = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
+    const account0Address: string = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";    
     const account0 = new Account(provider, account0Address, privateKey0);
     console.log('OZ account0 connected.\n');
 

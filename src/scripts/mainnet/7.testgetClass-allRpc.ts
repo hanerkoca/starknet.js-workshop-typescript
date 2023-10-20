@@ -46,18 +46,22 @@ async function main() {
     const providerNethermindTestnet = new RpcProvider({ nodeUrl: junoNMtestnet });
     // Lava node rpc for Testnet : 
     const providerTestnetLavaPublic = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" });
+    // with your own local Pathfinder node, in your local network : 
+    const providerPathfinderTestnetRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.99:9545/rpc/v0.4' });
+    // with your own local Pathfinder node, in the same computer : 
+    const providerPathfinderTestnetRpcLocComputer = new RpcProvider({ nodeUrl: 'http://127.0.0.1:9545/rpc/v0.4' });
     // Testnet 1 sequencer (soon deprecated):
     const providerTestnet = new SequencerProvider({ network: constants.NetworkName.SN_GOERLI });
 
-    // ******* TESTNET2 ************
-    // Infura node rpc for Testnet2 :
-    const providerInfuraTestnet2 = new RpcProvider({ nodeUrl: 'https://starknet-goerli2.infura.io/v3/' + infuraKey });
-    // Blast node rpc for Testnet2 :
-    const providerBlastTestnet2 = new RpcProvider({ nodeUrl: 'https://starknet-testnet-2.blastapi.io/' + blastKey + "/rpc/v0.4" });
-    // Nethermind Juno node rpc for Testnet 2 :
-    const providerNethermindTestnet2 = new RpcProvider({ nodeUrl: junoNMtestnet2 });
-    // Testnet 2 sequencer  (soon deprecated) :
-    const providerTestnet2 = new SequencerProvider({ network: constants.NetworkName.SN_GOERLI2 });
+    // // ******* TESTNET2 ************
+    // // Infura node rpc for Testnet2 :
+    // const providerInfuraTestnet2 = new RpcProvider({ nodeUrl: 'https://starknet-goerli2.infura.io/v3/' + infuraKey });
+    // // Blast node rpc for Testnet2 :
+    // const providerBlastTestnet2 = new RpcProvider({ nodeUrl: 'https://starknet-testnet-2.blastapi.io/' + blastKey + "/rpc/v0.4" });
+    // // Nethermind Juno node rpc for Testnet 2 :
+    // const providerNethermindTestnet2 = new RpcProvider({ nodeUrl: junoNMtestnet2 });
+    // // Testnet 2 sequencer  (soon deprecated) :
+    // const providerTestnet2 = new SequencerProvider({ network: constants.NetworkName.SN_GOERLI2 });
 
     // ******* DEVNETS ************
     // Starknet-devnet sequencer :

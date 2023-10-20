@@ -60,7 +60,7 @@ async function main() {
 
     // console.log(myTestContract.functions);
     const blockNum = await provider.getBlock("latest");
-    wait(800);
+    await wait(800);
     const count1 = await myTestContract.get_counter();
     console.log("counter =", count1, "\nBlock# =", blockNum.block_number);
     // use 100 to have a success.
