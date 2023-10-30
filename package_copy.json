@@ -24,7 +24,7 @@
     "micro-starknet": "^0.2.3",
     "pako": "^2.1.0",
     "starknet1": "file:/D/starknetFork/starknet.js",
-    "starknet2": "0xs34n/starknet.js#a5b628fb0248a5c8caddc985cf93b6d53a69bf04",
+    "starknet2": "starknet-io/starknet.js#a5b628fb0248a5c8caddc985cf93b6d53a69bf04",
     "starknet3": "^5.14.0"
   },
   "devDependencies": {

@@ -2,30 +2,29 @@
 // use Starknet.js v5.17, starknet-devnet 0.5.5
 // launch with npx ts-node src/scripts/cairo13-devnet/3.deployTestSpan.ts
 
-import { Provider, RpcProvider, Account, Contract, json, constants, GetTransactionReceiptResponse, InvokeFunctionResponse, shortString, ec, encode } from "starknet";
+import { Provider, RpcProvider, Account, Contract, json, constants, GetTransactionReceiptResponse, InvokeFunctionResponse, shortString, ec, encode, WeierstrassSignatureType } from "starknet";
 import fs from "fs";
-import { accountTestnet4privateKey, accountTestnet4Address } from "../../A1priv/A1priv"
+//import { accountTestnet4privateKey, accountTestnet4Address } from "../../A1priv/A1priv"
 import * as dotenv from "dotenv";
 import { resetDevnetNow } from "../resetDevnetFunc";
 dotenv.config();
 
 //          👇👇👇
-// 🚨🚨🚨   Launch : katana --accounts 3 --seed 0 --port 5001
+// 🚨🚨🚨   Launch : katana --accounts 3 --seed 0 
+// reset devnet before launch.
 //          👆👆👆
 
 
 async function main() {
     //initialize Provider 
-    const provider = new RpcProvider({ nodeUrl: 'http://0.0.0.0:5001' });
+    const provider = new RpcProvider({ nodeUrl: 'http://0.0.0.0:5050' });
     console.log('✅ Connected to Katana devnet.');
 
     // resetDevnetNow();
     // initialize existing predeployed account 0 of Devnet
-    const privateKey = "0x300001800000000300000180000000000030000000000003006001800006600";
-    //const privateKey = "0x079c733b28fb8555cdffc3984d521df11c234ae7c7106ab56bdc175595511a64";
-    const accountAddress: string = "0x3ee9e18edc71a6df30ac3aca2e0b02a198fbce19b7480a63a0d71cbd76652e0";
-    const pubK = "0x1b7b37a580d91bc3ad4f9933ed61f3a395e0e51c9dd5553323b8ca3942bb44e";
-    //const pubK = "0x6586e6776038bda0aa5a58ae0bf0debf59626abddbaad7af92396526e01cbe5";
+    const privateKey = "0x1800000000300000180000000000030000000000003006001800006600";
+    const accountAddress: string = "0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f8160973";
+    const pubKey="0x2b191c2f3ecf685a91af7cf72a43e7b90e2e41220175de5c4f7498981b10053";
 
     const account0 = new Account(provider, accountAddress, privateKey, "0");
     console.log('✅ Predeployed account connected\nOZ_ACCOUNT_ADDRESS=', account0.address);
@@ -49,7 +48,8 @@ async function main() {
     const nonce = await account0.getNonce();
     console.log("nonce =", nonce);
     const msgHash = "0x35ba2ab5d05cd48e760438341e9b6f2d05dbc7d1842104b91724d993b3e61a1";
-    const res2 = await myAccountContract.isValidSignature(msgHash, ['0x7db07a0efe565d73246586c6e05a8cc9a28fc433f3434c424d5051c1c15a2d2', '0x75160c642b50775658b313dfba110300c5203f900d701c93990065778c28a29']);
+    const calculatedSignature: WeierstrassSignatureType = ec.starkCurve.sign(msgHash,privateKey);
+    const res2 = await myAccountContract.isValidSignature(msgHash, [calculatedSignature.r, calculatedSignature.s]);
     // const res2 = await myAccountContract.isValidSignature(msgHash, [58305781414811813910822436322716203844397183351016274693545010133635199090n,1008460282911861562060287573023180307713575270942446864283983351311853564605n]);
 
     console.log("isValidSignature =", res2);

@@ -11,21 +11,21 @@ import { infuraKey, account4MainnetAddress, account4MainnetPrivateKey } from "..
 
 async function main() {
     // initialize Provider 
-    //const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" } ); // only starknet-devnet-rs
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" } ); // only starknet-devnet-rs
     // const provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" }); // testnet
-    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.4" }); // local pathfinder testnet node
+    //const provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.4" }); // local pathfinder testnet node
 
     // Check that communication with provider is OK
     const ci = await provider.getChainId();
     console.log("chain Id =", ci);
 
     // //devnet-rs
-    // const privateKey = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
-    // const accountAddress: string = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
+    const accountAddress: string = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
+     const privateKey = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
 
     // initialize existing Argent X testnet  account
-    const accountAddress = account5TestnetAddress
-    const privateKey = account5TestnetPrivateKey;
+    // const accountAddress = account5TestnetAddress
+    // const privateKey = account5TestnetPrivateKey;
 
     // // initialize existing Argent X mainnet  account
     // const privateKey = account4MainnetPrivateKey;
@@ -39,6 +39,8 @@ async function main() {
 
     const ch = hash.computeSierraContractClassHash(compiledSierra);
     console.log("Class hash calc =", ch);
+    const compCH=hash.computeCompiledClassHash(compiledCasm);
+    console.log("compiled class hash =",compCH);
 
     const declareResponse = await account0.declare({ contract: compiledSierra, casm: compiledCasm });
     const contractClassHash = declareResponse.class_hash;

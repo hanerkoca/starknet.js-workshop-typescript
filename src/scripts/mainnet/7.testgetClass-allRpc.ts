@@ -32,6 +32,8 @@ async function main() {
     const providerPathfinderMainnetRpcLocComputer = new RpcProvider({ nodeUrl: 'http://127.0.0.1:9545/rpc/v0.4' });
     // with your own local Juno node, in the same computer : 
     const providerJunoMainnetRpcLocComputer = new RpcProvider({ nodeUrl: 'http://127.0.0.1:6060' });
+    // with your own local Juno node, in your local network : 
+    const providerJunoMainnetRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.99:6060' });
     // mainnet sequencer (soon deprecated) :
     const providerMainnetSequencer = new SequencerProvider({ network: constants.NetworkName.SN_MAIN });
 
