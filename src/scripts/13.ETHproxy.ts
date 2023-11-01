@@ -2,24 +2,24 @@
 // launch with npx ts-node src/scripts/13.ETHproxy.ts
 // Coded with Starknet.js v5.17.0
 
-import { Provider, Contract, Account, json, constants, num, uint256 } from "starknet";
+import { Contract, json, num, uint256, RpcProvider } from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 async function main() {
     // initialize provider
-    const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
+    const provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" });
 
     const ETHproxyAddress = "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7"; // address of ETH proxy
     const compiledProxy = await provider.getClassAt(ETHproxyAddress); // abi of proxy
     const proxyContract = new Contract(compiledProxy.abi, ETHproxyAddress, provider);
-    const {address:implementationAddress} = await proxyContract.implementation(); 
+    const { address: implementationAddress } = await proxyContract.implementation();
     // specific to this proxy : Implementation() returns an address of implementation.
     // Other proxies returns generaly a class hash of implementation
     console.log("implementation ERC20 Address =", num.toHex(implementationAddress));
-    const classHashERC20Class=await provider.getClassHashAt(num.toHex(implementationAddress)); // read the class hash related to this contract address.
-    console.log("classHash of ERC20 =",classHashERC20Class);
+    const classHashERC20Class = await provider.getClassHashAt(num.toHex(implementationAddress)); // read the class hash related to this contract address.
+    console.log("classHash of ERC20 =", classHashERC20Class);
     const compiledERC20 = await provider.getClassByHash(classHashERC20Class); // final objective : the answer contains the abi of the ERC20.
     fs.writeFileSync('./compiledContracts/erc20ETH.json', json.stringify(compiledERC20, undefined, 2));
 

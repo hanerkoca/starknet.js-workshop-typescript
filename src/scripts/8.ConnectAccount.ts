@@ -1,29 +1,28 @@
 // Connect an existing account in devnet.
 // launch with : npx ts-node src/scripts/8.ConnectWallet.ts
-// Coded with Starknet.js v5.16.0
+// Coded with Starknet.js v5.16.0, Starknet-devnet-rs v0.1.0
 
-import { Account, Provider } from "starknet";
+import { Account, RpcProvider } from "starknet";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 
 //        👇👇👇
-// 🚨🚨🚨 launch 'starknet-devnet --seed 0' before using this script
+// 🚨🚨🚨 launch 'cargo run --release -- --seed 0' in devnet-rs directory before using this script
 //         and also script 2, to create an account.
 //        👆👆👆
 async function main() {
-    //initialize Provider with DEVNET, reading .env file
-    if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
-        console.log("This script work only on local devnet.");
-        process.exit(1);
-    }
-    const provider = new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });
-    console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
-    // connect an existing OZ wallet
-    const privateKeyOZaccount = process.env.OZ_NEW_ACCOUNT_PRIVKEY ?? "";
-    const OZaccountAddress = process.env.OZ_NEW_ACCOUNT_ADDRESS ?? "";
-    const OZaccount = new Account(provider, OZaccountAddress, privateKeyOZaccount);
-    console.log('✅ Existing OpenZeppelin account connected.\n   at address =', OZaccount.address);
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" }); // only for starknet-devnet-rs
+    console.log("Provider connected to Starknet-devnet-rs");
+
+    // initialize existing predeployed account 0 of Devnet
+    console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
+    console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
+    const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
+    const accountAddress0: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
+    const account0 = new Account(provider, accountAddress0, privateKey0);
+    console.log("Account 0 connected.\n");
+    console.log('✅ Existing OpenZeppelin account connected.\n   at address =', account0.address);
 
 }
 main()

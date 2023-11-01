@@ -1,34 +1,28 @@
 // interact with a contract that is already deployed on devnet.
 // launch with npx ts-node src/scripts/11.CallInvokeContract.ts
-// Coded with Starknet.js v5.16.0
+// Coded with Starknet.js v5.16.0, Starknet-devnet-rs v0.1.0
 
-import { Provider, Contract, Account, json } from "starknet";
+import { Contract, Account, json, RpcProvider } from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 
 //          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
+// 🚨🚨🚨 launch 'cargo run --release -- --seed 0' in devnet-rs directory before using this script
 //          Launch also the script for deployement of Test (script5).
 //          👆👆👆
 async function main() {
-    //initialize Provider with DEVNET, reading .env file
-    if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
-        console.log("This script work only on local devnet.");
-        process.exit(1);
-    }
-    const provider = new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });
-    console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" }); // only for starknet-devnet-rs
+    console.log("Provider connected to Starknet-devnet-rs");
 
-    // connect existing predeployed account 0 of Devnet
-    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
-    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
+    // initialize existing predeployed account 0 of Devnet
+    console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
+    console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
     const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
-    const account0Address: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
-    const account0 = new Account(provider, account0Address, privateKey0);
-    console.log('existing OZ account0 connected.\n');
-
+    const accountAddress0: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
+    const account0 = new Account(provider, accountAddress0, privateKey0);
+    console.log("Account 0 connected.\n");
 
     // Connect the deployed Test instance in devnet
     const testAddress = "0x1e90aef7a2d5489f2f3707aae854c77e27f16dee6d34339eb93d18451c317c6"; // modify in accordance with result of script 5
@@ -38,7 +32,7 @@ async function main() {
 
     // Interactions with the contract with call & invoke
     myTestContract.connect(account0);
-    const {res} = await myTestContract.get_balance();
+    const { res } = await myTestContract.get_balance();
     const bal1b = await myTestContract.call("get_balance");
     console.log("Initial balance =", res);
     console.log("Initial balance =", res.toString());

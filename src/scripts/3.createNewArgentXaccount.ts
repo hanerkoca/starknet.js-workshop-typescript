@@ -1,6 +1,6 @@
 // Deploy a new ArgentX wallet (Cairo1 0.3.0).
 // launch with : npx ts-node ssrc/scripts/3.createNewArgentXaccount.ts
-// Coded with Starknet.js v5.19.5
+// Coded with Starknet.js v5.19.5, Starknet-devnet-rs v0.1.0
 
 import { Provider, RpcProvider, Account, ec, json, stark, hash, CallData, Contract } from "starknet";
 import { infuraKey } from "../A-MainPriv/mainPriv";
@@ -13,20 +13,19 @@ dotenv.config();
 
 
 //          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
+// 🚨🚨🚨 launch 'cargo run --release -- --seed 0' in devnet-rs directory before using this script
 //          👆👆👆
 async function main() {
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" }); // only for starknet-devnet-rs
+    console.log("Provider connected to Starknet-devnet-rs");
 
-    const provider = new Provider({ sequencer: { baseUrl: "http://127.0.0.1:5050" } });
-
-    // connect existing predeployed account 0 of Devnet
-    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
-    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
+    // initialize existing predeployed account 0 of Devnet
+    console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
+    console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
     const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
-    const account0Address: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
-    const account0 = new Account(provider, account0Address, privateKey0);
-    console.log('existing OZ account0 connected.\n');
-
+    const accountAddress0: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
+    const account0 = new Account(provider, accountAddress0, privateKey0);
+    console.log("Account 0 connected.\n");
     
     const accountAXsierra = json.parse(fs.readFileSync("./compiledContracts/cairo200/ArgentXaccount030.sierra.json").toString("ascii"));
     const accountAXcasm = json.parse(fs.readFileSync("./compiledContracts/cairo200/ArgentXaccount030.casm.json").toString("ascii"));

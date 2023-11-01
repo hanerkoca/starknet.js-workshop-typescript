@@ -1,16 +1,16 @@
 // Deploy and use an ERC20, monetized by a new account
 // Launch with : npx ts-node src/starknet_jsNewAccount.ts
-// Coded with Starknet.js v5.21.0, starknet-devnet 0.6.3
+// Coded with Starknet.js v5.21.0, Starknet-devnet-rs v0.1.0
 
 import fs from "fs";
-import { Account, Contract, defaultProvider, ec, json, stark, Provider, shortString, uint256, hash, CallData, Call, Calldata, RawArgsObject, RawArgsArray, cairo, Uint256 } from "starknet";
+import { Account, Contract, ec, json, uint256, hash, CallData, Call, Calldata, cairo, Uint256, RpcProvider } from "starknet";
 import axios from "axios";
 import * as dotenv from "dotenv";
 import { resetDevnetNow } from "./scripts/resetDevnetFunc";
 dotenv.config();
 
 //        👇👇👇
-// 🚨🚨🚨 launch 'starknet-devnet --seed 0' before using this script
+// 🚨🚨🚨 launch 'cargo run --release -- --seed 0' in devnet-rs directory before using this script
 //        👆👆👆
 
 function formatBalance(qty: bigint, decimals: number): string {
@@ -21,25 +21,16 @@ function formatBalance(qty: bigint, decimals: number): string {
 }
 
 async function main() {
-    //initialize Provider with DEVNET, reading .env file
-    resetDevnetNow();
-    if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
-        console.log("This script work only on local devnet.");
-        process.exit(1);
-    }
-    const provider = process.env.STARKNET_PROVIDER_BASE_URL === undefined ?
-        defaultProvider :
-        new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });
-    console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" }); // only for starknet-devnet-rs
+    console.log("Provider connected to Starknet-devnet-rs");
 
-    // Connect existing predeployed account 0 of Devnet
-    console.log('OZ_ACCOUNT0_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
-    console.log('OZ_ACCOUNT0_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
-    const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
-    // const starkKeyPair0 = ec.getKeyPair(privateKey0);
-    const account0Address: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
-    const account0 = new Account(provider, account0Address, privateKey0, "0");
-    console.log('OZ account0 connected, version ', account0.cairoVersion, '\n');
+    // initialize existing predeployed account 0 of Devnet
+    console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
+    console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
+    const privateKey = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
+    const accountAddress: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
+    const account0 = new Account(provider, accountAddress, privateKey);
+    console.log("Account 0 connected.\n");
 
     // creation of new Cairo 2.0.0 Starkware account in Devnet
     console.log('C20_NEW_ACCOUNT_PRIVATE_KEY=', process.env.C20_NEW_ACCOUNT_PRIVKEY);
@@ -68,7 +59,7 @@ async function main() {
     // deploy account
     const accountC20 = new Account(provider, C20contractAddress, privateKeyC20); // with Starknet.js v5.21.0, automatic recognize of the Cairo version of the account
     const { transaction_hash, contract_address } = await accountC20.deployAccount({ classHash: decCH, constructorCalldata: accountConstructorCallData, addressSalt: starkKeyPubC20 });
-    console.log('New Cairo 2.0.0 Starkware account created.\n   final address =', contract_address ,accountC20.cairoVersion, );
+    console.log('New Cairo 2.0.0 Starkware account created.\n   final address =', contract_address);
     await provider.waitForTransaction(transaction_hash);
     console.log('new Cairo 2.0.0 Starkware account connected.\n');
 
@@ -109,7 +100,7 @@ async function main() {
     // },
 
     const compiledErc20mintable = json.parse(fs.readFileSync("compiledContracts/cairo060/ERC20MintableOZ_0_6_1.json").toString("ascii"));
-    const DECIMALS=18;
+    const DECIMALS = 18;
     const initialTk: Uint256 = cairo.uint256(100);
 
     // define the constructor :
@@ -140,7 +131,7 @@ async function main() {
     const erc20 = new Contract(compiledErc20mintable.abi, erc20Address, provider);
     erc20.connect(account0);
 
-    // Check balance - should be 100
+    // Check balance - should be 100 wei
     console.log(`Calling StarkNet for account balance...`);
     const balanceInitial = await erc20.balanceOf(account0.address);
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceInitial.balance).toString());
@@ -152,7 +143,7 @@ async function main() {
     // Wait for the invoke transaction to be accepted on StarkNet
     console.log(`Waiting for Tx to be Accepted on Starknet - Minting...`);
     //await provider.waitForTransaction(mintTxHash);
-    // Check balance - should be 1100
+    // Check balance - should be 1100 wei
     console.log(`Calling StarkNet for account balance...`);
     const balanceBeforeTransfer = await erc20.balanceOf(account0.address);
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceBeforeTransfer.balance).toString());
@@ -175,7 +166,7 @@ async function main() {
     console.log(`Waiting for Tx to be Accepted on Starknet - Transfer...`);
     await provider.waitForTransaction(transferTxHash3);
 
-    // Check balance after transfer - should be 1070
+    // Check balance after transfer - should be 1070 wei
     console.log(`Calling StarkNet for account balance...`);
     const balanceAfterTransfer = await erc20.balanceOf(account0.address);
     console.log("account0 has a balance of :", uint256.uint256ToBN(balanceAfterTransfer.balance).toString());

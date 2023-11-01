@@ -1,14 +1,14 @@
 // Deploy and use an ERC20, monetized by an existing account
 // Launch with : npx ts-node src/starknet_jsExistingAccount.ts
-// Coded with Starknet.js v5.19.5, starknet-devnet 0.5.3
+// Coded with Starknet.js v5.19.5, Starknet-devnet-rs v0.1.0
 
 import fs from "fs";
-import { Account, Contract, defaultProvider, json, Provider, CallData, RawArgs, Calldata, RawArgsArray, RawArgsObject, Call, cairo, uint256, Uint256 } from "starknet";
+import { Account, Contract, defaultProvider, json, Provider, CallData, Calldata, Call, cairo, uint256, Uint256, RpcProvider } from "starknet";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 //        👇👇👇
-// 🚨🚨🚨 launch 'starknet-devnet --seed 0' before using this script
+// 🚨🚨🚨 launch 'cargo run --release -- --seed 0' in devnet-rs directory before using this script
 //        👆👆👆
 
 function formatBalance(qty: bigint, decimals: number): string {
@@ -19,15 +19,8 @@ function formatBalance(qty: bigint, decimals: number): string {
 }
 
 async function main() {
-    //initialize Provider with DEVNET, reading .env file
-    if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
-        console.log("This script work only on local devnet.");
-        process.exit(1);
-    }
-    const provider = process.env.STARKNET_PROVIDER_BASE_URL === undefined ?
-        defaultProvider :
-        new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });
-    console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" }); // only for starknet-devnet-rs
+    console.log("Provider connected to Starknet-devnet-rs");
 
     // initialize existing predeployed account 0 of Devnet
     console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
@@ -35,7 +28,7 @@ async function main() {
     const privateKey = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
     const accountAddress: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
     const account0 = new Account(provider, accountAddress, privateKey);
-    console.log('OZ account 0 connected.\n');
+    console.log("Account 0 connected.\n");
 
     // Deploy an ERC20 contract 
     console.log("Deployment Tx - ERC20 Contract to StarkNet...");
@@ -74,7 +67,7 @@ async function main() {
     // },
 
     const compiledErc20mintable = json.parse(fs.readFileSync("./compiledContracts/cairo060/ERC20MintableOZ_0_6_1.json").toString("ascii"));
-    const DECIMALS=18;
+    const DECIMALS = 18;
 
     // define the constructor :
     const initialTk: Uint256 = cairo.uint256(100);
@@ -105,7 +98,7 @@ async function main() {
     // Check balance - should be 100
     console.log(`Calling StarkNet for account balance...`);
     const balanceInitial = await erc20.balanceOf(account0.address);
-    console.log("account0 has a balance of :", formatBalance(uint256.uint256ToBN(balanceInitial.balance),DECIMALS));
+    console.log("account0 has a balance of :", formatBalance(uint256.uint256ToBN(balanceInitial.balance), DECIMALS));
 
     // Mint 1000 tokens to account address
     const amountToMint = cairo.uint256(1000);
@@ -117,7 +110,7 @@ async function main() {
     // Check balance - should be 1100
     console.log(`Calling StarkNet for account balance...`);
     const balanceBeforeTransfer = await erc20.balanceOf(account0.address);
-    console.log("account0 has a balance of :", formatBalance(uint256.uint256ToBN(balanceBeforeTransfer.balance),DECIMALS));
+    console.log("account0 has a balance of :", formatBalance(uint256.uint256ToBN(balanceBeforeTransfer.balance), DECIMALS));
 
     // Execute tx transfer of 2x10 tokens, showing 2 ways to write data in Starknet
     console.log(`Invoke Tx - Transfer 2x10 tokens back to erc20 contract...`);
@@ -140,7 +133,7 @@ async function main() {
     // Check balance after transfer - should be 1070
     console.log(`Calling StarkNet for account balance...`);
     const balanceAfterTransfer = await erc20.balanceOf(account0.address);
-    console.log("account0 has a balance of :", formatBalance(uint256.uint256ToBN(balanceAfterTransfer.balance),DECIMALS));
+    console.log("account0 has a balance of :", formatBalance(uint256.uint256ToBN(balanceAfterTransfer.balance), DECIMALS));
     console.log("✅ Test completed.");
 }
 main()

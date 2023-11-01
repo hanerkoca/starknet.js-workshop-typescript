@@ -1,6 +1,6 @@
 // create a new OZ account in devnet
 // launch with npx ts-node src/scripts/2.createNewOZaccount.ts
-// Coded with Starknet.js v5.21.0, Starknet-devnet v0.6.3
+// Coded with Starknet.js v5.21.0, Starknet-devnet-rs v0.1.0
 
 
 import { Account, ec, json, Provider, hash, CallData, RpcProvider } from "starknet";
@@ -11,18 +11,19 @@ dotenv.config();
 
 
 //        👇👇👇
-// 🚨🚨🚨 launch 'starknet-devnet --seed 0' before using this script
+// 🚨🚨🚨 launch 'cargo run --release -- --seed 0' in devnet-rs directory before using this script
 //        👆👆👆
 async function main() {
-    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" } ); // only starknet-devnet-rs
-    console.log("Provider connected.");
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" }); // only for starknet-devnet-rs
+    console.log("Provider connected to Starknet-devnet-rs");
 
-    // Connect existing predeployed account 0 of Devnet
-    const privateKey0 = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
-    const account0Address: string = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";    
-    const account0 = new Account(provider, account0Address, privateKey0);
-    console.log('OZ account0 connected.\n');
-
+    // initialize existing predeployed account 0 of Devnet
+    console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
+    console.log('OZ_ACCOUNT_PRIVATE_KEY=', process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY);
+    const privateKey0 = process.env.OZ_ACCOUNT0_DEVNET_PRIVATE_KEY ?? "";
+    const accountAddress0: string = process.env.OZ_ACCOUNT0_DEVNET_ADDRESS ?? "";
+    const account0 = new Account(provider, accountAddress0, privateKey0);
+    console.log("Account 0 connected.\n");
 
     // new Open Zeppelin account v0.7.0 (Cairo 1) :
 

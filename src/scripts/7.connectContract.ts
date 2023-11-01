@@ -1,26 +1,20 @@
 // connect a contract that is already deployed on devnet.
 // launch with npx ts-node src/scripts/7.connectContract.ts
-// Coded with Starknet.js v5.16.0
+// Coded with Starknet.js v5.16.0, Starknet-devnet-rs v0.1.0
 
-import { Provider, Contract, json } from "starknet";
+import { Contract, json, RpcProvider } from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 
 //          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
+// 🚨🚨🚨 launch 'cargo run --release -- --seed 0' in devnet-rs directory before using this script
 //          Launch also the script for deployement of Test (script5).
 //          👆👆👆
 async function main() {
-    //initialize Provider with DEVNET, reading .env file
-    if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
-        console.log("This script work only on local devnet.");
-        process.exit(1);
-    }
-    const provider = new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });
-
-    console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" }); // only for starknet-devnet-rs
+    console.log("Provider connected to Starknet-devnet-rs");
 
     // Connect the deployed Test instance in devnet
     const testAddress = "0x7667469b8e93faa642573078b6bf8c790d3a6184b2a1bb39c5c923a732862e1";

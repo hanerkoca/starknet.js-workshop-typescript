@@ -2,16 +2,16 @@
 // launch with npx ts-node src/scripts/13a.ETHproxyFast.ts
 // Coded with Starknet.js v5.17.0
 
-import { Provider, Contract, Account, json, constants, num, uint256 } from "starknet";
+import { Contract, json, uint256, RpcProvider } from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 async function main() {
     // initialize provider
-    const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
+    const provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" });
 
-    const ETHproxyAddress = "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7"; 
+    const ETHproxyAddress = "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
     const compiledERC20 = json.parse(fs.readFileSync("./compiledContracts/erc20ETH.json").toString("ascii"));
     const ethContract = new Contract(compiledERC20.abi, ETHproxyAddress, provider);
     console.log('ETH Contract connected at =', ethContract.address);
