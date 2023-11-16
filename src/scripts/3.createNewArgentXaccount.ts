@@ -2,9 +2,7 @@
 // launch with : npx ts-node ssrc/scripts/3.createNewArgentXaccount.ts
 // Coded with Starknet.js v5.19.5, Starknet-devnet-rs v0.1.0
 
-import { Provider, RpcProvider, Account, ec, json, stark, hash, CallData, Contract } from "starknet";
-import { infuraKey } from "../A-MainPriv/mainPriv";
-import { account7TestnetPrivateKey } from "../A1priv/A1priv";
+import { RpcProvider, Account, ec, json, stark, hash, CallData, Contract } from "starknet";
 
 import fs from "fs";
 import axios from "axios";
