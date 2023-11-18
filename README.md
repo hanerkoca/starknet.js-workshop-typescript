@@ -81,15 +81,19 @@ To simplify the test of these scripts, take advantage to install the extension `
 
 You can find some explanations for the use of Starknet.js with Cairo v1&v2 smart-contracts [here](./Cairo1.md).
 
+## Demo DAPP - Cairo1-JS :
+
+Be able to create some scripts is a good first step. The next step is the creation of DAPPs (decentralized application) ; see my [demo DAPP](https://github.com/PhilippeR26/Cairo1JS) for Starknet 
+
 ## Proxy :
 
-Some explanations to interact with a contract behind a proxy [here](proxy.md)
+Some explanations to interact with a contract behind a proxy [here](./proxy.md)
 
 ## 🤔 Questions?
 
 Have a look in the starknet.js [documentation](https://www.starknetjs.com/docs/next/guides/intro).
 
-Ask in #starknet-js channel in the [StarkNet Discord](https://discord.gg/C2JsG2j7Fs)
+Ask in #starknet-js channel in the [Starknet Discord](https://discord.gg/C2JsG2j7Fs)
 
 Philippe. ROSTAN @ critical.devs.fr - Phil26#1686 on Discord
 
