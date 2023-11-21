@@ -49,8 +49,10 @@ async function main() {
     const respDecl = await account0.declare({ contract: contractSierra, casm: contractCasm });
     //const contractClassHash = "0x00bf5a9e6533e70a811a622eaa402724d290898c59fe7627f523893f2b2a0644";
     const contractClassHash = respDecl.class_hash;
-    await provider.waitForTransaction(respDecl.transaction_hash);
+    const txR=await provider.waitForTransaction(respDecl.transaction_hash);
+    console.log(txR);
     console.log("contract declared")
+
 
     // const calldata = new CallData(contractSierra.abi);
     // const constructorCallData = calldata.compile("constructor", {

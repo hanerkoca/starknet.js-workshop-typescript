@@ -1,0 +1,290 @@
+[
+    {
+      "name": "UpgradeableImpl",
+      "type": "impl",
+      "interface_name": "openzeppelin::upgrades::interface::IUpgradeable"
+    },
+    {
+      "name": "openzeppelin::upgrades::interface::IUpgradeable",
+      "type": "interface",
+      "items": [
+        {
+          "name": "upgrade",
+          "type": "function",
+          "inputs": [
+            {
+              "name": "new_class_hash",
+              "type": "core::starknet::class_hash::ClassHash"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "external"
+        }
+      ]
+    },
+    {
+      "name": "OwnableImpl",
+      "type": "impl",
+      "interface_name": "openzeppelin::access::ownable::interface::IOwnable"
+    },
+    {
+      "name": "openzeppelin::access::ownable::interface::IOwnable",
+      "type": "interface",
+      "items": [
+        {
+          "name": "owner",
+          "type": "function",
+          "inputs": [],
+          "outputs": [
+            {
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "name": "transfer_ownership",
+          "type": "function",
+          "inputs": [
+            {
+              "name": "new_owner",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "external"
+        },
+        {
+          "name": "renounce_ownership",
+          "type": "function",
+          "inputs": [],
+          "outputs": [],
+          "state_mutability": "external"
+        }
+      ]
+    },
+    {
+      "name": "AccessControlImpl",
+      "type": "impl",
+      "interface_name": "dropx::factory::IAccessControl"
+    },
+    {
+      "name": "dropx::factory::IAccessControl",
+      "type": "interface",
+      "items": [
+        {
+          "name": "grantAdminRole",
+          "type": "function",
+          "inputs": [
+            {
+              "name": "role",
+              "type": "core::felt252"
+            },
+            {
+              "name": "role_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "external"
+        }
+      ]
+    },
+    {
+      "name": "Factory",
+      "type": "impl",
+      "interface_name": "dropx::factory::ICounterFactory"
+    },
+    {
+      "name": "core::integer::u256",
+      "type": "struct",
+      "members": [
+        {
+          "name": "low",
+          "type": "core::integer::u128"
+        },
+        {
+          "name": "high",
+          "type": "core::integer::u128"
+        }
+      ]
+    },
+    {
+      "name": "core::bool",
+      "type": "enum",
+      "variants": [
+        {
+          "name": "False",
+          "type": "()"
+        },
+        {
+          "name": "True",
+          "type": "()"
+        }
+      ]
+    },
+    {
+      "name": "dropx::helper::Helper::ClaimAmountDetails",
+      "type": "struct",
+      "members": [
+        {
+          "name": "maxClaimable",
+          "type": "core::integer::u256"
+        },
+        {
+          "name": "totalClaimAmount",
+          "type": "core::integer::u256"
+        }
+      ]
+    },
+    {
+      "name": "dropx::helper::Helper::ClaimSettings",
+      "type": "struct",
+      "members": [
+        {
+          "name": "name",
+          "type": "core::felt252"
+        },
+        {
+          "name": "creatorAddress",
+          "type": "core::starknet::contract_address::ContractAddress"
+        },
+        {
+          "name": "walletAddress",
+          "type": "core::starknet::contract_address::ContractAddress"
+        },
+        {
+          "name": "airdropToken",
+          "type": "core::starknet::contract_address::ContractAddress"
+        },
+        {
+          "name": "daoToken",
+          "type": "core::starknet::contract_address::ContractAddress"
+        },
+        {
+          "name": "tokenGatingValue",
+          "type": "core::integer::u256"
+        },
+        {
+          "name": "startTime",
+          "type": "core::integer::u64"
+        },
+        {
+          "name": "endTime",
+          "type": "core::integer::u64"
+        },
+        {
+          "name": "cooldownTime",
+          "type": "core::integer::u64"
+        },
+        {
+          "name": "hasAllowanceMechanism",
+          "type": "core::bool"
+        },
+        {
+          "name": "isEnabled",
+          "type": "core::bool"
+        },
+        {
+          "name": "permission",
+          "type": "core::felt252"
+        },
+        {
+          "name": "claimAmountDetails",
+          "type": "dropx::helper::Helper::ClaimAmountDetails"
+        }
+      ]
+    },
+    {
+      "name": "dropx::helper::Helper::WhitelistedUser",
+      "type": "struct",
+      "members": [
+        {
+          "name": "user",
+          "type": "core::starknet::contract_address::ContractAddress"
+        },
+        {
+          "name": "max_claimable_amount",
+          "type": "core::integer::u256"
+        }
+      ]
+    },
+    {
+      "name": "dropx::factory::ICounterFactory",
+      "type": "interface",
+      "items": [
+        {
+          "name": "create_airdrop",
+          "type": "function",
+          "inputs": [
+            {
+              "name": "admin",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "claimSettings",
+              "type": "dropx::helper::Helper::ClaimSettings"
+            },
+            {
+              "name": "_whitelisted_user",
+              "type": "core::array::Array::<dropx::helper::Helper::WhitelistedUser>"
+            }
+          ],
+          "outputs": [
+            {
+              "type": "(core::starknet::contract_address::ContractAddress, core::starknet::contract_address::ContractAddress)"
+            }
+          ],
+          "state_mutability": "external"
+        },
+        {
+          "name": "updater_emitter_class_hash",
+          "type": "function",
+          "inputs": [
+            {
+              "name": "new_class_hash",
+              "type": "core::starknet::class_hash::ClassHash"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "external"
+        },
+        {
+          "name": "updater_claim_class_hash",
+          "type": "function",
+          "inputs": [
+            {
+              "name": "new_class_hash",
+              "type": "core::starknet::class_hash::ClassHash"
+            }
+          ],
+          "outputs": [],
+          "state_mutability": "external"
+        }
+      ]
+    },
+    {
+      "name": "constructor",
+      "type": "constructor",
+      "inputs": [
+        {
+          "name": "_claim_class_hash",
+          "type": "core::starknet::class_hash::ClassHash"
+        },
+        {
+          "name": "_emitter_class_hash",
+          "type": "core::starknet::class_hash::ClassHash"
+        },
+        {
+          "name": "_admin",
+          "type": "core::starknet::contract_address::ContractAddress"
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "name": "dropx::factory::Factory::Event",
+      "type": "event",
+      "variants": []
+    }
+  ]
