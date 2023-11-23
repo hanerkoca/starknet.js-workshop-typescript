@@ -3,9 +3,9 @@
 // Coded with Starknet.js v5.21.0
 
 import { Provider, RpcProvider, Contract, Account, json, uint256, shortString, ContractClassResponse, num } from "starknet";
-import { account4MainnetAddress, account4MainnetPrivateKey } from "../../A-MainPriv/mainPriv";
+import { account4MainnetAddress, account4MainnetPrivateKey } from "../../../A-MainPriv/mainPriv";
 import fs from "fs";
-import { formatBalance } from "../formatBalance";
+import { formatBalance } from "../../formatBalance";
 // import * as dotenv from "dotenv";
 // dotenv.config();
 

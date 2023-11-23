@@ -11,7 +11,7 @@
             "type": "node",
             "request": "launch",
             "name": "typescript1",
-            "program": "${workspaceFolder}/src/scripts/cairo12/cairo12-testnet/5.ComplexInvoke.ts",
+            "program": "${workspaceFolder}/src/scripts/cairo12/cairo12-testnet/7.testRpcVersion.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,

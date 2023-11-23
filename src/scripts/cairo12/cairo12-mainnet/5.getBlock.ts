@@ -1,7 +1,6 @@
 import { GetBlockResponse, RpcProvider } from 'starknet'
 import { Provider, Account, Contract, ec, json, number, stark, Calldata } from "starknet";
 import fs from "fs";
-import { RawCalldata } from "starknet/dist/types/lib";
 import * as dotenv from "dotenv";
 dotenv.config();
 

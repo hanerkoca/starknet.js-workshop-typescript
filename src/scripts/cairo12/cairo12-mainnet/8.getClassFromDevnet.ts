@@ -3,8 +3,8 @@
 // Coded with Starknet.js v5.14.1
 
 import { Provider, RpcProvider, Contract, Account, json, uint256, Abi, constants, shortString, CompiledContract, ContractClass, RPC, SequencerProvider, ContractClassResponse, stark, contractClassResponseToLegacyCompiledContract, LegacyCompiledContract, hash } from "starknet";
-import { alchemyKey } from "../../A-MainPriv/mainPriv";
-import { resetDevnetNow } from "../resetDevnetFunc";
+import { alchemyKey } from "../../../A-MainPriv/mainPriv";
+import { resetDevnetNow } from "../../resetDevnetFunc";
 import fs from "fs";
 import axios from 'axios';
 import * as dotenv from "dotenv";

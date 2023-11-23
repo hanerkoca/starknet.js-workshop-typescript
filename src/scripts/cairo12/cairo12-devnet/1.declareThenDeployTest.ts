@@ -4,7 +4,7 @@
 
 import { Provider, Account, Contract, json ,constants} from "starknet";
 import fs from "fs";
-import {accountTestnet4privateKey, accountTestnet4Address} from "../../../A1priv/A1priv"
+import {account2TestnetPrivateKey, account2TestnetAddress} from "../../../A1priv/A1priv"
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -22,8 +22,8 @@ async function main() {
     // initialize existing predeployed account 0 of Devnet
     // const privateKey = "0xe3e70682c2094cac629f6fbed82c07cd";
     // const accountAddress: string = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
-    const privateKey=accountTestnet4privateKey;
-    const accountAddress=accountTestnet4Address;
+    const privateKey=account2TestnetPrivateKey;
+    const accountAddress=account2TestnetAddress;
     const account0 = new Account(provider, accountAddress, privateKey);
     console.log('✅ Predeployed account connected\nOZ_ACCOUNT_ADDRESS=', account0.address);
     //console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey);

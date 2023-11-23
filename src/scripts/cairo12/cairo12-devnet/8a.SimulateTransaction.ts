@@ -1,6 +1,6 @@
 // test in testnet/rpc0.4.0 a contract that can be rejected.
 // launch with npx ts-node src/scripts/cairo12-devnet/8a.SimulateTransaction.ts
-// Coded with Starknet.js v5.24.1
+// Coded with Starknet.js v5.23.0
 
 import { constants, Provider, Contract, Account, json, shortString, RpcProvider, Invocations, TransactionType, Call, SimulateTransactionResponse, } from "starknet";
 import fs from "fs";
@@ -45,7 +45,7 @@ async function main() {
 
 
     // testnet
-    //const contractAddress = "0x76e73ba220fcdc9b0b0b68556b9a59f36f5d124349db56e1de4879aa61a91ef"; 
+    // const contractAddress = "0x76e73ba220fcdc9b0b0b68556b9a59f36f5d124349db56e1de4879aa61a91ef"; 
     // mainnet
     // const contractAddress = "0x02bD907B978F58ceDf616cFf5CdA213d63Daa3AD28Dd3C1Ea17cA6CF5E1D395F"; 
     // devnet

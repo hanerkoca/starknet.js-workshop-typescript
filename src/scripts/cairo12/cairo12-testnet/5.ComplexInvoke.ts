@@ -145,7 +145,7 @@ async function main() {
     //     "state_mutability": "external"
     //   },
 
-    console.log("abi=",myContract.abi);
+    // console.log("abi=",myContract.abi);
     
     const myData: RawArgsObject = {
         admin: adminAddr,

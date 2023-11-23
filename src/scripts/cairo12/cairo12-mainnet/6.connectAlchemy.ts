@@ -3,8 +3,8 @@
 // Coded with Starknet.js v5.10.2
 
 import { Provider, RpcProvider, Contract, Account, json, uint256 } from "starknet";
-import { accountMainnet4Address, accountMainnet4AddressprivateKey } from "../../A-MainPriv/mainPriv";
-import { alchemyKey } from "../../A-MainPriv/mainPriv";
+import { accountMainnet4Address, accountMainnet4AddressprivateKey } from "../../../A-MainPriv/mainPriv";
+import { alchemyKey } from "../../../A-MainPriv/mainPriv";
 import fs from "fs";
 import axios from 'axios';
 import * as dotenv from "dotenv";

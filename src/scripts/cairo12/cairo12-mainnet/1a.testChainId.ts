@@ -1,5 +1,5 @@
 // test account.getChainId()
-// launch with npx ts-node src/scripts/cairo12/cairo12-mainnet/1.testChainId.ts
+// launch with npx ts-node src/scripts/cairo12/cairo12-mainnet/1a.testChainId.ts
 // Coded with Starknet.js v5.21.0
 
 import { constants, Provider, Contract, Account, json, shortString, RpcProvider, encode, BlockTag } from "starknet";

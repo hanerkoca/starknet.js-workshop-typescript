@@ -2,12 +2,12 @@
 // launch with npx ts-node src/scripts/cairo11-testnet2/6a.Rejected.ts
 // Coded with Starknet.js v5.19.0
 
-import { constants, Provider, Contract, Account, json, shortString, RpcProvider, SequencerProvider } from "starknet";
+import { constants,  Contract, Account, json, shortString, RpcProvider } from "starknet";
 import fs from "fs";
-import { account1Testnet2ArgentXAddress, account1Testnet2ArgentXprivateKey, TonyNode } from "../../A2priv/A2priv";
-import { account2TestnetAddress, account2TestnetPrivateKey, junoNMtestnet } from "../../A1priv/A1priv";
-import { account4MainnetAddress, account4MainnetPrivateKey, infuraKey, alchemyKey, blastKey, lavaMainnetKey, junoNMmainnet } from "../../A-MainPriv/mainPriv";
-import { junoNMtestnet2 } from "../../A2priv/A2priv";
+import { account1Testnet2ArgentXAddress, account1Testnet2ArgentXprivateKey, TonyNode } from "../../../A2priv/A2priv";
+import { account2TestnetAddress, account2TestnetPrivateKey, junoNMtestnet } from "../../../A1priv/A1priv";
+import { account4MainnetAddress, account4MainnetPrivateKey, infuraKey, alchemyKey, blastKey, lavaMainnetKey, junoNMmainnet } from "../../../A-MainPriv/mainPriv";
+import { junoNMtestnet2 } from "../../../A2priv/A2priv";
 
 function wait(delay: number) {
     return new Promise((res) => {

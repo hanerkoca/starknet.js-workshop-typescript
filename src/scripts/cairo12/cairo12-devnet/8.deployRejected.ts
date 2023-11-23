@@ -1,6 +1,6 @@
 // deploy in devnet a contract that can be rejected.
 // launch with npx ts-node src/scripts/cairo12-devnet/8.deployRejected.ts
-// Coded with Starknet.js v5.21.0
+// Coded with Starknet.js v5.23.0
 
 import { constants, Provider, Contract, Account, json, shortString, RpcProvider } from "starknet";
 import fs from "fs";
@@ -11,20 +11,21 @@ import { infuraKey, account4MainnetAddress, account4MainnetPrivateKey } from "..
 
 async function main() {
     // initialize Provider 
-    // const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" } ); // only starknet-devnet-rs
-    const provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" }); // testnet
-    // const provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.4" }); // local mainnet node
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" } ); // only starknet-devnet-rs
+    // const provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" }); // testnet
+    // const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9545/rpc/v0.4" }); // local mainnet node
 
     // Check that communication with provider is OK
     const ch = await provider.getChainId();
     console.log("chain Id =", ch);
 
-    // const privateKey = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
-    // const accountAddress: string = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
-    // initialize existing Argent X testnet  account
-    const privateKey = account5TestnetPrivateKey;
-    const accountAddress = account5TestnetAddress
-    // initialize existing Argent X mainnet  account
+    // *** Devnet-rs 
+    const privateKey = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
+     const accountAddress: string = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
+    // *** initialize existing Argent X testnet  account
+    // const privateKey = account5TestnetPrivateKey;
+    // const accountAddress = account5TestnetAddress
+    // *** initialize existing Argent X mainnet  account
     // const privateKey = account4MainnetPrivateKey;
     // const accountAddress = account4MainnetAddress
     const account0 = new Account(provider, accountAddress, privateKey);
@@ -42,7 +43,7 @@ async function main() {
     // // class hash in Cairo2.0.0 = 0x5f3614e8671257aff9ac38e929c74d65b02d460ae966cd826c9f04a7fa8e0d4
     console.log('✅ Test Contract declared with classHash =', contractClassHash);
 
-    // await provider.waitForTransaction(declareResponse.transaction_hash);
+     await provider.waitForTransaction(declareResponse.transaction_hash);
     console.log("Deploy of contract in progress...")
     const { transaction_hash: th2, address } = await account0.deployContract({ classHash: contractClassHash });
     console.log("contract_address =", address);
