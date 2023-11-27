@@ -11,7 +11,7 @@ import { formatBalance } from "../../formatBalance";
 
 async function main() {
     //initialize the Provider, with a Juno rpc Mainnet node, located in the local network
-    const provider = new RpcProvider({ nodeUrl: 'http://192.168.1.44:6060' });
+    const provider = new RpcProvider({ nodeUrl: 'http://192.168.1.99:6060' });
 
     const chainId = await provider.getChainId();
     console.log('Connected to the local network node (Mainnet)=', shortString.decodeShortString(chainId));

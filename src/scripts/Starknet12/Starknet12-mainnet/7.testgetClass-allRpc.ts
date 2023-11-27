@@ -14,16 +14,17 @@ dotenv.config();
 
 async function main() {
     // ******* MAINNET ************
-    // Alchemy node rpc for Mainnet (do not work today) :
+    // Alchemy node rpc 0.5.0 for Mainnet (do not work today) :
     const providerAlchemyMainnet = new RpcProvider({ nodeUrl: "https://starknet-mainnet.g.alchemy.com/v2/" + alchemyKey });
     // Infura node rpc for Mainnet :
     const providerInfuraMainnet = new RpcProvider({ nodeUrl: "https://starknet-mainnet.infura.io/v3/" + infuraKey });
-    // Blast node rpc for mainnet :
+    // Blast node rpc 0.5.1 for mainnet :
     const providerBlastMainnet = new RpcProvider({ nodeUrl: "https://starknet-mainnet.blastapi.io/" + blastKey + "/rpc/v0.5" });
-    // Public Blast node rpc for Mainnet : 
+    // Public Blast node rpc 0.5.0 for Mainnet : 
     const providerMainnetBlastPublic = new RpcProvider({ nodeUrl: "https://starknet-testnet.public.blastapi.io/rpc/v0.5" });
-    // Public Lava node rpc for Mainnet : 
+    // Lava node rpc for Mainnet : 
     const providerMainnetLava = new RpcProvider({ nodeUrl: "https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/" + lavaMainnetKey });
+    // Public Lava node rpc for Mainnet : 
     const providerMainnetLavaPublic = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-mainnet.public.lavanet.xyz" });
     // with your own local Pathfinder node, in your local network : 
     const providerPathfinderMainnetRpcLocNetwork = new RpcProvider({ nodeUrl: "http://192.168.1.44:9545/rpc/v0.5" });
@@ -31,18 +32,18 @@ async function main() {
     const providerPathfinderMainnetRpcLocComputer = new RpcProvider({ nodeUrl: "http://127.0.0.1:9545/rpc/v0.5" });
     // Nethermind Juno node rpc for Mainnet (only whitelisted access) :
     const providerNethermindMainnet = new RpcProvider({ nodeUrl: junoNMmainnet });
-    // Public Nethermind node rpc for Mainnet : 
+    // Public Nethermind node rpc 0.5.1 for Mainnet : 
     const providerMainnetNethermindPublic = new RpcProvider({ nodeUrl: "https://limited-rpc.nethermind.io/mainnet-juno/v0_5" });
     // with your own local Juno node, in the same computer : 
     const providerJunoMainnetRpcLocComputer = new RpcProvider({ nodeUrl: "http://127.0.0.1:6060/v0_5" });
-    // with your own local Juno node, in your local network : 
+    // with your own local Juno node rpc 0.5.1, in your local network : 
     const providerJunoMainnetRpcLocNetwork = new RpcProvider({ nodeUrl: "http://192.168.1.44:6060/v0_5" });
     // mainnet sequencer (soon deprecated) :
     const providerMainnetSequencer = new SequencerProvider({ network: constants.NetworkName.SN_MAIN });
 
     // ******* TESTNET ************
-    // Alchemy node rpc for Testnet (do not work today) :
-    const providerAlchemyTestnet = new RpcProvider({ nodeUrl: 'https://starknet-goerli.g.alchemy.com/v2/' + alchemyKey });
+    // Alchemy node rpc 0.5.0 for Testnet (do not work today) :
+    const providerAlchemyTestnet = new RpcProvider({ nodeUrl: "https://starknet-goerli.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey });
     // Infura node rpc for Testnet :
     const providerInfuraTestnet = new RpcProvider({ nodeUrl: 'https://starknet-goerli.infura.io/v3/' + infuraKey });
     // Blast node rpc for Testnet :
@@ -51,10 +52,10 @@ async function main() {
     const providerTestnetBlastPublic = new RpcProvider({ nodeUrl: "https://starknet-testnet.public.blastapi.io/rpc/v0.5" });
     // Nethermind Juno node rpc for Testnet (only whitelisted access) :
     const providerNethermindTestnet = new RpcProvider({ nodeUrl: junoNMtestnet });
-    // Public Lava node rpc for Testnet : 
-    const providerTestnetLavaPublic = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" });
     // Public Nethermind node rpc for Testnet : 
     const providerTestnetNethermindPublic = new RpcProvider({ nodeUrl: "https://limited-rpc.nethermind.io/goerli-juno" });
+    // Public Lava node rpc 0.4.0 for Testnet : 
+    const providerTestnetLavaPublic = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" });
     // with your own local Pathfinder node, in your local network : 
     const providerPathfinderTestnetRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.44:9545/rpc/v0.5' });
     // with your own local Pathfinder node, in the same computer : 
