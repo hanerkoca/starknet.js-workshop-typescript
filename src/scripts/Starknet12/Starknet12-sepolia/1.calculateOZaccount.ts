@@ -11,7 +11,7 @@ dotenv.config();
 
 async function main() {
     // const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" } ); // only starknet-devnet-rs
-    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.5" }); // local pathfinder testnet node
+    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9545/rpc/v0.5" }); // local pathfinder testnet node
     // const provider = new RpcProvider({ nodeUrl: junoNMtestnet }); // local pathfinder testnet node
     console.log("Provider connected.");
 

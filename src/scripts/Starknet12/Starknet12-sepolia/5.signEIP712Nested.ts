@@ -1,35 +1,38 @@
 // Test an EIP712 message. 
+// launch with npx ts-node src/scripts/Starknet12/Starknet12-sepolia/5.signEIP712Nested.ts
 // coded with Starknet.js v5.24.3 + sepolia
-// launch with npx ts-node src/scripts/signature/4b.signEIP712test.ts
 
-import { Account, ec, hash, RpcProvider, json, Contract, encode, shortString, typedData, WeierstrassSignatureType, constants } from "starknet";
+import { Account, ec, hash, RpcProvider, json, Contract, encode, shortString, typedData, WeierstrassSignatureType, constants, Signature, stark, CallData, num } from "starknet";
+import { account0OZSepoliaAddress, account0OZSepoliaPrivateKey, account7TestnetAddress, account7TestnetPrivateKey} from "../../../A1priv/A1priv";
 
 import * as dotenv from "dotenv";
 import fs from "fs";
+import { SignatureType } from "@noble/curves/abstract/weierstrass";
+import { sign } from "crypto";
+import { ethAddress } from "../../utils/constants";
 dotenv.config();
 
 //    👇👇👇
 // 🚨 launch in 'starknet-devnet-rs' the command 'cargo run --release -- --seed 0' before using this script
 //    👆👆👆
 async function main() {
-    //initialize Provider with DEVNET
-    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" });
-    console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
+    //initialize Provider with local Pathfinder Sepolia
+    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9545/rpc/v0.5" });
+    console.log('STARKNET provider connected.');
 
-    // initialize existing predeployed account 0 of Devnet
-    const privateKey0 =  "0x71d7bb07b9a64f6f78ac4c816aff4da9";
-    // const starkKeyPair0 = ec.getKeyPair(privateKey0);
-    const accountAddress0 = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
+    // initialize existing predeployed account 0
+    const privateKey0 =  account0OZSepoliaPrivateKey;
+    const accountAddress0 = account0OZSepoliaAddress;
     console.log('OZ_ACCOUNT_ADDRESS=', accountAddress0);
     console.log('OZ_ACCOUNT_PRIVATE_KEY=', privateKey0);
     const account0 = new Account(provider, accountAddress0, privateKey0);
-    console.log('✅ OZ predeployed account 0 connected.');
+    console.log('✅deployed account 0 connected.');
 
     // creation of message signature
     // const privateKey = stark.randomAddress();
     const privateKey = privateKey0;
-    const starknetPublicKey = ec.starkCurve.getStarkKey(privateKey);
     const fullPubKey = encode.buf2hex(ec.starkCurve.getPublicKey(privateKey, false)); // complete public key
+    const starknetPublicKey = ec.starkCurve.getStarkKey(privateKey);
     console.log("publicKey calculated =", starknetPublicKey, typeof (starknetPublicKey));
     console.log('fullpubKey =', fullPubKey);
 
@@ -165,12 +168,29 @@ async function main() {
         },
     };
     const msgHash=typedData.getMessageHash(typedMessage,account0.address);
-    //const msgHash=await account0.hashMessage(typedMessage);
-    const signature  = await account0.signMessage(typedMessage);
+    const msgHashAcc=await account0.hashMessage(typedMessage);
+    console.log("msgHash=",msgHash);
+    console.log("msgHashAcc=",msgHashAcc);
 
-    const res = await account0.verifyMessage(typedMessage, signature);
-    console.log(" :>> ", res);
-    console.log("Hash =",msgHash,"\nSignature =", signature);
+    const signature  = await account0.signMessage(typedMessage);
+    const sigArray=stark.formatSignature(signature);
+    console.log("Signature =", signature,sigArray);
+    const res = await account0.verifyMessage(typedMessage, sigArray);
+    console.log("bool response >> ", res);
+    const res2 = await account0.verifyMessageHash(msgHash, sigArray);
+    console.log("bool response >> ", res2);
+   const resp=await account0.callContract({
+        contractAddress: account0.address,
+        entrypoint: 'isValidSignature',
+        calldata: CallData.compile({
+          hash: num.toBigInt(msgHash).toString(),
+          signature: sigArray,
+        }),
+      });
+      console.log("resp=", shortString.decodeShortString(resp.result[0]));
+
+    const isVerified=ec.starkCurve.verify(signature as SignatureType, msgHash, fullPubKey);
+    console.log("verified by Noble (boolean) =",isVerified);
 
     console.log('✅ Test completed.');
 

@@ -13,7 +13,7 @@ import { junoNMtestnet } from "../../../A1priv/A1priv";
 
 
 async function main() {
-    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.5" }); // local pathfinder sepolia testnet node
+    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9545/rpc/v0.5" }); // local pathfinder sepolia testnet node
 
 
     // new Open Zeppelin account v0.8.0b1 :

@@ -1,4 +1,4 @@
-// Create a new OpenZeppelin account in Starknet Sepolia testnet. Step 1/3
+// Create a new OpenZeppelin account in Starknet Sepolia testnet. Step 3/3
 // launch with npx ts-node src/scripts/Starknet12/Starknet12-sepolia/3.deployOZaccount.ts
 // Coded with Starknet.js v5.24.3
 import { Account, ec, json, Provider, hash, CallData, RpcProvider, Contract, cairo, stark } from "starknet";
@@ -13,7 +13,7 @@ import { junoNMtestnet } from "../../../A1priv/A1priv";
 
 
 async function main() {
-    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.5" }); // local pathfinder sepolia testnet node
+    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9545/rpc/v0.5" }); // local pathfinder sepolia testnet node
 
 
     // new Open Zeppelin account v0.8.0b1 :

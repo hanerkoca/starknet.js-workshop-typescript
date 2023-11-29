@@ -1,23 +1,20 @@
-// Deploy in Testnet a new ArgentX wallet (Cairo1 0.3.0).
-// launch with : npx ts-node src/scripts/cairo12/cairo12-testnet/4.DeployNewArgentXaccount.ts
+// Deploy in Sepolia a new ArgentX wallet (Cairo1 0.3.0).
+// launch with : npx ts-node src/scripts/Starknet12/Starknet12-sepolia/4.DeployNewArgentXaccount.ts
 // Coded with Starknet.js v5.24.3
 
-import { RpcProvider, Account, ec, json, stark, hash, CallData, Contract, cairo, Call } from "starknet";
-import { account2TestnetAddress, account2TestnetPrivateKey } from "../../../A1priv/A1priv";
+import { RpcProvider, Account, ec, json, stark, hash, CallData, Contract, cairo, Call, num } from "starknet";
+import { account7TestnetAddress, account7TestnetPrivateKey, account0OZSepoliaAddress,account0OZSepoliaPrivateKey } from "../../../A1priv/A1priv";
 import fs from "fs";
 import { ethAddress } from "../../utils/constants";
 
 async function main() {
-    // const provider = new RpcProvider({ nodeUrl: "https://starknet-testnet.public.blastapi.io" });
-    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.5" }); // local pathfinder sepolia testnet node
-
+    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9545/rpc/v0.5" });
     console.log("Provider connected.");
     const chId = await provider.getChainId(); console.log("chId =", chId);
-
     // initialize existing predeployed account 0 of Devnet
-
-    const privateKey0: string = account2TestnetPrivateKey;
-    const accountAddress0: string = account2TestnetAddress;
+    
+    const privateKey0=account0OZSepoliaPrivateKey;
+    const accountAddress0 = account0OZSepoliaAddress;
     const account0 = new Account(provider, accountAddress0, privateKey0);
     console.log("Account 0 connected.\n");
 
@@ -26,7 +23,7 @@ async function main() {
     console.log("Class Hash of ArgentX contract =", ch);
 
     // Calculate future address of the ArgentX account
-    const privateKeyAX = stark.randomAddress();;
+    const privateKeyAX: string =num.toHexString (account7TestnetPrivateKey);
     console.log('AX account Private Key =', privateKeyAX);
     console.log("Store safely this private key!!!");
     const starkKeyPubAX = ec.starkCurve.getStarkKey(privateKeyAX);
@@ -43,6 +40,7 @@ async function main() {
     const accountAXAddress = hash.calculateContractAddressFromHash(starkKeyPubAX, contractAXclassHash, ConstructorAXCallData, 0);
     console.log('Precalculated account address=', accountAXAddress);
 
+    //process.exit(1);
     // fund account address before account creation
     const transferCall: Call = {
         contractAddress: ethAddress,

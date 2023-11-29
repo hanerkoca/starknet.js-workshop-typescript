@@ -3,7 +3,7 @@
 // coded with Starknet.js v5.19.5+commit
 // launch with npx ts-node src/scripts/signature/signEIP712-V5.ts
 
-import { Account, ec, hash, Provider, json, Contract, encode, shortString, typedData, WeierstrassSignatureType, ArraySignatureType } from "starknet";
+import { Account, ec, hash, Provider, json, Contract, encode, shortString, typedData, WeierstrassSignatureType, ArraySignatureType, stark } from "starknet";
 
 import * as dotenv from "dotenv";
 import fs from "fs";
@@ -97,17 +97,19 @@ async function main() {
             ]
         },
     };
-    const signature2  = await account.signMessage(typedDataValidate);
-    const sig2arr=signature2 as ArraySignatureType;
-    const sig2rs=signature2 as WeierstrassSignatureType;
+    const signature2  = await account.signMessage(typedDataValidate) as WeierstrassSignatureType;
+    console.log("sig2 =",signature2);
+    const sig2arr=stark.signatureToHexArray(signature2)
+    const sig2rs=signature2;
 
 
     // on receiver side, with account (that needs privKey)
-    const result = await account.verifyMessage(typedDataValidate, signature2);
+    const result = await account.verifyMessage(typedDataValidate, sig2arr);
     console.log("Result off-chain by account (boolean)=", result);
-
-    // on receiver side, without account  (so, without privKey)
     const msgHash5 = typedData.getMessageHash(typedDataValidate, account.address);
+    const result3 = await account.verifyMessageHash(msgHash5, sig2arr);
+    console.log("Result off-chain by account (boolean)=", result3);
+    // on receiver side, without account  (so, without privKey)
     const isVerified=ec.starkCurve.verify(sig2rs, msgHash5, fullPubKey);
     console.log("verified by Noble (boolean) =",isVerified);
 

@@ -8,8 +8,13 @@ import { account2TestnetAddress, account2TestnetPrivateKey } from "../../../A1pr
 import fs from "fs";
 import * as dotenv from "dotenv";
 import { alchemyKey, blastKey, infuraKey, lavaMainnetKey } from "../../../A-MainPriv/mainPriv";
-import { StarknetChainId } from "starknet/src/constants";
 dotenv.config();
+
+declare enum StarknetChainId {
+    SN_MAIN = "0x534e5f4d41494e",
+    SN_GOERLI = "0x534e5f474f45524c49",
+    SN_SEPOLIA = "0x534e5f5345504f4c4941",
+}
 
 async function testProvider(providerUrl: string): Promise<string> {
     const provider = new RpcProvider({ nodeUrl: providerUrl });
@@ -36,7 +41,7 @@ async function testProvider(providerUrl: string): Promise<string> {
 }
 
 async function main() {
-    
+
     const listProvider = [
         "https://starknet-goerli.g.alchemy.com/v2/" + alchemyKey,
         "https://starknet-goerli.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey,
@@ -52,14 +57,14 @@ async function main() {
         'http://192.168.1.99:9545/rpc/v0_5',
         "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey,
         "https://starknet-mainnet.infura.io/v3/" + infuraKey,
-        "https://starknet-mainnet.blastapi.io/" + blastKey + "/rpc/v0.5" ,
+        "https://starknet-mainnet.blastapi.io/" + blastKey + "/rpc/v0.5",
         "https://starknet-testnet.public.blastapi.io/rpc/v0.5",
         "https://limited-rpc.nethermind.io/mainnet-juno/v0_5",
         "https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/" + lavaMainnetKey,
         "https://json-rpc.starknet-mainnet.public.lavanet.xyz",
         "http://192.168.1.99:6060/v0_5",
     ]
-    
+
     for (const url of listProvider) {
         console.log(await testProvider(url) + "\n");
     }

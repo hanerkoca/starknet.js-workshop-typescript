@@ -1,4 +1,4 @@
-// Create a new OpenZeppelin account in Starknet Sepolia testnet. Step 1/3
+// Create a new OpenZeppelin account in Starknet Sepolia testnet. Step 2/3
 // launch with npx ts-node src/scripts/Starknet12/Starknet12-sepolia/2.checkFunding.ts
 // Coded with Starknet.js v5.24.3
 
@@ -7,7 +7,7 @@ import fs from "fs";
 import axios from "axios";
 import * as dotenv from "dotenv";
 dotenv.config();
-import { account0OZSepoliaAddress, account2TestnetAddress, account2TestnetPrivateKey } from "../../../A1priv/A1priv";
+import { account0OZSepoliaAddress, account7TestnetAddress, account7TestnetPrivateKey } from "../../../A1priv/A1priv";
 import { infuraKey, account4MainnetAddress, account4MainnetPrivateKey } from "../../../A-MainPriv/mainPriv";
 import { junoNMtestnet } from "../../../A1priv/A1priv";
 import { ethAddress } from "../../utils/constants";
@@ -23,7 +23,7 @@ import { formatBalance } from "../../formatBalance";
 
 
 async function main() {
-    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.5" }); // local pathfinder sepolia testnet node
+    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9545/rpc/v0.5" }); // local pathfinder sepolia testnet node
     console.log("Provider connected.");
     const contractFilePathERC20 = "./compiledContracts/cairo060/ERC20ETH.json";
     const compiledEthContract = json.parse(fs.readFileSync(contractFilePathERC20).toString("ascii"));
@@ -31,7 +31,7 @@ async function main() {
     const ethContract = new Contract(compiledEthContract.abi, ethAddress, provider);
     console.log('ETH ERC20 contract connected at =', ethContract.address);
 
-    const res1 = await ethContract.balanceOf(account0OZSepoliaAddress);
+    const res1 = await ethContract.balanceOf(account7TestnetAddress);
     const balance = BigInt(uint256.uint256ToBN(res1.balance));
     console.log("addr: ", account0OZSepoliaAddress, res1, balance);
     console.log("Node report that account owns", formatBalance(balance, 18), "ETH");
