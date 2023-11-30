@@ -1,21 +1,18 @@
-29/nov/2023 :
+30/nov/2023 :
 
-*** https://starknet-goerli.g.alchemy.com/v2/ckfQRCmXY1xycTplwfeE9LHtLq7h7HbP
+*** https://starknet-goerli.g.alchemy.com/v2/xxxbP
 Provider is working fine.
 This provider use a rpc version 0.4.0 or older.
 
-*** https://starknet-goerli.g.alchemy.com/starknet/version/rpc/v0.5/ckfQRCmXY1xycTplwfeE9LHtLq7h7HbP
+*** https://starknet-goerli.g.alchemy.com/starknet/version/rpc/v0.5/xxxbP
 Provider is working fine.
 This provider use a rpc version 0.5.0
 
-*** https://starknet-goerli.infura.io/v3/2a91208ea5d44c58a7fe90236e156348
+*** https://starknet-goerli.infura.io/v3/xxx48
 Provider is working fine.
 This provider use a rpc version 0.4.0 or older.
 
-*** https://starknet-goerli.infura.io/rpc/v0.5/2a91208ea5d44c58a7fe90236e156348
-This provider is not working properly.
-
-*** https://starknet-testnet.blastapi.io/a54b77df-5790-462f-bcfd-018719b87ea6/rpc/v0.5
+*** https://starknet-testnet.blastapi.io/xxx6/rpc/v0.5
 Provider is working fine.
 This provider use a rpc version 0.5.0
 
@@ -31,46 +28,50 @@ This provider use a rpc version 0.5.0
 Provider is working fine.
 This provider use a rpc version 0.5.1
 
+*** https://free-rpc.nethermind.io/goerli-juno/v0_5
+Provider is working fine.
+This provider use a rpc version 0.5.1
+
 *** https://json-rpc.starknet-testnet.public.lavanet.xyz
 Provider is working fine.
 This provider use a rpc version 0.4.0 or older.
 
-*** http://192.168.1.99:9545/rpc/v0.4
-This provider is not working properly.
-
-*** http://192.168.1.99:9545/rpc/v0.5
-This provider is not working properly.
-
-*** http://192.168.1.99:9545/rpc/v0_5
-This provider is not working properly.
-
-*** https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0.5/ckfQRCmXY1xycTplwfeE9LHtLq7h7HbP
-Provider is working fine.
-This provider use a rpc version 0.5.0
-
-*** https://starknet-mainnet.infura.io/v3/2a91208ea5d44c58a7fe90236e156348
+*** https://starknet-mainnet.g.alchemy.com/v2/xxxbP
 Provider is working fine.
 This provider use a rpc version 0.4.0 or older.
 
-*** https://starknet-mainnet.blastapi.io/a54b77df-5790-462f-bcfd-018719b87ea6/rpc/v0.5
+*** https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0.5/xxxbP
+Provider is working fine.
+This provider use a rpc version 0.5.0
+
+*** https://starknet-mainnet.infura.io/v3/xxx48
+Provider is working fine.
+This provider use a rpc version 0.4.0 or older.
+
+*** https://starknet-mainnet.blastapi.io/xxx6/rpc/v0.5
 Provider is working fine.
 This provider use a rpc version 0.5.1
 
-*** https://starknet-testnet.public.blastapi.io/rpc/v0.5
+*** https://starknet-mainnet.public.blastapi.io/rpc/v0.4
 Provider is working fine.
-This provider use a rpc version 0.5.0
+This provider use a rpc version 0.4.0 or older.
+
+*** https://starknet-mainnet.public.blastapi.io/rpc/v0.5
+Provider is working fine.
+This provider use a rpc version 0.5.1
 
 *** https://limited-rpc.nethermind.io/mainnet-juno/v0_5
 Provider is working fine.
 This provider use a rpc version 0.5.1
 
-*** https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/85c501d84aff9f4b405d1eadaaf42955
+*** https://free-rpc.nethermind.io/mainnet-juno/v0_5
+Provider is working fine.
+This provider use a rpc version 0.5.1
+
+*** https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/xxx2955
 Provider is working fine.
 This provider use a rpc version 0.4.0 or older.
 
 *** https://json-rpc.starknet-mainnet.public.lavanet.xyz
 Provider is working fine.
 This provider use a rpc version 0.4.0 or older.
-
-*** http://192.168.1.99:6060/v0_5
-This provider is not working properly.

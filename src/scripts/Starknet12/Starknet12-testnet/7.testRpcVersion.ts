@@ -43,26 +43,37 @@ async function testProvider(providerUrl: string): Promise<string> {
 async function main() {
 
     const listProvider = [
+        // testnet
         "https://starknet-goerli.g.alchemy.com/v2/" + alchemyKey,
         "https://starknet-goerli.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey,
         'https://starknet-goerli.infura.io/v3/' + infuraKey,
-        'https://starknet-goerli.infura.io/rpc/v0.5/' + infuraKey,
+        // 'https://starknet-goerli.infura.io/rpc/v0.5/' + infuraKey,
         'https://starknet-testnet.blastapi.io/' + blastKey + "/rpc/v0.5",
         "https://starknet-testnet.public.blastapi.io/rpc/v0.4",
         "https://starknet-testnet.public.blastapi.io/rpc/v0.5",
         "https://limited-rpc.nethermind.io/goerli-juno",
+        "https://free-rpc.nethermind.io/goerli-juno/v0_5",
         "https://json-rpc.starknet-testnet.public.lavanet.xyz",
-        'http://192.168.1.99:9545/rpc/v0.4',
-        'http://192.168.1.99:9545/rpc/v0.5',
-        'http://192.168.1.99:9545/rpc/v0_5',
+        // 'http://192.168.1.99:9545/rpc/v0.4', //pathfinder 0.10.0
+        // 'http://192.168.1.99:9545/rpc/v0_4', //pathfinder 0.10.0
+        // 'http://192.168.1.99:9545/rpc/v0.5', //pathfinder 0.10.0
+        // 'http://192.168.1.99:9545/rpc/v0_5', //pathfinder 0.10.0
+        // 'http://192.168.1.99:9545/rpc/v0.6', //pathfinder 0.10.0
+        // 'http://192.168.1.99:9545/rpc/v0_6', //pathfinder 0.10.0
+        // mainnet
+        "https://starknet-mainnet.g.alchemy.com/v2/" + alchemyKey,
         "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey,
         "https://starknet-mainnet.infura.io/v3/" + infuraKey,
+        // 'https://starknet-mainnet.infura.io/rpc/v0.5/' + infuraKey,
         "https://starknet-mainnet.blastapi.io/" + blastKey + "/rpc/v0.5",
+        "https://starknet-mainnet.public.blastapi.io/rpc/v0.4",
         "https://starknet-mainnet.public.blastapi.io/rpc/v0.5",
         "https://limited-rpc.nethermind.io/mainnet-juno/v0_5",
+        "https://free-rpc.nethermind.io/mainnet-juno/v0_5",
         "https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/" + lavaMainnetKey,
         "https://json-rpc.starknet-mainnet.public.lavanet.xyz",
-        "http://192.168.1.99:6060/v0_5",
+        // "http://192.168.1.99:6060/v0_4", //Juno
+        // "http://192.168.1.99:6060/v0_5", //Juno
     ]
 
     for (const url of listProvider) {
@@ -78,3 +89,5 @@ main()
         console.error(error);
         process.exit(1);
     });
+
+
