@@ -3,9 +3,7 @@
 // Launch with npx ts-node src/scripts/webSocket/1.balanceMainnetWebSocket.ts
 // Coded with Starknet.js v5.21.0
 
-import { Provider, RpcProvider, Contract, Account, json, uint256, shortString } from "starknet";
-//import { account4MainnetAddress, account4MainnetPrivateKey } from "../../A-MainPriv/mainPriv";
-import fs from "fs";
+import { json } from "starknet";
 import { formatBalance } from "../formatBalance";
 import WebSocket from 'ws';
 // import * as dotenv from "dotenv";
@@ -39,8 +37,6 @@ async function keypress(): Promise<void> {
 //        👆👆👆
 
 async function main() {
-    //initialize the Provider, with a rpc node located in the local network
-    //const provider = new RpcProvider({ nodeUrl: 'wss://192.168.1.99:6061' });
 
     let wsOpen: boolean = false;
     const start0 = new Date().getTime();
@@ -71,7 +67,7 @@ async function main() {
     });
     console.log("C");
     await wait(10 * 1000); // 10 sec
-    console.log("press a key to stop the .");
+    console.log("press a key to stop the scan.");
     await keypress();
     ws.send('{"jsonrpc" : "2.0", "method" : "pathfinder_unsubscribe","params" : ["newHeads"],  "id" : 1}');
     console.log("C2");
