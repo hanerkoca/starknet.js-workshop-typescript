@@ -3,7 +3,7 @@
 // coded with Starknet.js v5.19.5+commit
 // launch with npx ts-node src/scripts/signature/signEIP712-V5.ts
 
-import { Account, ec, hash, Provider, json, Contract, encode, shortString, typedData, WeierstrassSignatureType, ArraySignatureType, stark } from "starknet";
+import { Account, ec, hash, json, Contract, encode, shortString, typedData, WeierstrassSignatureType, ArraySignatureType, stark, RpcProvider, Signature, num } from "starknet";
 
 import * as dotenv from "dotenv";
 import fs from "fs";
@@ -14,12 +14,8 @@ dotenv.config();
 //    👆👆👆
 async function main() {
     //initialize Provider with DEVNET, reading .env file
-    if (process.env.STARKNET_PROVIDER_BASE_URL != "http://127.0.0.1:5050") {
-        console.log("This script work only on local devnet.");
-        process.exit(1);
-    }
-    const provider = new Provider({ sequencer: { baseUrl: process.env.STARKNET_PROVIDER_BASE_URL } });
-    console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" });
+    console.log("Provider connected");
 
     // initialize existing predeployed account 0 of Devnet
     console.log('OZ_ACCOUNT_ADDRESS=', process.env.OZ_ACCOUNT0_DEVNET_ADDRESS);
@@ -34,8 +30,8 @@ async function main() {
     // const privateKey = stark.randomAddress();
     const privateKey = privateKey0;
     const starknetPublicKey = ec.starkCurve.getStarkKey(privateKey);
-    const fullPubKey = encode.buf2hex(ec.starkCurve.getPublicKey(privateKey, false)); // complete public key
     console.log("publicKey calculated =", starknetPublicKey, typeof (starknetPublicKey));
+    const fullPubKey = encode.addHexPrefix(encode.buf2hex(ec.starkCurve.getPublicKey(privateKey, false))); // complete public key
     console.log('fullpubKey =', fullPubKey);
 
     const message = [1, 128, 18, 14];
@@ -97,21 +93,21 @@ async function main() {
             ]
         },
     };
-    const signature2  = await account.signMessage(typedDataValidate) as WeierstrassSignatureType;
-    console.log("sig2 =",signature2);
-    const sig2arr=stark.signatureToHexArray(signature2)
-    const sig2rs=signature2;
+    const signature2: Signature = await account.signMessage(typedDataValidate) as WeierstrassSignatureType;
+    console.log("sig2 =", signature2);
+    const sig2arr: ArraySignatureType = stark.signatureToHexArray(signature2)
+    const sig2rs: WeierstrassSignatureType = signature2;
 
 
     // on receiver side, with account (that needs privKey)
     const result = await account.verifyMessage(typedDataValidate, sig2arr);
-    console.log("Result off-chain by account (boolean)=", result);
+    console.log("Result by account (boolean)=", result);
     const msgHash5 = typedData.getMessageHash(typedDataValidate, account.address);
     const result3 = await account.verifyMessageHash(msgHash5, sig2arr);
-    console.log("Result off-chain by account (boolean)=", result3);
+    console.log("Result  by account (boolean)=", result3);
     // on receiver side, without account  (so, without privKey)
-    const isVerified=ec.starkCurve.verify(sig2rs, msgHash5, fullPubKey);
-    console.log("verified by Noble (boolean) =",isVerified);
+    const isVerified = ec.starkCurve.verify(sig2rs, msgHash5, fullPubKey);
+    console.log("verified off chain by Noble (boolean) =", isVerified);
 
     // on receiver side, verify on chain, without account (so, without privKey)
     const compiledAccount = json.parse(fs.readFileSync("./compiledContracts/cairo060/Account_0_5_1.json").toString("ascii"));

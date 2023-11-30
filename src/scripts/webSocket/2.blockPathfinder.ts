@@ -45,7 +45,7 @@ async function main() {
     let wsOpen: boolean = false;
     const start0 = new Date().getTime();
     let end0: number = 0;
-    const ws = new WebSocket("ws://192.168.1.99:9545/ws");
+    const ws = new WebSocket("ws://192.168.1.44:9545/ws");
     console.log("A");
     ws.on('open', function open() {
         end0 = new Date().getTime();

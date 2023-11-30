@@ -21,7 +21,7 @@ async function main() {
     // Blast node rpc 0.5.1 for mainnet :
     const providerBlastMainnet = new RpcProvider({ nodeUrl: "https://starknet-mainnet.blastapi.io/" + blastKey + "/rpc/v0.5" });
     // Public Blast node rpc 0.5.0 for Mainnet : 
-    const providerMainnetBlastPublic = new RpcProvider({ nodeUrl: "https://starknet-testnet.public.blastapi.io/rpc/v0.5" });
+    const providerMainnetBlastPublic = new RpcProvider({ nodeUrl: "https://starknet-mainnet.public.blastapi.io/rpc/v0.5" });
     // Lava node rpc for Mainnet : 
     const providerMainnetLava = new RpcProvider({ nodeUrl: "https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/" + lavaMainnetKey });
     // Public Lava node rpc for Mainnet : 

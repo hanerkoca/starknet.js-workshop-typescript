@@ -58,7 +58,7 @@ async function main() {
         "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey,
         "https://starknet-mainnet.infura.io/v3/" + infuraKey,
         "https://starknet-mainnet.blastapi.io/" + blastKey + "/rpc/v0.5",
-        "https://starknet-testnet.public.blastapi.io/rpc/v0.5",
+        "https://starknet-mainnet.public.blastapi.io/rpc/v0.5",
         "https://limited-rpc.nethermind.io/mainnet-juno/v0_5",
         "https://g.w.lavanet.xyz:443/gateway/strk/rpc-http/" + lavaMainnetKey,
         "https://json-rpc.starknet-mainnet.public.lavanet.xyz",

@@ -2,7 +2,7 @@
 // coded with Starknet.js v5.21.1
 // launch with npx ts-node src/scripts/signature/4b.signEIP712test.ts
 
-import { Account, ec, hash, RpcProvider, json, Contract, encode, shortString, typedData, WeierstrassSignatureType, constants } from "starknet";
+import { Account, ec, RpcProvider, encode, typedData, Signature, stark, ArraySignatureType, WeierstrassSignatureType } from "starknet";
 
 import * as dotenv from "dotenv";
 import fs from "fs";
@@ -14,10 +14,10 @@ dotenv.config();
 async function main() {
     //initialize Provider with DEVNET
     const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" });
-    console.log('STARKNET_PROVIDER_BASE_URL=', process.env.STARKNET_PROVIDER_BASE_URL);
+    console.log("Provider connected");
 
     // initialize existing predeployed account 0 of Devnet
-    const privateKey0 =  "0x71d7bb07b9a64f6f78ac4c816aff4da9";
+    const privateKey0 = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
     // const starkKeyPair0 = ec.getKeyPair(privateKey0);
     const accountAddress0 = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
     console.log('OZ_ACCOUNT_ADDRESS=', accountAddress0);
@@ -29,7 +29,7 @@ async function main() {
     // const privateKey = stark.randomAddress();
     const privateKey = privateKey0;
     const starknetPublicKey = ec.starkCurve.getStarkKey(privateKey);
-    const fullPubKey = encode.buf2hex(ec.starkCurve.getPublicKey(privateKey, false)); // complete public key
+    const fullPubKey = encode.addHexPrefix(encode.buf2hex(ec.starkCurve.getPublicKey(privateKey, false))); // complete public key
     console.log("publicKey calculated =", starknetPublicKey, typeof (starknetPublicKey));
     console.log('fullpubKey =', fullPubKey);
 
@@ -38,7 +38,7 @@ async function main() {
             chainId: "Starknet Mainnet",
             name: "Dappland",
             version: "1.0",
-            hashing_function:"pedersen"
+            hashing_function: "pedersen"
         },
         message: {
             MessageId: 345,
@@ -164,13 +164,14 @@ async function main() {
             ],
         },
     };
-    const msgHash=typedData.getMessageHash(typedMessage,account0.address);
+    const msgHash = typedData.getMessageHash(typedMessage, account0.address);
     //const msgHash=await account0.hashMessage(typedMessage);
-    const signature  = await account0.signMessage(typedMessage);
-
-    const res = await account0.verifyMessage(typedMessage, signature);
+    const signature: Signature = await account0.signMessage(typedMessage);
+    const arr: ArraySignatureType = stark.formatSignature(signature);
+    const sig2: WeierstrassSignatureType = new ec.starkCurve.Signature(BigInt(arr[0]), BigInt(arr[1]));
+    const res = await account0.verifyMessage(typedMessage, sig2);
     console.log(" :>> ", res);
-    console.log("Hash =",msgHash,"\nSignature =", signature);
+    console.log("Hash =", msgHash, "\nSignature =", signature);
 
     console.log('✅ Test completed.');
 
