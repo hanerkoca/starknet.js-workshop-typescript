@@ -2,7 +2,7 @@
 // Launch with npx ts-node src/scripts/webSocket/1.balanceMainnetWebSocket.ts
 // Coded with Starknet.js v5.21.0
 
-import { formatBalance } from "../formatBalance";
+import { formatBalance } from "../utils/formatBalance";
 import WebSocket from 'ws';
 // import * as dotenv from "dotenv";
 // dotenv.config();

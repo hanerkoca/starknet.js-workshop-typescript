@@ -6,7 +6,7 @@ import { Provider, Account, Calldata, Signer, BigNumberish, ec, hash, json, Call
 import { abstractionFns } from "./14b.myAccountAbstractionMod";
 import fs from "fs";
 import axios from "axios";
-import { resetDevnetNow } from "../../resetDevnetFunc";
+import { resetDevnetNow } from "../../utils/resetDevnetFunc";
 
 
 //          👇👇👇

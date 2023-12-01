@@ -6,7 +6,7 @@ import { Provider, RpcProvider, Contract, Account, json, uint256, Abi, constants
 import { alchemyKey, infuraKey, blastKey, lavaMainnetKey } from "../../../A-MainPriv/mainPriv";
 import { account4MainnetAddress, account4MainnetPrivateKey, junoNMmainnet } from "../../../A-MainPriv/mainPriv";
 import { account2TestnetAddress, account2TestnetPrivateKey, junoNMtestnet } from "../../../A1priv/A1priv";
-import { resetDevnetNow } from "../../resetDevnetFunc";
+import { resetDevnetNow } from "../../utils/resetDevnetFunc";
 import fs from "fs";
 import axios from 'axios';
 import * as dotenv from "dotenv";

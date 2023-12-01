@@ -7,7 +7,7 @@ import { alchemyKey, infuraKey } from "../../../A-MainPriv/mainPriv";
 //import { accountTestnet3Address, accountTestnet3privateKey } from "../../A1priv/A1priv";
 import { account4MainnetAddress, account4MainnetPrivateKey } from "../../../A-MainPriv/mainPriv";
 
-import { resetDevnetNow } from "../../resetDevnetFunc";
+import { resetDevnetNow } from "../../utils/resetDevnetFunc";
 import fs from "fs";
 import axios from 'axios';
 import * as dotenv from "dotenv";

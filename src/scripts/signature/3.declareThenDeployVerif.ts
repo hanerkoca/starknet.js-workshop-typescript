@@ -5,7 +5,7 @@
 import { Provider, Account, Contract, json ,constants, GetTransactionReceiptResponse, InvokeFunctionResponse} from "starknet";
 import fs from "fs";
 import * as dotenv from "dotenv";
-import { resetDevnetNow } from "../resetDevnetFunc";
+import { resetDevnetNow } from "../utils/resetDevnetFunc";
 dotenv.config();
 
 //          👇👇👇

@@ -6,7 +6,7 @@ import { Provider, RpcProvider, Account, Contract, json, constants, GetTransacti
 import fs from "fs";
 //import { accountTestnet4privateKey, accountTestnet4Address } from "../../A1priv/A1priv"
 import * as dotenv from "dotenv";
-import { resetDevnetNow } from "../../resetDevnetFunc";
+import { resetDevnetNow } from "../../utils/resetDevnetFunc";
 dotenv.config();
 
 //          👇👇👇

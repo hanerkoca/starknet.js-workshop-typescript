@@ -11,7 +11,7 @@ import { account0OZSepoliaAddress, account7TestnetAddress, account7TestnetPrivat
 import { infuraKey, account4MainnetAddress, account4MainnetPrivateKey } from "../../../A-MainPriv/mainPriv";
 import { junoNMtestnet } from "../../../A1priv/A1priv";
 import { ethAddress } from "../../utils/constants";
-import { formatBalance } from "../../formatBalance";
+import { formatBalance } from "../../utils/formatBalance";
 
 
 // In Sepolia, use the bridge https://sepolia.etherscan.io/address/0x8453fc6cd1bcfe8d4dfc069c400b433054d47bdc#writeProxyContract

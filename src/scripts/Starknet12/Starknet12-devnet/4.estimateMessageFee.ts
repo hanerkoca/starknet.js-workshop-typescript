@@ -4,7 +4,7 @@
 
 import { Provider, RpcProvider, Contract, Account, json, uint256, Abi, constants, shortString, CompiledContract, ContractClass, RPC, SequencerProvider, ContractClassResponse, stark, contractClassResponseToLegacyCompiledContract, LegacyCompiledContract, hash, num } from "starknet";
 import { alchemyKey, infuraKey } from "../../../A-MainPriv/mainPriv";
-import { resetDevnetNow } from "../../resetDevnetFunc";
+import { resetDevnetNow } from "../../utils/resetDevnetFunc";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();

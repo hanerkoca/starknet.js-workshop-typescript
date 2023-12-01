@@ -8,7 +8,7 @@ import { accountTestnet4privateKey, accountTestnet4Address } from "../../../A1pr
 import { accountTestnet2ArgentX1Address, accountTestnet2ArgentX1privateKey, TonyNode } from "../../../A2priv/A2priv";
 
 import * as dotenv from "dotenv";
-import { resetDevnetNow } from "../../resetDevnetFunc";
+import { resetDevnetNow } from "../../utils/resetDevnetFunc";
 dotenv.config();
 
 //          👇👇👇

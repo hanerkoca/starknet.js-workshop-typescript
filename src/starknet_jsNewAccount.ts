@@ -6,7 +6,7 @@ import fs from "fs";
 import { Account, Contract, ec, json, uint256, hash, CallData, Call, Calldata, cairo, Uint256, RpcProvider } from "starknet";
 import axios from "axios";
 import * as dotenv from "dotenv";
-import { resetDevnetNow } from "./scripts/resetDevnetFunc";
+import { resetDevnetNow } from "./scripts/utils/resetDevnetFunc";
 dotenv.config();
 
 //        👇👇👇

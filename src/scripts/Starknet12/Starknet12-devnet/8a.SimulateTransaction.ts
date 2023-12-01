@@ -7,7 +7,7 @@ import fs from "fs";
 import { account2TestnetAddress, account2TestnetPrivateKey } from "../../../A1priv/A1priv";
 import { infuraKey, account4MainnetAddress, account4MainnetPrivateKey } from "../../../A-MainPriv/mainPriv";
 import * as dotenv from "dotenv";
-import { resetDevnetNow } from "../../resetDevnetFunc";
+import { resetDevnetNow } from "../../utils/resetDevnetFunc";
 dotenv.config();
 
 function wait(delay: number) {

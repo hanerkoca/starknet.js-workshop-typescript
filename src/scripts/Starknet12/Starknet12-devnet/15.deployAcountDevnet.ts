@@ -10,7 +10,7 @@ import { addrETH } from "../../../A2priv/A2priv";
 import fs from "fs";
 import axios from "axios";
 import * as dotenv from "dotenv";
-import { resetDevnetNow } from "../../resetDevnetFunc";
+import { resetDevnetNow } from "../../utils/resetDevnetFunc";
 dotenv.config();
 
 

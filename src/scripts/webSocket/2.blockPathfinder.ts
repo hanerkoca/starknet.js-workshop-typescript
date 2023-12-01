@@ -4,7 +4,7 @@
 // Coded with Starknet.js v5.21.0
 
 import { json } from "starknet";
-import { formatBalance } from "../formatBalance";
+import { formatBalance } from "../utils/formatBalance";
 import WebSocket from 'ws';
 // import * as dotenv from "dotenv";
 // dotenv.config();
