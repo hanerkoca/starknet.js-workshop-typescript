@@ -33,7 +33,7 @@ async function main() {
         addressSalt: starkKeyPub
     });
     console.log("res =", resDeplAccount);
-    const { transaction_hash, contract_address } = await OZaccount0.deployAccount({ classHash: OZ080b1ClassHash, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub }); 
+    // const { transaction_hash, contract_address } = await OZaccount0.deployAccount({ classHash: OZ080b1ClassHash, constructorCalldata: OZaccountConstructorCallData, addressSalt: starkKeyPub }); 
     console.log("✅ New OpenZeppelin account created.txH =", resDeplAccount.transaction_hash, "\n   final address =", resDeplAccount.contract_address);
     await provider.waitForTransaction(resDeplAccount.transaction_hash);
 

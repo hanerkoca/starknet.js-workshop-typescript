@@ -33,7 +33,8 @@ async function main() {
     // Nethermind Juno node rpc for Mainnet (only whitelisted access) :
     const providerNethermindMainnet = new RpcProvider({ nodeUrl: junoNMmainnet });
     // Public Nethermind node rpc 0.5.1 for Mainnet : 
-    const providerMainnetNethermindPublic = new RpcProvider({ nodeUrl: "https://limited-rpc.nethermind.io/mainnet-juno/v0_5" });
+    const providerMainnetNethermindPublic = new RpcProvider({ nodeUrl: "https://free-rpc.nethermind.io/mainnet-juno/v0_5" });
+    const providerMainnetNethermindPublic2 = new RpcProvider({ nodeUrl: "https://limited-rpc.nethermind.io/mainnet-juno/v0_5" });
     // with your own local Juno node, in the same computer : 
     const providerJunoMainnetRpcLocComputer = new RpcProvider({ nodeUrl: "http://127.0.0.1:6060/v0_5" });
     // with your own local Juno node rpc 0.5.1, in your local network : 
@@ -53,7 +54,8 @@ async function main() {
     // Nethermind Juno node rpc for Testnet (only whitelisted access) :
     const providerNethermindTestnet = new RpcProvider({ nodeUrl: junoNMtestnet });
     // Public Nethermind node rpc for Testnet : 
-    const providerTestnetNethermindPublic = new RpcProvider({ nodeUrl: "https://limited-rpc.nethermind.io/goerli-juno" });
+    const providerTestnetNethermindPublic = new RpcProvider({ nodeUrl: "https://free-rpc.nethermind.io/goerli-juno" });
+    const providerTestnetNethermindPublic2 = new RpcProvider({ nodeUrl: "https://limited-rpc.nethermind.io/goerli-juno" });
     // Public Lava node rpc 0.4.0 for Testnet : 
     const providerTestnetLavaPublic = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" });
     // with your own local Pathfinder node, in your local network : 
@@ -62,6 +64,16 @@ async function main() {
     const providerPathfinderTestnetRpcLocComputer = new RpcProvider({ nodeUrl: 'http://127.0.0.1:9545/rpc/v0.5' });
     // Testnet 1 sequencer (soon deprecated):
     const providerTestnet = new SequencerProvider({ network: constants.NetworkName.SN_GOERLI });
+
+    // ******* SEPOLIA TESTNET ********
+// with your own local Pathfinder node, in your local network : 
+const providerPathfinderSepoliaTestnetRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.44:9545/rpc/v0.5' });
+// Public Blast node rpc for Testnet : 
+const providerBlastSepoliaTestnetPublic = new RpcProvider({ nodeUrl: "https://starknet-sepolia.public.blastapi.io/rpc/v0.5"});
+const providerBlastSepoliaTestnetPublicV6 = new RpcProvider({ nodeUrl: "https://starknet-sepolia.public.blastapi.io/rpc/v0_6"});
+// Public Nethermind node rpc for Testnet : 
+const providerNethermindSepoliaTestnetPublic = new RpcProvider({ nodeUrl: "https://free-rpc.nethermind.io/sepolia-juno/v0_5"});
+const providerNethermindSepoliaTestnetPublicV6 = new RpcProvider({ nodeUrl: "https://free-rpc.nethermind.io/sepolia-juno"});
 
     // ******* DEVNETS ************
     // Starknet-devnet sequencer :

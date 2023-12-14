@@ -6,7 +6,7 @@ import { constants, Contract, Account, json, shortString, RpcProvider, encode } 
 import { account2TestnetAddress, account2TestnetPrivateKey } from "../../../A1priv/A1priv";
 
 import fs from "fs";
-import {LogC} from "../../utils/logColors"
+import { LogC } from "../../utils/logColors"
 import * as dotenv from "dotenv";
 import { alchemyKey, blastKey, infuraKey, lavaMainnetKey } from "../../../A-MainPriv/mainPriv";
 dotenv.config();
@@ -25,7 +25,7 @@ async function testProvider(providerUrl: string): Promise<string> {
     try {
         chId = await provider.getChainId();
         if (chId) {
-            result = result + LogC.fg.green+"\nProvider is working fine."+LogC.reset;
+            result = result + LogC.fg.green + "\nProvider is working fine." + LogC.reset;
             try {
                 const resp = await provider.getSpecVersion();
                 result = result + "\nThis provider use a rpc version " + resp;
@@ -33,10 +33,10 @@ async function testProvider(providerUrl: string): Promise<string> {
                 result = result + "\nThis provider use a rpc version 0.4.0 or older.";
             }
         } else {
-            result = result+ LogC.fg.red + "\nThis provider is not working properly."+LogC.reset;
+            result = result + LogC.fg.red + "\nThis provider is not working properly." + LogC.reset;
         }
     } catch {
-        result = result+ LogC.fg.red + "\nThis provider is not working properly."+LogC.reset;
+        result = result + LogC.fg.red + "\nThis provider is not working properly." + LogC.reset;
     }
     return result;
 }
@@ -46,14 +46,19 @@ async function main() {
     // defaul node
     const provider = new RpcProvider();
     const chId = shortString.decodeShortString(await provider.getChainId());
-    const resp =  await provider.getSpecVersion();
-    console.log("default =",chId,resp);
-    
+    const resp = await provider.getSpecVersion();
+    console.log("default =", chId, resp);
+
     const listProvider = [
         constants.NetworkName.SN_GOERLI, // default Testnet
         constants.NetworkName.SN_MAIN, // default Testnet
 
-        // testnet
+        //sepolia testnet
+        "https://starknet-sepolia.public.blastapi.io/rpc/v0.5",
+        "https://starknet-sepolia.public.blastapi.io/rpc/v0_6",
+        "https://free-rpc.nethermind.io/sepolia-juno",
+        "https://free-rpc.nethermind.io/sepolia-juno/v0_5",
+        // goerli testnet
         "https://starknet-goerli.g.alchemy.com/v2/" + alchemyKey,
         "https://starknet-goerli.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey,
         'https://starknet-goerli.infura.io/v3/' + infuraKey,

@@ -14,8 +14,9 @@ dotenv.config();
 async function main() {
     //initialize the Provider, with a rpc node 
 
-    const provider = new RpcProvider({ nodeUrl: 'https://starknet-mainnet.g.alchemy.com/v2/' + alchemyKey });
-    // with a Provider object : const provider = new Provider({ rpc: { nodeUrl: 'http://192.168.1.99:9545' } });
+    //const provider = new RpcProvider({ nodeUrl: 'https://starknet-mainnet.g.alchemy.com/v2/' + alchemyKey });
+    // with a Provider object : 
+    const provider = new RpcProvider( { nodeUrl: 'http://192.168.1.44:6060/v0_5' } );
     // on the same computer : const provider = new Provider({ rpc: { nodeUrl: 'http://127.0.0.1:9545' } });
     const chainId = await provider.getChainId();
     console.log('Connected to the local network node (Mainnet)=', shortString.decodeShortString(chainId));
@@ -32,7 +33,7 @@ async function main() {
 
     // direct acces with axios
     const apiKey = alchemyKey;
-    const url = `https://starknet-mainnet.g.alchemy.com/v2/${apiKey}`;
+    const url =provider.nodeUrl ;
     console.log("url=",url);
     const payload = {
         jsonrpc: '2.0',
