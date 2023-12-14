@@ -25,7 +25,7 @@ async function main() {
     const account0 = new Account(provider, accountAddress0, privateKey0);
     console.log("Account 0 connected.\n");
 
-    // new Open Zeppelin account v0.7.0 (Cairo 1) :
+    // new Open Zeppelin account v0.8.0 (Cairo 1) :
 
     // Generate public and private key pair.
     const privateKey = process.env.C20_NEW_ACCOUNT_PRIVKEY!;
