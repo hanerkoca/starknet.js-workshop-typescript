@@ -66,14 +66,18 @@ async function main() {
     const providerTestnet = new SequencerProvider({ network: constants.NetworkName.SN_GOERLI });
 
     // ******* SEPOLIA TESTNET ********
+    // Public Blast node rpc for Testnet : 
+    const providerBlastSepoliaTestnetPublic = new RpcProvider({ nodeUrl: "https://starknet-sepolia.public.blastapi.io/rpc/v0.5"});
+    const providerBlastSepoliaTestnetPublicV6 = new RpcProvider({ nodeUrl: "https://starknet-sepolia.public.blastapi.io/rpc/v0_6"});
+    // Public Nethermind node rpc for Testnet : 
+    const providerNethermindSepoliaTestnetPublic = new RpcProvider({ nodeUrl: "https://free-rpc.nethermind.io/sepolia-juno/v0_5"});
+    const providerNethermindSepoliaTestnetPublicV6 = new RpcProvider({ nodeUrl: "https://free-rpc.nethermind.io/sepolia-juno"});
+    // with your own local Pathfinder node, in your local network : 
+    const providerPathfinderSepoliaTestnetRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.44:9545/rpc/v0.5' });
+
+    // ******* SEPOLIA INTEGRATION ********
 // with your own local Pathfinder node, in your local network : 
-const providerPathfinderSepoliaTestnetRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.44:9545/rpc/v0.5' });
-// Public Blast node rpc for Testnet : 
-const providerBlastSepoliaTestnetPublic = new RpcProvider({ nodeUrl: "https://starknet-sepolia.public.blastapi.io/rpc/v0.5"});
-const providerBlastSepoliaTestnetPublicV6 = new RpcProvider({ nodeUrl: "https://starknet-sepolia.public.blastapi.io/rpc/v0_6"});
-// Public Nethermind node rpc for Testnet : 
-const providerNethermindSepoliaTestnetPublic = new RpcProvider({ nodeUrl: "https://free-rpc.nethermind.io/sepolia-juno/v0_5"});
-const providerNethermindSepoliaTestnetPublicV6 = new RpcProvider({ nodeUrl: "https://free-rpc.nethermind.io/sepolia-juno"});
+const providerPathfinderSepoliaIntegrationRpcLocNetwork = new RpcProvider({ nodeUrl: 'http://192.168.1.44:9550/rpc/v0.5' });
 
     // ******* DEVNETS ************
     // Starknet-devnet sequencer :

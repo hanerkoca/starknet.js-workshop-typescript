@@ -11,7 +11,7 @@
             "type": "node",
             "request": "launch",
             "name": "TS1",
-            "program": "${workspaceFolder}/src/scripts/signature/5.testAllAccounts.ts",
+            "program": "${workspaceFolder}/src/scripts/Starknet12/Starknet12-testnet/8.JediSwap.ts",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,
