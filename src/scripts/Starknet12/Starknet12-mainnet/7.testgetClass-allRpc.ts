@@ -15,7 +15,7 @@ dotenv.config();
 async function main() {
     // ******* MAINNET ************
     // Alchemy node rpc 0.5.0 for Mainnet (do not work today) :
-    const providerAlchemyMainnet = new RpcProvider({ nodeUrl: "https://starknet-mainnet.g.alchemy.com/v2/" + alchemyKey });
+    const providerAlchemyMainnet = new RpcProvider({ nodeUrl: "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey });
     // Infura node rpc for Mainnet :
     const providerInfuraMainnet = new RpcProvider({ nodeUrl: "https://starknet-mainnet.infura.io/v3/" + infuraKey });
     // Blast node rpc 0.5.1 for mainnet :
