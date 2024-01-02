@@ -1,0 +1,66 @@
+// Deploy in Sepolia Integration a new ArgentX wallet (Cairo1 0.3.0).
+// launch with : npx ts-node src/scripts/Starknet12/Starknet12-integration/4.deployNewArgentXaccount.ts
+// Coded with Starknet.js v5.24.3
+
+import { RpcProvider, Account, ec, json, stark, hash, CallData, Contract, cairo, Call, num, shortString } from "starknet";
+import { account2IntegrationAXaddress, account2IntegrationAXprivateKey } from "../../../A2priv/A2priv";
+import { account1IntegrationGoerliAXprivateKey, goerliIntegrationUrl } from "../../../A1priv/A1priv";
+
+import fs from "fs";
+import { ethAddress } from "../../utils/constants";
+
+async function main() {
+    const provider = new RpcProvider({ nodeUrl: goerliIntegrationUrl });
+    console.log("chain Id =", shortString.decodeShortString(await provider.getChainId()), ", rpc", await provider.getSpecVersion());
+    console.log("Provider connected.");
+    // initialize existing predeployed account 0 of Devnet
+
+    const privateKey0 = account1IntegrationGoerliAXprivateKey;
+    // const accountAddress0 = account2IntegrationAXaddress;
+    // const account0 = new Account(provider, accountAddress0, privateKey0);
+    // console.log("Account 0 connected.\n");
+
+    const contractAXclassHash = "0x028463df0e5e765507ae51f9e67d6ae36c7e5af793424eccc9bc22ad705fc09d"; // ArgentX Cairo 1 experimental for tx V3
+    const accountAXsierra = await provider.getClassByHash(contractAXclassHash);
+    //const ch = hash.computeContractClassHash(accountAXsierra);
+    //console.log("Class Hash of ArgentX contract =", ch);
+
+    // Calculate future address of the ArgentX account
+    const privateKeyAX: string = num.toHexString(privateKey0);
+    console.log('AX account Private Key =', privateKeyAX);
+    console.log("Store safely this private key!!!");
+    const starkKeyPubAX = ec.starkCurve.getStarkKey(privateKeyAX);
+    console.log('AX account Public Key  =', starkKeyPubAX);
+
+
+
+    const calldataAX = new CallData(accountAXsierra.abi);
+    const ConstructorAXCallData = calldataAX.compile("constructor", {
+        owner: starkKeyPubAX,
+        guardian: "0"
+    });
+    const accountAXAddress = hash.calculateContractAddressFromHash(starkKeyPubAX, contractAXclassHash, ConstructorAXCallData, 0);
+    console.log('Precalculated account address=', accountAXAddress);
+
+    // process.exit(1);
+    // fund account address before account creation
+    // deploy ArgentX account
+    const accountAX = new Account(provider, accountAXAddress, privateKeyAX);
+    const deployAccountPayload = {
+        classHash: contractAXclassHash,
+        constructorCalldata: ConstructorAXCallData,
+        contractAddress: accountAXAddress,
+        addressSalt: starkKeyPubAX
+    };
+    const { transaction_hash: AXdAth, contract_address: accountAXFinalAdress } = await accountAX.deployAccount(deployAccountPayload);
+    console.log("Final address =", accountAXFinalAdress);
+    await provider.waitForTransaction(AXdAth);
+    console.log('✅ ArgentX wallet deployed.');
+
+}
+main()
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });

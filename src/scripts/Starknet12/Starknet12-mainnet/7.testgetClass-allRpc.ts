@@ -42,7 +42,7 @@ async function main() {
     // mainnet sequencer (soon deprecated) :
     const providerMainnetSequencer = new SequencerProvider({ network: constants.NetworkName.SN_MAIN });
 
-    // ******* TESTNET ************
+    // ******* GOERLI TESTNET ************
     // Alchemy node rpc 0.5.0 for Testnet (do not work today) :
     const providerAlchemyTestnet = new RpcProvider({ nodeUrl: "https://starknet-goerli.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey });
     // Infura node rpc for Testnet :

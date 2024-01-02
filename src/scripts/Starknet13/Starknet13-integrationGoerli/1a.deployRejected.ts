@@ -1,10 +1,10 @@
-// deploy in Sepolia Testnet a contract that can be rejected.
-// launch with npx ts-node src/scripts/Starknet12/Starknet12-sepolia/6.deployRejected.ts
+// deploy in Goerli Integration a contract that can be rejected.
+// launch with npx ts-node src/scripts/Starknet13/Starknet13-integrationGoerli/1a.deployRejected.ts
 // Coded with Starknet.js v5.24.3
 
 import { constants, Contract, Account, json, shortString, RpcProvider } from "starknet";
 import fs from "fs";
-import { account5TestnetAddress, account5TestnetPrivateKey } from "../../../A1priv/A1priv";
+import { account1IntegrationGoerliAXaddress, account1IntegrationGoerliAXprivateKey, account5TestnetAddress, account5TestnetPrivateKey, goerliIntegrationUrl } from "../../../A1priv/A1priv";
 import { infuraKey, account4MainnetAddress, account4MainnetPrivateKey } from "../../../A-MainPriv/mainPriv";
 import { account0OZSepoliaAddress,account0OZSepoliaPrivateKey } from "../../../A1priv/A1priv";
 import { account1IntegrationOZaddress, account1IntegrationOZprivateKey } from "../../../A2priv/A2priv";
@@ -13,21 +13,24 @@ import { account1IntegrationOZaddress, account1IntegrationOZprivateKey } from ".
 
 async function main() {
     // initialize Provider 
-    //const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" } ); // only starknet-devnet-rs
+    const provider = new RpcProvider({ nodeUrl: goerliIntegrationUrl } ); 
     // const provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" }); // testnet
     //const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9545/rpc/v0.5" }); // local Sepolia Testnet node
-    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9550/rpc/v0.5" }); // local Pathfinder Sepolia Integration node
+    //const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9550/rpc/v0.5" }); // local Pathfinder Sepolia Integration node
 
     // Check that communication with provider is OK
     const ch = await provider.getChainId();
     console.log("chain Id =" , shortString.decodeShortString(ch), ", rpc", await provider.getSpecVersion());
 
     // *** Devnet-rs 
-   //const privateKey0 = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
-   //  const accountAddress0: string = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
+//    const privateKey0 = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
+//     const accountAddress0: string = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
     // *** initialize existing Argent X testnet  account
     // const privateKey0 = account5TestnetPrivateKey;
     // const accountAddress0 = account5TestnetAddress
+    // *** initialize existing Argent X Goerly Testnet  account
+    const privateKey0 = account1IntegrationGoerliAXprivateKey;
+    const accountAddress0 =account1IntegrationGoerliAXaddress 
     // *** initialize existing Argent X mainnet  account
     // const privateKey0 = account4MainnetPrivateKey;
     // const accountAddress0 = account4MainnetAddress
@@ -35,8 +38,8 @@ async function main() {
     //const privateKey0=account0OZSepoliaPrivateKey;
     //const accountAddress0 = account0OZSepoliaAddress;
     // *** initialize existing Sepolia Integration account
-    const privateKey0=account1IntegrationOZprivateKey;
-    const accountAddress0 = account1IntegrationOZaddress;
+    //const privateKey0=account1IntegrationOZprivateKey;
+    //const accountAddress0 = account1IntegrationOZaddress;
     const account0 = new Account(provider, accountAddress0, privateKey0);
     console.log('existing_ACCOUNT_ADDRESS=', accountAddress0);
     console.log('existing account connected.\n');
@@ -44,7 +47,7 @@ async function main() {
     const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/reject.sierra.json").toString("ascii"));
     const compiledCasm = json.parse(fs.readFileSync("./compiledContracts/cairo210/reject.casm.json").toString("ascii"));
 
-    const declareResponse = await account0.declare({ contract: compiledSierra, casm: compiledCasm });
+    const declareResponse = await account0.declareIfNot({ contract: compiledSierra, casm: compiledCasm });
     const contractClassHash = declareResponse.class_hash;
     // const contractClassHash = "0x5f3614e8671257aff9ac38e929c74d65b02d460ae966cd826c9f04a7fa8e0d4";
 
@@ -56,6 +59,7 @@ async function main() {
     console.log("Deploy of contract in progress...")
     const { transaction_hash: th2, address } = await account0.deployContract({ classHash: contractClassHash });
     console.log("contract_address =", address);
+    // address in Goerli Integration : 0x7688d6bd38fe908104c5fe9da9956d53e5a4dace48fd9c776b035bcda90ddf4
     // address in Goerly Testnet : 0x01073c451258ff87d4e280fb00bc556767cdd464d14823f84fcbb8ba44895a34
     // address in Sepolia Integration : 0x33852427be21d24eca46797a31363597f52afcc315763ce32e83e5218eed2e3
     // address in Sepolia Testnet : 0x37bfdeb9c262566183211b89e85b871518eb0c32cbcb026dce9a486560a03e0

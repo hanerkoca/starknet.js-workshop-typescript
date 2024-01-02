@@ -58,23 +58,28 @@ async function main() {
         "https://starknet-sepolia.public.blastapi.io/rpc/v0_6",
         "https://free-rpc.nethermind.io/sepolia-juno",
         "https://free-rpc.nethermind.io/sepolia-juno/v0_5",
+        "https://free-rpc.nethermind.io/sepolia-juno/v0_6",
         // goerli testnet
         "https://starknet-goerli.g.alchemy.com/v2/" + alchemyKey,
         "https://starknet-goerli.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey,
+        "https://starknet-goerli.g.alchemy.com/starknet/version/rpc/v0_6/" + alchemyKey, // use 0.4.0
+        "https://starknet-goerli.g.alchemy.com/starknet/version/rpc/v0.6/" + alchemyKey, // use 0.4.0
         'https://starknet-goerli.infura.io/v3/' + infuraKey,
-        'https://starknet-goerli.infura.io/rpc/v0.5/' + infuraKey,
+        'https://starknet-goerli.infura.io/rpc/v0.5/' + infuraKey, //error
         'https://starknet-testnet.blastapi.io/' + blastKey + "/rpc/v0.5",
         "https://starknet-testnet.public.blastapi.io/rpc/v0.4",
         "https://starknet-testnet.public.blastapi.io/rpc/v0.5",
+        "https://starknet-testnet.public.blastapi.io/rpc/v0_6",
         "https://limited-rpc.nethermind.io/goerli-juno",
         "https://free-rpc.nethermind.io/goerli-juno/v0_5",
+        "https://free-rpc.nethermind.io/goerli-juno/v0_6",
         "https://json-rpc.starknet-testnet.public.lavanet.xyz",
-        'http://192.168.1.44:9545/rpc/v0.4', //pathfinder 0.10.0
-        'http://192.168.1.44:9545/rpc/v0_4', //pathfinder 0.10.0
-        'http://192.168.1.44:9545/rpc/v0.5', //pathfinder 0.10.0
-        'http://192.168.1.44:9545/rpc/v0_5', //pathfinder 0.10.0
-        'http://192.168.1.44:9545/rpc/v0.6', //pathfinder 0.10.0
-        'http://192.168.1.44:9545/rpc/v0_6', //pathfinder 0.10.0
+        'http://192.168.1.44:9545/rpc/v0.4', //pathfinder 0.10.3
+        'http://192.168.1.44:9545/rpc/v0_4', //pathfinder 0.10.3
+        'http://192.168.1.44:9545/rpc/v0.5', //pathfinder 0.10.3
+        'http://192.168.1.44:9545/rpc/v0_5', //pathfinder 0.10.3
+        'http://192.168.1.44:9545/rpc/v0.6', //pathfinder 0.10.3
+        'http://192.168.1.44:9545/rpc/v0_6', //pathfinder 0.10.3
         // mainnet
         "https://starknet-mainnet.g.alchemy.com/v2/" + alchemyKey,
         "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0.5/" + alchemyKey,

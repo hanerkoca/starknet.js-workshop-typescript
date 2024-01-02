@@ -1,5 +1,5 @@
-// deploy in Sepolia Testnet a contract that can be rejected.
-// launch with npx ts-node src/scripts/Starknet12/Starknet12-sepolia/6.deployRejected.ts
+// deploy in devnet-rs a contract that can be rejected.
+// launch with npx ts-node src/scripts/Starknet13/Starknet13-devnet/1.deployRejected.ts
 // Coded with Starknet.js v5.24.3
 
 import { constants, Contract, Account, json, shortString, RpcProvider } from "starknet";
@@ -13,18 +13,18 @@ import { account1IntegrationOZaddress, account1IntegrationOZprivateKey } from ".
 
 async function main() {
     // initialize Provider 
-    //const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" } ); // only starknet-devnet-rs
+    const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" } ); // only starknet-devnet-rs
     // const provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-testnet.public.lavanet.xyz" }); // testnet
     //const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9545/rpc/v0.5" }); // local Sepolia Testnet node
-    const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9550/rpc/v0.5" }); // local Pathfinder Sepolia Integration node
+    //const provider = new RpcProvider({ nodeUrl: "http://192.168.1.44:9550/rpc/v0.5" }); // local Pathfinder Sepolia Integration node
 
     // Check that communication with provider is OK
     const ch = await provider.getChainId();
     console.log("chain Id =" , shortString.decodeShortString(ch), ", rpc", await provider.getSpecVersion());
 
     // *** Devnet-rs 
-   //const privateKey0 = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
-   //  const accountAddress0: string = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
+   const privateKey0 = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
+    const accountAddress0: string = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
     // *** initialize existing Argent X testnet  account
     // const privateKey0 = account5TestnetPrivateKey;
     // const accountAddress0 = account5TestnetAddress
@@ -35,8 +35,8 @@ async function main() {
     //const privateKey0=account0OZSepoliaPrivateKey;
     //const accountAddress0 = account0OZSepoliaAddress;
     // *** initialize existing Sepolia Integration account
-    const privateKey0=account1IntegrationOZprivateKey;
-    const accountAddress0 = account1IntegrationOZaddress;
+    //const privateKey0=account1IntegrationOZprivateKey;
+    //const accountAddress0 = account1IntegrationOZaddress;
     const account0 = new Account(provider, accountAddress0, privateKey0);
     console.log('existing_ACCOUNT_ADDRESS=', accountAddress0);
     console.log('existing account connected.\n');
@@ -44,7 +44,7 @@ async function main() {
     const compiledSierra = json.parse(fs.readFileSync("./compiledContracts/cairo210/reject.sierra.json").toString("ascii"));
     const compiledCasm = json.parse(fs.readFileSync("./compiledContracts/cairo210/reject.casm.json").toString("ascii"));
 
-    const declareResponse = await account0.declare({ contract: compiledSierra, casm: compiledCasm });
+    const declareResponse = await account0.declareIfNot({ contract: compiledSierra, casm: compiledCasm });
     const contractClassHash = declareResponse.class_hash;
     // const contractClassHash = "0x5f3614e8671257aff9ac38e929c74d65b02d460ae966cd826c9f04a7fa8e0d4";
 
